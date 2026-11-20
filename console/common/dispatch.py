@@ -5,8 +5,8 @@ import math
 import sqlite3
 import threading
 
-from maps import parse_map, plan
-from telemetry import now
+from .maps import parse_map, plan
+from .telemetry import now
 
 
 ACTIVE = {'accepted', 'running', 'paused'}

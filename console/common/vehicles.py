@@ -1,23 +1,13 @@
 """Save vehicle connection profiles and track each independent status feed."""
 
 import sqlite3
-import ipaddress
-import re
-from pathlib import Path
-from sample_vehicle import SampleVehicle
-
-from telemetry import TCP_MODES, Telemetry, tcp_address
-
-SAMPLE_FILES = {
-    'sample_tcp': 'history.jsonl',
-    'fork_sample_tcp': 'history-huocha.jsonl',
-}
-SAMPLE_PREFIX = 'SIM-'
+from .telemetry import Telemetry, tcp_address
 
 
 class Vehicles:
-    def __init__(self, dispatch, *, mode=None):
-        self.mode = mode
+    connection_modes = ('tcp',)
+
+    def __init__(self, dispatch):
         self.db = dispatch.db
         self.lock = dispatch.lock
         self.feeds = {}
@@ -40,21 +30,18 @@ class Vehicles:
     def profile(row):
         return dict(zip(('id', 'vehicle_id', 'name', 'host', 'port'), row))
 
+    def address(self, identity, body):
+        return tcp_address(body.get('host'), body.get('port'))
+
+    def prepare_sample(self, mode, profile):
+        return None
+
     def add(self, body):
         identity, name = body.get('vehicle_id'), body.get('name')
         if any(not isinstance(value, str) or not 1 <= len(value.strip()) <= 120 for value in (identity, name)):
             raise ValueError('车辆编号和名称均须为 1 至 120 个字符')
         identity = identity.strip()
-        if self.mode == 'sim':
-            if identity != SAMPLE_PREFIX + 'DEMO-FORKLIFT':
-                raise ValueError('请使用样本车辆编号 SIM-DEMO-FORKLIFT')
-            host, port = '127.0.0.1', 0
-        else:
-            host, port = tcp_address(body.get('host'), body.get('port'))
-            if self.mode == 'field' and (identity.upper().startswith(SAMPLE_PREFIX)
-                                        or re.fullmatch(r'agv\d+', identity, re.IGNORECASE)
-                                        or ipaddress.IPv4Address(host).is_loopback):
-                raise ValueError('请使用现场车辆编号及车端局域网地址')
+        host, port = self.address(identity, body)
         try:
             with self.lock, self.db:
                 row = (identity.strip(), name.strip(), host, port)
@@ -66,10 +53,8 @@ class Vehicles:
             raise ValueError('车辆编号或连接地址已登记') from error
 
     def command(self, vehicle, operation, mode='tcp'):
-        if operation == 'connect':
-            modes = {'field': ('tcp',), 'sim': tuple(SAMPLE_FILES)}.get(self.mode, TCP_MODES)
-            if mode not in modes:
-                raise ValueError('当前部署不支持该连接方式')
+        if operation == 'connect' and mode not in self.connection_modes:
+            raise ValueError('当前部署不支持该连接方式')
         with self.lock:
             row = self.db.execute('SELECT id,vehicle_id,name,host,port FROM vehicles WHERE id=?', (vehicle,)).fetchone()
             if row is None:
@@ -90,17 +75,7 @@ class Vehicles:
             if feed is None:
                 feed = self.feeds[vehicle] = Telemetry()
             if operation == 'connect':
-                sender = None
-                if mode in SAMPLE_FILES:
-                    filename = SAMPLE_FILES[mode]
-                    try:
-                        prefix = SAMPLE_PREFIX if self.mode == 'sim' else ''
-                        sender = SampleVehicle(Path(__file__).parent / 'samples' / filename, identity_prefix=prefix)
-                    except OSError as error:
-                        raise ValueError(f'无法启动历史数据模拟，请检查样本文件 {filename} 和本机监听端口') from error
-                    if sender.vehicle_id!=profile['vehicle_id']:
-                        sender.close()
-                        raise ValueError(f'历史样本车辆编号为 {sender.vehicle_id}，请登记相同编号，不能冒充其他车辆')
+                sender = self.prepare_sample(mode, profile)
                 feed.select('stopped')
                 old=self.senders.pop(vehicle,None)
                 if old:old.close()

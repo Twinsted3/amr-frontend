@@ -5,17 +5,15 @@ import tempfile
 import threading
 import time
 import unittest
-from sample_vehicle import SampleVehicle
-from telemetry import Telemetry,receive_frame
-from dispatch import Dispatch
-from vehicles import Vehicles
-
-ROOT=Path(__file__).parent
+from common.telemetry import receive_frame
+from common.dispatch import Dispatch
+from sim.sample_vehicle import SampleVehicle
+from sim.vehicles import SAMPLE_DIR, SimVehicles
 
 class SampleTests(unittest.TestCase):
     def test_real_wire_format_order_and_one_second_cadence(self):
-        sample=[json.loads(l) for l in (ROOT/'samples/history.jsonl').read_text().splitlines() if l.strip()]
-        server=SampleVehicle(ROOT/'samples/history.jsonl').start()
+        sample=[json.loads(l) for l in (SAMPLE_DIR/'history.jsonl').read_text().splitlines() if l.strip()]
+        server=SampleVehicle(SAMPLE_DIR/'history.jsonl').start()
         try:
             with socket.create_connection(('127.0.0.1',server.port)) as sock:
                 first=receive_frame(sock,threading.Event());start=time.monotonic()
@@ -36,9 +34,9 @@ class SampleTests(unittest.TestCase):
             finally:server.close()
     def test_registered_vehicle_replay_and_cleanup(self):
         with tempfile.TemporaryDirectory() as directory:
-            dispatch=Dispatch(Path(directory)/'state.sqlite3',ROOT/'samples');vehicles=Vehicles(dispatch)
+            dispatch=Dispatch(Path(directory)/'state.sqlite3',SAMPLE_DIR);vehicles=SimVehicles(dispatch)
             try:
-                row=vehicles.add(dict(vehicle_id='DEMO-FORKLIFT',name='sample',host='127.0.0.1',port=19301))
+                row=vehicles.add(dict(vehicle_id='SIM-DEMO-FORKLIFT',name='sample'))
                 vehicles.command(row['id'],'connect','sample_tcp')
                 deadline=time.monotonic()+3
                 while time.monotonic()<deadline:
@@ -56,9 +54,11 @@ class SampleTests(unittest.TestCase):
             finally:vehicles.close();dispatch.db.close()
     def test_identity_mismatch_does_not_fabricate_vehicle(self):
         with tempfile.TemporaryDirectory() as directory:
-            dispatch=Dispatch(Path(directory)/'state.sqlite3',ROOT/'samples');vehicles=Vehicles(dispatch)
+            dispatch=Dispatch(Path(directory)/'state.sqlite3',SAMPLE_DIR);vehicles=SimVehicles(dispatch)
             try:
-                row=vehicles.add(dict(vehicle_id='wrong',name='wrong',host='127.0.0.1',port=19301))
+                row=vehicles.add(dict(vehicle_id='SIM-DEMO-FORKLIFT',name='sample'))
+                with dispatch.db:
+                    dispatch.db.execute('UPDATE vehicles SET vehicle_id=? WHERE id=?', ('wrong', row['id']))
                 with self.assertRaises(ValueError):vehicles.command(row['id'],'connect','sample_tcp')
                 self.assertFalse(vehicles.senders)
             finally:vehicles.close();dispatch.db.close()

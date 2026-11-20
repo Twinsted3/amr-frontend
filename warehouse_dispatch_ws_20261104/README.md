@@ -2,6 +2,8 @@
 
 四／五台 Gazebo 叉车、ROS 2 调度、Nav2、充电和工位仿真。ROS 2 Kilted 与对应的 Gazebo、Nav2、colcon 等依赖需预先安装。Windows 控制台位于上一级的 console。
 
+选车匹配和优先级策略的源码在上一级的 `dispatch_core/`。请保留完整的仓库结构。启动脚本会把仓库根目录加入 Python 模块路径。
+
 从本目录执行。
 
     ./sim.sh setup-dispatch

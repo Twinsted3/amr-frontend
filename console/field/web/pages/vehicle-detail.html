@@ -1,0 +1,11 @@
+<a class="back-link" href="/vehicles">← 返回车辆管理</a>
+<article class="panel">
+  <div class="panel-head"><div><h2 id="vehicle-record-name">正在读取车辆</h2><p id="vehicle-record-address"></p></div><div class="actions"><span class="badge">实车</span><span id="vehicle-record-status" class="badge"></span><button id="vehicle-record-connection" type="button" class="primary" disabled>连接</button><button id="vehicle-record-remove" type="button" disabled>移除登记</button></div></div>
+
+  <div id="vehicle-remove-confirm" class="panel-body ruled actions" hidden>
+    <span>移除后会断开该车辆的车况连接。</span>
+    <button id="vehicle-remove-submit" type="button" data-vehicle-command="remove">确认移除</button>
+    <button id="vehicle-remove-cancel" type="button">取消移除</button>
+  </div>
+  <div id="vehicle-status-body" class="panel-body"></div>
+</article>
