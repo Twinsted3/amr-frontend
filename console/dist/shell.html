@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>$title · AMR调度控制台$mode_suffix</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="/app.js" defer></script>
+  $page_scripts
+</head>
+<body data-view="$page" data-record="$record_id" data-mode="$mode">
+<svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true">
+  <symbol id="icon-brand" viewBox="0 0 24 24"><path d="M3 16V7h9v9M12 11h4v5h5M3 16h13m3-8v8m-7-9V4H6v3"/><circle cx="6" cy="18" r="2"/><circle cx="14" cy="18" r="2"/></symbol>
+  <symbol id="icon-overview" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="icon-fleet" viewBox="0 0 24 24"><path d="M5 19h14M6 5h12v9H6zM9 5v9m6-9v9m-6 3 3-3 3 3"/><circle cx="5" cy="19" r="1"/><circle cx="19" cy="19" r="1"/></symbol>
+  <symbol id="icon-tasks" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h6v2M9 10h6m-6 4h6m-6 4h4"/></symbol>
+  <symbol id="icon-maps" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15m6-12v15"/></symbol>
+  <symbol id="icon-vehicles" viewBox="0 0 24 24"><path d="M4 16V7h8v9m0-4h4v4h5m-2-8v8M4 16h12"/><circle cx="7" cy="18" r="2"/><circle cx="14" cy="18" r="2"/></symbol>
+  <symbol id="icon-editor" viewBox="0 0 24 24"><path d="M12 20H5V4h12v6m-8 0h4m-4 4h3m2 6 1-4 5-5 3 3-5 5z"/></symbol>
+</svg>
+<a class="skip-link" href="#main-content">跳到页面内容</a>
+<aside class="rail">
+  <a class="brand" href="/"><span class="mark"><svg aria-hidden="true"><use href="#icon-brand"/></svg></span><span><strong>AMR调度</strong><small>控制台$mode_suffix</small></span></a>
+  <nav aria-label="功能导航">$navigation</nav>
+  <div class="rail-foot"><span class="lamp"></span><span>AMR</span></div>
+</aside>
+<main id="main-content">
+  <div class="topbar"><span>调度控制台$mode_suffix <span class="crumb-separator">/</span> $title</span><div class="header-state"><span id="connection" class="badge connection">正在连接</span><span class="badge environment">$environment</span></div></div>
+  <div class="workspace">
+    <header class="page-head"><div><h1 id="title">$title</h1><p>$subtitle</p></div></header>
+    <noscript><div class="notice error">浏览器已禁用 JavaScript。模块链接仍可使用，地图、车况和任务操作需要启用 JavaScript。</div></noscript>
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <section id="$page" aria-labelledby="title">$content</section>
+  </div>
+</main>
+</body>
+</html>

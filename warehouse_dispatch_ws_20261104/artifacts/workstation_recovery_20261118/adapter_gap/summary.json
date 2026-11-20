@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "checks": {
+    "held_during_gap": true,
+    "ready_after_same_adapter_return": true,
+    "exactly_one_completed_execution": true
+  }
+}

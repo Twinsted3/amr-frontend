@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "checks": {
+    "both_done": true,
+    "both_moved": true,
+    "observed_blocking": true,
+    "ordered_release": true,
+    "no_reservation_overlap": true,
+    "segment_exit_confirmed": true,
+    "follower_permitted_before_leader_final": true
+  }
+}

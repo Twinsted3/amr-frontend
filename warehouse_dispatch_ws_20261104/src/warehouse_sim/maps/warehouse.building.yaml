@@ -1,0 +1,2791 @@
+coordinate_system: cartesian_meters
+name: warehouse_v2
+graphs:
+  0:
+    name: default_smap_routes
+    default_lane_width: 3.0
+levels:
+  L1:
+    x_meters: 72.0
+    y_meters: 52.0
+    elevation: 0.0
+    vertices:
+    - - 13.0
+      - 13.0
+      - 0
+      - LM_13_13
+      - {}
+    - - 13.0
+      - 20.0
+      - 0
+      - AP_PICK_01
+      - {}
+    - - 13.0
+      - 26.0
+      - 0
+      - LM_13_26
+      - {}
+    - - 13.0
+      - 32.0
+      - 0
+      - LM_13_32
+      - {}
+    - - 13.0
+      - 38.0
+      - 0
+      - LM_13_38
+      - {}
+    - - 13.0
+      - 44.0
+      - 0
+      - LM_13_44
+      - {}
+    - - 13.0
+      - 49.0
+      - 0
+      - LM_13_49
+      - {}
+    - - 23.0
+      - 13.0
+      - 0
+      - LM_23_13
+      - {}
+    - - 23.0
+      - 20.0
+      - 0
+      - LM_23_20
+      - {}
+    - - 23.0
+      - 26.0
+      - 0
+      - LM_23_26
+      - {}
+    - - 23.0
+      - 32.0
+      - 0
+      - LM_23_32
+      - {}
+    - - 23.0
+      - 38.0
+      - 0
+      - LM_23_38
+      - {}
+    - - 23.0
+      - 44.0
+      - 0
+      - LM_23_44
+      - {}
+    - - 23.0
+      - 49.0
+      - 0
+      - LM_23_49
+      - {}
+    - - 33.0
+      - 13.0
+      - 0
+      - LM_33_13
+      - {}
+    - - 33.0
+      - 20.0
+      - 0
+      - LM_33_20
+      - {}
+    - - 33.0
+      - 26.0
+      - 0
+      - LM_33_26
+      - {}
+    - - 33.0
+      - 32.0
+      - 0
+      - AP_PICK_02
+      - {}
+    - - 33.0
+      - 38.0
+      - 0
+      - LM_33_38
+      - {}
+    - - 33.0
+      - 44.0
+      - 0
+      - LM_33_44
+      - {}
+    - - 33.0
+      - 49.0
+      - 0
+      - LM_33_49
+      - {}
+    - - 43.0
+      - 13.0
+      - 0
+      - LM_43_13
+      - {}
+    - - 43.0
+      - 20.0
+      - 0
+      - LM_43_20
+      - {}
+    - - 43.0
+      - 26.0
+      - 0
+      - LM_43_26
+      - {}
+    - - 43.0
+      - 32.0
+      - 0
+      - LM_43_32
+      - {}
+    - - 43.0
+      - 38.0
+      - 0
+      - LM_43_38
+      - {}
+    - - 43.0
+      - 44.0
+      - 0
+      - LM_43_44
+      - {}
+    - - 43.0
+      - 49.0
+      - 0
+      - LM_43_49
+      - {}
+    - - 53.0
+      - 13.0
+      - 0
+      - LM_53_13
+      - {}
+    - - 53.0
+      - 20.0
+      - 0
+      - LM_53_20
+      - {}
+    - - 53.0
+      - 26.0
+      - 0
+      - LM_53_26
+      - {}
+    - - 53.0
+      - 32.0
+      - 0
+      - LM_53_32
+      - {}
+    - - 53.0
+      - 38.0
+      - 0
+      - LM_53_38
+      - {}
+    - - 53.0
+      - 44.0
+      - 0
+      - AP_PICK_03
+      - {}
+    - - 53.0
+      - 49.0
+      - 0
+      - LM_53_49
+      - {}
+    - - 63.0
+      - 13.0
+      - 0
+      - LM_63_13
+      - {}
+    - - 63.0
+      - 20.0
+      - 0
+      - LM_63_20
+      - {}
+    - - 63.0
+      - 26.0
+      - 0
+      - LM_63_26
+      - {}
+    - - 63.0
+      - 32.0
+      - 0
+      - LM_63_32
+      - {}
+    - - 63.0
+      - 38.0
+      - 0
+      - LM_63_38
+      - {}
+    - - 63.0
+      - 44.0
+      - 0
+      - LM_63_44
+      - {}
+    - - 63.0
+      - 49.0
+      - 0
+      - LM_63_49
+      - {}
+    - - 6.0
+      - 13.0
+      - 0
+      - LM_06_13
+      - {}
+    - - 12.0
+      - 13.0
+      - 0
+      - LM_12_13
+      - {}
+    - - 18.0
+      - 13.0
+      - 0
+      - LM_18_13
+      - {}
+    - - 24.0
+      - 13.0
+      - 0
+      - LM_24_13
+      - {}
+    - - 34.0
+      - 13.0
+      - 0
+      - LM_34_13
+      - {}
+    - - 40.0
+      - 13.0
+      - 0
+      - LM_40_13
+      - {}
+    - - 46.0
+      - 13.0
+      - 0
+      - LM_46_13
+      - {}
+    - - 56.0
+      - 13.0
+      - 0
+      - LM_56_13
+      - {}
+    - - 66.0
+      - 13.0
+      - 0
+      - LM_66_13
+      - {}
+    - - 6.0
+      - 5.0
+      - 0
+      - CP_06
+      - is_charger:
+        - 4
+        - true
+    - - 6.0
+      - 10.0
+      - 0
+      - LM_DOCK_06
+      - {}
+    - - 12.0
+      - 5.0
+      - 0
+      - CP_12
+      - is_charger:
+        - 4
+        - true
+    - - 12.0
+      - 10.0
+      - 0
+      - LM_DOCK_12
+      - {}
+    - - 18.0
+      - 5.0
+      - 0
+      - CP_18
+      - is_charger:
+        - 4
+        - true
+    - - 18.0
+      - 10.0
+      - 0
+      - LM_DOCK_18
+      - {}
+    - - 24.0
+      - 5.0
+      - 0
+      - CP_24
+      - is_charger:
+        - 4
+        - true
+    - - 24.0
+      - 10.0
+      - 0
+      - LM_DOCK_24
+      - {}
+    - - 34.0
+      - 9.0
+      - 0
+      - AP_SHIP_01
+      - {}
+    - - 40.0
+      - 9.0
+      - 0
+      - AP_SHIP_02
+      - {}
+    - - 46.0
+      - 9.0
+      - 0
+      - AP_RECEIVE_01
+      - {}
+    - - 56.0
+      - 9.0
+      - 0
+      - AP_RECEIVE_02
+      - {}
+    - - 66.0
+      - 9.0
+      - 0
+      - AP_RECEIVE_03
+      - {}
+    - - 68.0
+      - 26.0
+      - 0
+      - AP_BUFFER_01
+      - {}
+    - - 68.0
+      - 38.0
+      - 0
+      - AP_BUFFER_02
+      - {}
+    - - 10.0
+      - 42.0
+      - 0
+      - LM_QC_E
+      - {}
+    - - 7.0
+      - 39.0
+      - 0
+      - LM_QC_S
+      - {}
+    - - 4.0
+      - 42.0
+      - 0
+      - LM_QC_W
+      - {}
+    - - 7.0
+      - 45.0
+      - 0
+      - AP_QC_01
+      - {}
+    - - 64.740741
+      - 25.777778
+      - 0
+      - ''
+      - {}
+    - - 66.259259
+      - 26.222222
+      - 0
+      - ''
+      - {}
+    - - 64.740741
+      - 37.777778
+      - 0
+      - ''
+      - {}
+    - - 66.259259
+      - 38.222222
+      - 0
+      - ''
+      - {}
+    - - 9.590412
+      - 40.485843
+      - 0
+      - ''
+      - {}
+    - - 8.514157
+      - 39.409588
+      - 0
+      - ''
+      - {}
+    - - 5.485843
+      - 39.409588
+      - 0
+      - ''
+      - {}
+    - - 4.409588
+      - 40.485843
+      - 0
+      - ''
+      - {}
+    - - 4.409588
+      - 43.514157
+      - 0
+      - ''
+      - {}
+    - - 5.485843
+      - 44.590412
+      - 0
+      - ''
+      - {}
+    - - 8.514157
+      - 44.590412
+      - 0
+      - ''
+      - {}
+    - - 9.590412
+      - 43.514157
+      - 0
+      - ''
+      - {}
+    - - 12.666667
+      - 39.925926
+      - 0
+      - ''
+      - {}
+    - - 11.666667
+      - 41.407407
+      - 0
+      - ''
+      - {}
+    - - 23.740741
+      - 11.111111
+      - 0
+      - ''
+      - {}
+    - - 23.259259
+      - 11.888889
+      - 0
+      - ''
+      - {}
+    - - 41.444444
+      - 9.592593
+      - 0
+      - ''
+      - {}
+    - - 42.555556
+      - 11.074074
+      - 0
+      - ''
+      - {}
+    - - 0.0
+      - 0.0
+      - 0
+      - ''
+      - {}
+    - - 72.0
+      - 0.0
+      - 0
+      - ''
+      - {}
+    - - 72.0
+      - 52.0
+      - 0
+      - ''
+      - {}
+    - - 0.0
+      - 52.0
+      - 0
+      - ''
+      - {}
+    - - 16.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 20.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 20.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 16.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 16.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 20.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 20.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 16.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 16.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 20.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 20.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 16.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 26.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 30.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 30.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 26.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 26.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 30.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 30.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 26.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 26.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 30.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 30.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 26.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 36.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 40.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 40.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 36.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 36.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 40.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 40.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 36.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 36.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 40.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 40.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 36.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 46.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 50.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 50.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 46.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 46.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 50.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 50.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 46.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 46.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 50.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 50.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 46.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 56.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 60.0
+      - 17.0
+      - 0
+      - ''
+      - {}
+    - - 60.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 56.0
+      - 23.0
+      - 0
+      - ''
+      - {}
+    - - 56.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 60.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 60.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 56.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 56.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 60.0
+      - 41.0
+      - 0
+      - ''
+      - {}
+    - - 60.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 56.0
+      - 47.0
+      - 0
+      - ''
+      - {}
+    - - 2.0
+      - 18.0
+      - 0
+      - ''
+      - {}
+    - - 10.0
+      - 18.0
+      - 0
+      - ''
+      - {}
+    - - 10.0
+      - 28.0
+      - 0
+      - ''
+      - {}
+    - - 2.0
+      - 28.0
+      - 0
+      - ''
+      - {}
+    - - 2.0
+      - 31.0
+      - 0
+      - ''
+      - {}
+    - - 9.0
+      - 31.0
+      - 0
+      - ''
+      - {}
+    - - 9.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 2.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 65.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 71.0
+      - 29.0
+      - 0
+      - ''
+      - {}
+    - - 71.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 65.0
+      - 35.0
+      - 0
+      - ''
+      - {}
+    - - 6.4
+      - 41.4
+      - 0
+      - ''
+      - {}
+    - - 7.6
+      - 41.4
+      - 0
+      - ''
+      - {}
+    - - 7.6
+      - 42.6
+      - 0
+      - ''
+      - {}
+    - - 6.4
+      - 42.6
+      - 0
+      - ''
+      - {}
+    - - 44.5
+      - 1.0
+      - 0
+      - ''
+      - {}
+    - - 47.5
+      - 1.0
+      - 0
+      - ''
+      - {}
+    - - 47.5
+      - 7.0
+      - 0
+      - ''
+      - {}
+    - - 44.5
+      - 7.0
+      - 0
+      - ''
+      - {}
+    - - 54.5
+      - 1.0
+      - 0
+      - ''
+      - {}
+    - - 57.5
+      - 1.0
+      - 0
+      - ''
+      - {}
+    - - 57.5
+      - 7.0
+      - 0
+      - ''
+      - {}
+    - - 54.5
+      - 7.0
+      - 0
+      - ''
+      - {}
+    - - 64.5
+      - 1.0
+      - 0
+      - ''
+      - {}
+    - - 67.5
+      - 1.0
+      - 0
+      - ''
+      - {}
+    - - 67.5
+      - 7.0
+      - 0
+      - ''
+      - {}
+    - - 64.5
+      - 7.0
+      - 0
+      - ''
+      - {}
+    - - 32.7
+      - 2.5
+      - 0
+      - ''
+      - {}
+    - - 35.3
+      - 2.5
+      - 0
+      - ''
+      - {}
+    - - 35.3
+      - 5.5
+      - 0
+      - ''
+      - {}
+    - - 32.7
+      - 5.5
+      - 0
+      - ''
+      - {}
+    - - 38.7
+      - 2.5
+      - 0
+      - ''
+      - {}
+    - - 41.3
+      - 2.5
+      - 0
+      - ''
+      - {}
+    - - 41.3
+      - 5.5
+      - 0
+      - ''
+      - {}
+    - - 38.7
+      - 5.5
+      - 0
+      - ''
+      - {}
+    - - 5.4
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 6.6
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 6.6
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 5.4
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 11.4
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 12.6
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 12.6
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 11.4
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 17.4
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 18.6
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 18.6
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 17.4
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 23.4
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 24.6
+      - 1.4
+      - 0
+      - ''
+      - {}
+    - - 24.6
+      - 2.2
+      - 0
+      - ''
+      - {}
+    - - 23.4
+      - 2.2
+      - 0
+      - ''
+      - {}
+    walls:
+    - - 88
+      - 89
+      - texture_name:
+        - 1
+        - wall_white
+    - - 89
+      - 90
+      - texture_name:
+        - 1
+        - wall_white
+    - - 90
+      - 91
+      - texture_name:
+        - 1
+        - wall_white
+    - - 91
+      - 88
+      - texture_name:
+        - 1
+        - wall_white
+    - - 92
+      - 93
+      - texture_name:
+        - 1
+        - wall_white
+    - - 93
+      - 94
+      - texture_name:
+        - 1
+        - wall_white
+    - - 94
+      - 95
+      - texture_name:
+        - 1
+        - wall_white
+    - - 95
+      - 92
+      - texture_name:
+        - 1
+        - wall_white
+    - - 96
+      - 97
+      - texture_name:
+        - 1
+        - wall_white
+    - - 97
+      - 98
+      - texture_name:
+        - 1
+        - wall_white
+    - - 98
+      - 99
+      - texture_name:
+        - 1
+        - wall_white
+    - - 99
+      - 96
+      - texture_name:
+        - 1
+        - wall_white
+    - - 100
+      - 101
+      - texture_name:
+        - 1
+        - wall_white
+    - - 101
+      - 102
+      - texture_name:
+        - 1
+        - wall_white
+    - - 102
+      - 103
+      - texture_name:
+        - 1
+        - wall_white
+    - - 103
+      - 100
+      - texture_name:
+        - 1
+        - wall_white
+    - - 104
+      - 105
+      - texture_name:
+        - 1
+        - wall_white
+    - - 105
+      - 106
+      - texture_name:
+        - 1
+        - wall_white
+    - - 106
+      - 107
+      - texture_name:
+        - 1
+        - wall_white
+    - - 107
+      - 104
+      - texture_name:
+        - 1
+        - wall_white
+    - - 108
+      - 109
+      - texture_name:
+        - 1
+        - wall_white
+    - - 109
+      - 110
+      - texture_name:
+        - 1
+        - wall_white
+    - - 110
+      - 111
+      - texture_name:
+        - 1
+        - wall_white
+    - - 111
+      - 108
+      - texture_name:
+        - 1
+        - wall_white
+    - - 112
+      - 113
+      - texture_name:
+        - 1
+        - wall_white
+    - - 113
+      - 114
+      - texture_name:
+        - 1
+        - wall_white
+    - - 114
+      - 115
+      - texture_name:
+        - 1
+        - wall_white
+    - - 115
+      - 112
+      - texture_name:
+        - 1
+        - wall_white
+    - - 116
+      - 117
+      - texture_name:
+        - 1
+        - wall_white
+    - - 117
+      - 118
+      - texture_name:
+        - 1
+        - wall_white
+    - - 118
+      - 119
+      - texture_name:
+        - 1
+        - wall_white
+    - - 119
+      - 116
+      - texture_name:
+        - 1
+        - wall_white
+    - - 120
+      - 121
+      - texture_name:
+        - 1
+        - wall_white
+    - - 121
+      - 122
+      - texture_name:
+        - 1
+        - wall_white
+    - - 122
+      - 123
+      - texture_name:
+        - 1
+        - wall_white
+    - - 123
+      - 120
+      - texture_name:
+        - 1
+        - wall_white
+    - - 124
+      - 125
+      - texture_name:
+        - 1
+        - wall_white
+    - - 125
+      - 126
+      - texture_name:
+        - 1
+        - wall_white
+    - - 126
+      - 127
+      - texture_name:
+        - 1
+        - wall_white
+    - - 127
+      - 124
+      - texture_name:
+        - 1
+        - wall_white
+    - - 128
+      - 129
+      - texture_name:
+        - 1
+        - wall_white
+    - - 129
+      - 130
+      - texture_name:
+        - 1
+        - wall_white
+    - - 130
+      - 131
+      - texture_name:
+        - 1
+        - wall_white
+    - - 131
+      - 128
+      - texture_name:
+        - 1
+        - wall_white
+    - - 132
+      - 133
+      - texture_name:
+        - 1
+        - wall_white
+    - - 133
+      - 134
+      - texture_name:
+        - 1
+        - wall_white
+    - - 134
+      - 135
+      - texture_name:
+        - 1
+        - wall_white
+    - - 135
+      - 132
+      - texture_name:
+        - 1
+        - wall_white
+    - - 136
+      - 137
+      - texture_name:
+        - 1
+        - wall_white
+    - - 137
+      - 138
+      - texture_name:
+        - 1
+        - wall_white
+    - - 138
+      - 139
+      - texture_name:
+        - 1
+        - wall_white
+    - - 139
+      - 136
+      - texture_name:
+        - 1
+        - wall_white
+    - - 140
+      - 141
+      - texture_name:
+        - 1
+        - wall_white
+    - - 141
+      - 142
+      - texture_name:
+        - 1
+        - wall_white
+    - - 142
+      - 143
+      - texture_name:
+        - 1
+        - wall_white
+    - - 143
+      - 140
+      - texture_name:
+        - 1
+        - wall_white
+    - - 144
+      - 145
+      - texture_name:
+        - 1
+        - wall_white
+    - - 145
+      - 146
+      - texture_name:
+        - 1
+        - wall_white
+    - - 146
+      - 147
+      - texture_name:
+        - 1
+        - wall_white
+    - - 147
+      - 144
+      - texture_name:
+        - 1
+        - wall_white
+    - - 148
+      - 149
+      - texture_name:
+        - 1
+        - wall_white
+    - - 149
+      - 150
+      - texture_name:
+        - 1
+        - wall_white
+    - - 150
+      - 151
+      - texture_name:
+        - 1
+        - wall_white
+    - - 151
+      - 148
+      - texture_name:
+        - 1
+        - wall_white
+    - - 152
+      - 153
+      - texture_name:
+        - 1
+        - wall_white
+    - - 153
+      - 154
+      - texture_name:
+        - 1
+        - wall_white
+    - - 154
+      - 155
+      - texture_name:
+        - 1
+        - wall_white
+    - - 155
+      - 152
+      - texture_name:
+        - 1
+        - wall_white
+    - - 156
+      - 157
+      - texture_name:
+        - 1
+        - wall_white
+    - - 157
+      - 158
+      - texture_name:
+        - 1
+        - wall_white
+    - - 158
+      - 159
+      - texture_name:
+        - 1
+        - wall_white
+    - - 159
+      - 156
+      - texture_name:
+        - 1
+        - wall_white
+    - - 160
+      - 161
+      - texture_name:
+        - 1
+        - wall_white
+    - - 161
+      - 162
+      - texture_name:
+        - 1
+        - wall_white
+    - - 162
+      - 163
+      - texture_name:
+        - 1
+        - wall_white
+    - - 163
+      - 160
+      - texture_name:
+        - 1
+        - wall_white
+    - - 164
+      - 165
+      - texture_name:
+        - 1
+        - wall_white
+    - - 165
+      - 166
+      - texture_name:
+        - 1
+        - wall_white
+    - - 166
+      - 167
+      - texture_name:
+        - 1
+        - wall_white
+    - - 167
+      - 164
+      - texture_name:
+        - 1
+        - wall_white
+    - - 168
+      - 169
+      - texture_name:
+        - 1
+        - wall_white
+    - - 169
+      - 170
+      - texture_name:
+        - 1
+        - wall_white
+    - - 170
+      - 171
+      - texture_name:
+        - 1
+        - wall_white
+    - - 171
+      - 168
+      - texture_name:
+        - 1
+        - wall_white
+    - - 172
+      - 173
+      - texture_name:
+        - 1
+        - wall_white
+    - - 173
+      - 174
+      - texture_name:
+        - 1
+        - wall_white
+    - - 174
+      - 175
+      - texture_name:
+        - 1
+        - wall_white
+    - - 175
+      - 172
+      - texture_name:
+        - 1
+        - wall_white
+    - - 176
+      - 177
+      - texture_name:
+        - 1
+        - wall_white
+    - - 177
+      - 178
+      - texture_name:
+        - 1
+        - wall_white
+    - - 178
+      - 179
+      - texture_name:
+        - 1
+        - wall_white
+    - - 179
+      - 176
+      - texture_name:
+        - 1
+        - wall_white
+    - - 180
+      - 181
+      - texture_name:
+        - 1
+        - wall_white
+    - - 181
+      - 182
+      - texture_name:
+        - 1
+        - wall_white
+    - - 182
+      - 183
+      - texture_name:
+        - 1
+        - wall_white
+    - - 183
+      - 180
+      - texture_name:
+        - 1
+        - wall_white
+    - - 184
+      - 185
+      - texture_name:
+        - 1
+        - wall_white
+    - - 185
+      - 186
+      - texture_name:
+        - 1
+        - wall_white
+    - - 186
+      - 187
+      - texture_name:
+        - 1
+        - wall_white
+    - - 187
+      - 184
+      - texture_name:
+        - 1
+        - wall_white
+    - - 188
+      - 189
+      - texture_name:
+        - 1
+        - wall_white
+    - - 189
+      - 190
+      - texture_name:
+        - 1
+        - wall_white
+    - - 190
+      - 191
+      - texture_name:
+        - 1
+        - wall_white
+    - - 191
+      - 188
+      - texture_name:
+        - 1
+        - wall_white
+    - - 192
+      - 193
+      - texture_name:
+        - 1
+        - wall_white
+    - - 193
+      - 194
+      - texture_name:
+        - 1
+        - wall_white
+    - - 194
+      - 195
+      - texture_name:
+        - 1
+        - wall_white
+    - - 195
+      - 192
+      - texture_name:
+        - 1
+        - wall_white
+    - - 196
+      - 197
+      - texture_name:
+        - 1
+        - wall_white
+    - - 197
+      - 198
+      - texture_name:
+        - 1
+        - wall_white
+    - - 198
+      - 199
+      - texture_name:
+        - 1
+        - wall_white
+    - - 199
+      - 196
+      - texture_name:
+        - 1
+        - wall_white
+    - - 200
+      - 201
+      - texture_name:
+        - 1
+        - wall_white
+    - - 201
+      - 202
+      - texture_name:
+        - 1
+        - wall_white
+    - - 202
+      - 203
+      - texture_name:
+        - 1
+        - wall_white
+    - - 203
+      - 200
+      - texture_name:
+        - 1
+        - wall_white
+    lanes:
+    - - 0
+      - 1
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 1
+      - 2
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 2
+      - 3
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 3
+      - 4
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 4
+      - 5
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 5
+      - 6
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 7
+      - 8
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 8
+      - 9
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 9
+      - 10
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 10
+      - 11
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 11
+      - 12
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 12
+      - 13
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 15
+      - 14
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 16
+      - 15
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 17
+      - 16
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 18
+      - 17
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 19
+      - 18
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 20
+      - 19
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 21
+      - 22
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 22
+      - 23
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 23
+      - 24
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 24
+      - 25
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 25
+      - 26
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 26
+      - 27
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 29
+      - 28
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 30
+      - 29
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 31
+      - 30
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 32
+      - 31
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 33
+      - 32
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 34
+      - 33
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 35
+      - 36
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 36
+      - 37
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 37
+      - 38
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 38
+      - 39
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 39
+      - 40
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 40
+      - 41
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 42
+      - 43
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 43
+      - 0
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 0
+      - 44
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 44
+      - 7
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 7
+      - 45
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 45
+      - 14
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 14
+      - 46
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 46
+      - 47
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 47
+      - 21
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 21
+      - 48
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 48
+      - 28
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 28
+      - 49
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 49
+      - 35
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 35
+      - 50
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 2
+      - 9
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 9
+      - 16
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 16
+      - 23
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 23
+      - 30
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 30
+      - 37
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 11
+      - 4
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 18
+      - 11
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 25
+      - 18
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 32
+      - 25
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 39
+      - 32
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 6
+      - 13
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 13
+      - 20
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 20
+      - 27
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 27
+      - 34
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 34
+      - 41
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 51
+      - 52
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 52
+      - 42
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 53
+      - 54
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 54
+      - 43
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 55
+      - 56
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 56
+      - 44
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 57
+      - 58
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 58
+      - 45
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 59
+      - 46
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 60
+      - 47
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 61
+      - 48
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 62
+      - 49
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 63
+      - 50
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 37
+      - 70
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 70
+      - 71
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 71
+      - 64
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 39
+      - 72
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 72
+      - 73
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 73
+      - 65
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 66
+      - 74
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 74
+      - 75
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 75
+      - 67
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 67
+      - 76
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 76
+      - 77
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 77
+      - 68
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 68
+      - 78
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 78
+      - 79
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 79
+      - 69
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 69
+      - 80
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 80
+      - 81
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 81
+      - 66
+      - bidirectional:
+        - 4
+        - false
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 4
+      - 82
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 82
+      - 83
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 83
+      - 66
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 58
+      - 84
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 84
+      - 85
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 85
+      - 7
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 60
+      - 86
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 86
+      - 87
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    - - 87
+      - 21
+      - bidirectional:
+        - 4
+        - true
+        graph_idx:
+        - 2
+        - 0
+        speed_limit:
+        - 3
+        - 0.7
+    floors:
+    - vertices:
+      - 88
+      - 89
+      - 90
+      - 91
+      parameters:
+        indoor:
+        - 2
+        - 1
+        texture_name:
+        - 1
+        - blue_linoleum_high_contrast
+lifts: {}

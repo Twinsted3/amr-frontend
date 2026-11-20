@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": {
+    "one_pickup_reservation": true,
+    "same_business_id_and_new_vehicle": true,
+    "new_execution_created": true,
+    "isolated_route_retained": true,
+    "scheduler_restart_kept_live_execution": true,
+    "delivered_to_original_target": true,
+    "released_workstation_after_departure": true,
+    "loaded_vehicle_remains_owner": true,
+    "loaded_failure_kept_out_of_transfer": true,
+    "no_reservation_overlap": true
+  },
+  "elapsed_s": 195.70377568100048
+}

@@ -1,0 +1,23 @@
+<!-- CONNECTION -->
+<div class="panel-body fleet-status" id="fleet-health" role="status">正在读取车队状态</div>
+    <div id="fleet-metrics" class="metrics"></div>
+    <div class="workbench">
+      <article class="panel map-panel">
+        <div class="panel-head">
+          <div><h2>仓库运行地图</h2><p id="fleet-map-title">等待调度地图</p></div>
+          <div class="actions"><button id="fleet-zoom-out" aria-label="缩小仓库地图">−</button><button id="fleet-zoom-in" aria-label="放大仓库地图">＋</button><button id="fleet-fit">适合窗口</button></div>
+        </div>
+        <div class="fleet-map-wrap">
+          <svg id="fleet-map" role="img" aria-label="五车仓库地图和车辆位置"><g id="fleet-base"></g><g id="fleet-motion"></g><g id="fleet-points"></g></svg>
+          <div id="fleet-tip" hidden></div>
+        </div>
+        <div class="map-foot"><span><i class="key point"></i>站点</span><span><i class="key vehicle"></i>车辆 / 当前许可路线</span><span><i class="key route"></i>路权等待</span></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h2>车队状态</h2><p>定位、路权、货叉和仿真电量</p></div></div>
+        <div id="fleet-robots" class="panel-body fleet-robots"></div>
+      </article>
+    </div>
+<div class="panel-body actions"><a class="button primary" href="/tasks/new">创建任务</a><a class="button" href="/tasks">管理全部任务</a></div>
+<!-- TASK_LIST -->
+<article class="panel recent"><div class="panel-head"><h2>调度与交通事件</h2></div><div id="fleet-events" class="panel-body"></div></article>

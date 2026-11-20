@@ -1,0 +1,7 @@
+[
+  {"id":"DEMO-HOME-01","type":"standby","goal":"CP_06","priority":0},
+  {"id":"DEMO-HOME-02","type":"standby","goal":"CP_12","priority":0},
+  {"id":"DEMO-HOME-03","type":"standby","goal":"CP_18","priority":0},
+  {"id":"DEMO-HOME-04","type":"standby","goal":"CP_24","priority":0},
+  {"id":"DEMO-HOME-05","type":"standby","goal":"PP_05","priority":0}
+]

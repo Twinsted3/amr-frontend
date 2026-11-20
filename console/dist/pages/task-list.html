@@ -1,0 +1,9 @@
+<article class="panel">
+      <div class="panel-head"><h2>调度任务队列</h2><div class="actions">
+        <label>查找任务<input id="fleet-search" placeholder="编号、站点或车辆"></label>
+        <label>状态<select id="fleet-filter"><option value="all">全部</option><option value="active">未结束</option><option value="DONE">已完成</option><option value="FAILED">失败</option><option value="CANCELLED">已取消</option></select></label>
+        <label class="toggle"><input type="checkbox" id="fleet-system" checked>显示自动充电和返程</label>
+      </div></div>
+      <div id="fleet-jobs"></div>
+      <div id="fleet-detail" class="panel-body ruled muted">点击任务编号查看执行记录。</div>
+    </article>

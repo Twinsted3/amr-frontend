@@ -1,0 +1,14 @@
+build/
+install/
+log/
+__pycache__/
+*.pyc
+*.egg-info/
+.smap_editor_backups/
+*.bak
+.warehouse_run.pid
+.sim_session
+runtime/
+simulation_runs/
+dispatch_runs/
+presentation_logs/

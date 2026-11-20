@@ -1,0 +1,18 @@
+{
+  "method": "first_optimized_trajectory_node",
+  "trajectory_id": 0,
+  "map_base_anchor": [
+    -0.040063901963341364,
+    0.08337394514228351,
+    0.0012624454361706127
+  ],
+  "warehouse_spawn": [
+    6.0,
+    5.0,
+    1.5707963267948966
+  ],
+  "tracking_offset": [
+    0.0,
+    -0.093
+  ]
+}

@@ -1,0 +1,21 @@
+<a class="back-link" href="/maps">← 返回地图库</a>
+<div class="workbench map-details">
+  <article class="panel map-panel">
+    <div class="panel-head"><div><h2 id="map-detail-name">地图预览</h2><p id="map-caption">正在读取地图</p></div>
+      <div class="actions"><button id="zoom-out" aria-label="缩小地图">−</button><button id="zoom-in" aria-label="放大地图">＋</button><button id="fit">适合窗口</button></div>
+    </div>
+    <div class="canvas-wrap"><canvas id="map-canvas" aria-label="站点和有向路径预览"></canvas><div id="map-tip" hidden></div></div>
+    <div class="map-foot"><span><i class="key point"></i>站点</span><span id="map-scale"></span></div>
+  </article>
+  <div class="stack">
+    <article class="panel">
+      <div class="panel-head"><h2>版本信息</h2><span class="badge" id="map-detail-status"></span></div>
+      <div id="map-detail-stats" class="panel-body"></div>
+      <div class="panel-body ruled actions"><button id="map-enable" type="button" class="primary" disabled>使用</button><a id="edit-current-map" class="button" hidden>编辑</a><a id="export-map" class="button" download>下载 SMAP</a></div>
+    </article>
+    <article class="panel">
+      <div class="panel-head"><h2>站点目录</h2></div>
+      <div class="panel-body station-list" id="map-stations"></div>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+[
+  {"id":"FACTORY-BATCH-01","type":"transport","pickup":"AP_RECEIVE_01","dropoff":"AP_SHIP_01","priority":0},
+  {"id":"FACTORY-BATCH-02","type":"transport","pickup":"AP_PICK_03","dropoff":"AP_RECEIVE_03","priority":0},
+  {"id":"FACTORY-BATCH-03","type":"transport","pickup":"AP_QC_01","dropoff":"AP_BUFFER_02","priority":100},
+  {"id":"FACTORY-BATCH-04","type":"transport","pickup":"AP_PICK_01","dropoff":"AP_PICK_03","priority":0},
+  {"id":"FACTORY-BATCH-05","type":"transport","pickup":"AP_BUFFER_01","dropoff":"AP_QC_01","priority":0},
+  {"id":"FACTORY-BATCH-06","type":"transport","pickup":"AP_PICK_02","dropoff":"AP_SHIP_02","priority":100}
+]

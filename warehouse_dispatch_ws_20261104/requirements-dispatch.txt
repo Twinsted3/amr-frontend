@@ -1,0 +1,2 @@
+# Pure Python solver, isolated from ROS system packages.
+networkx==3.4.2

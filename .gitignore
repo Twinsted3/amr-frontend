@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+runtime/
+.dispatch-deps/
+build/
+install/
+log/
+.sim_session
+.warehouse_run.pid
+simulation_runs/
+dispatch_runs/
+presentation_logs/
+*.sqlite3
+*.sqlite3-*
+.env
+*.pem
+*.p12
