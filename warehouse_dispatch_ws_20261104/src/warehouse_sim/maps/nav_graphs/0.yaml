@@ -1,0 +1,770 @@
+building_name: warehouse_v2
+doors: {}
+levels:
+  L1:
+    lanes:
+    - - 0
+      - 1
+      - speed_limit: 0.7
+    - - 1
+      - 0
+      - speed_limit: 0.7
+    - - 1
+      - 2
+      - speed_limit: 0.7
+    - - 2
+      - 1
+      - speed_limit: 0.7
+    - - 2
+      - 3
+      - speed_limit: 0.7
+    - - 3
+      - 2
+      - speed_limit: 0.7
+    - - 3
+      - 4
+      - speed_limit: 0.7
+    - - 4
+      - 3
+      - speed_limit: 0.7
+    - - 4
+      - 5
+      - speed_limit: 0.7
+    - - 5
+      - 4
+      - speed_limit: 0.7
+    - - 5
+      - 6
+      - speed_limit: 0.7
+    - - 6
+      - 5
+      - speed_limit: 0.7
+    - - 7
+      - 8
+      - speed_limit: 0.7
+    - - 8
+      - 9
+      - speed_limit: 0.7
+    - - 9
+      - 10
+      - speed_limit: 0.7
+    - - 10
+      - 11
+      - speed_limit: 0.7
+    - - 11
+      - 12
+      - speed_limit: 0.7
+    - - 12
+      - 13
+      - speed_limit: 0.7
+    - - 15
+      - 14
+      - speed_limit: 0.7
+    - - 16
+      - 15
+      - speed_limit: 0.7
+    - - 17
+      - 16
+      - speed_limit: 0.7
+    - - 18
+      - 17
+      - speed_limit: 0.7
+    - - 19
+      - 18
+      - speed_limit: 0.7
+    - - 20
+      - 19
+      - speed_limit: 0.7
+    - - 21
+      - 22
+      - speed_limit: 0.7
+    - - 22
+      - 23
+      - speed_limit: 0.7
+    - - 23
+      - 24
+      - speed_limit: 0.7
+    - - 24
+      - 25
+      - speed_limit: 0.7
+    - - 25
+      - 26
+      - speed_limit: 0.7
+    - - 26
+      - 27
+      - speed_limit: 0.7
+    - - 29
+      - 28
+      - speed_limit: 0.7
+    - - 30
+      - 29
+      - speed_limit: 0.7
+    - - 31
+      - 30
+      - speed_limit: 0.7
+    - - 32
+      - 31
+      - speed_limit: 0.7
+    - - 33
+      - 32
+      - speed_limit: 0.7
+    - - 34
+      - 33
+      - speed_limit: 0.7
+    - - 35
+      - 36
+      - speed_limit: 0.7
+    - - 36
+      - 35
+      - speed_limit: 0.7
+    - - 36
+      - 37
+      - speed_limit: 0.7
+    - - 37
+      - 36
+      - speed_limit: 0.7
+    - - 37
+      - 38
+      - speed_limit: 0.7
+    - - 38
+      - 37
+      - speed_limit: 0.7
+    - - 38
+      - 39
+      - speed_limit: 0.7
+    - - 39
+      - 38
+      - speed_limit: 0.7
+    - - 39
+      - 40
+      - speed_limit: 0.7
+    - - 40
+      - 39
+      - speed_limit: 0.7
+    - - 40
+      - 41
+      - speed_limit: 0.7
+    - - 41
+      - 40
+      - speed_limit: 0.7
+    - - 42
+      - 43
+      - speed_limit: 0.7
+    - - 43
+      - 42
+      - speed_limit: 0.7
+    - - 43
+      - 0
+      - speed_limit: 0.7
+    - - 0
+      - 43
+      - speed_limit: 0.7
+    - - 0
+      - 44
+      - speed_limit: 0.7
+    - - 44
+      - 0
+      - speed_limit: 0.7
+    - - 44
+      - 7
+      - speed_limit: 0.7
+    - - 7
+      - 44
+      - speed_limit: 0.7
+    - - 7
+      - 45
+      - speed_limit: 0.7
+    - - 45
+      - 7
+      - speed_limit: 0.7
+    - - 45
+      - 14
+      - speed_limit: 0.7
+    - - 14
+      - 45
+      - speed_limit: 0.7
+    - - 14
+      - 46
+      - speed_limit: 0.7
+    - - 46
+      - 14
+      - speed_limit: 0.7
+    - - 46
+      - 47
+      - speed_limit: 0.7
+    - - 47
+      - 46
+      - speed_limit: 0.7
+    - - 47
+      - 21
+      - speed_limit: 0.7
+    - - 21
+      - 47
+      - speed_limit: 0.7
+    - - 21
+      - 48
+      - speed_limit: 0.7
+    - - 48
+      - 21
+      - speed_limit: 0.7
+    - - 48
+      - 28
+      - speed_limit: 0.7
+    - - 28
+      - 48
+      - speed_limit: 0.7
+    - - 28
+      - 49
+      - speed_limit: 0.7
+    - - 49
+      - 28
+      - speed_limit: 0.7
+    - - 49
+      - 35
+      - speed_limit: 0.7
+    - - 35
+      - 49
+      - speed_limit: 0.7
+    - - 35
+      - 50
+      - speed_limit: 0.7
+    - - 50
+      - 35
+      - speed_limit: 0.7
+    - - 2
+      - 9
+      - speed_limit: 0.7
+    - - 9
+      - 16
+      - speed_limit: 0.7
+    - - 16
+      - 23
+      - speed_limit: 0.7
+    - - 23
+      - 30
+      - speed_limit: 0.7
+    - - 30
+      - 37
+      - speed_limit: 0.7
+    - - 11
+      - 4
+      - speed_limit: 0.7
+    - - 18
+      - 11
+      - speed_limit: 0.7
+    - - 25
+      - 18
+      - speed_limit: 0.7
+    - - 32
+      - 25
+      - speed_limit: 0.7
+    - - 39
+      - 32
+      - speed_limit: 0.7
+    - - 6
+      - 13
+      - speed_limit: 0.7
+    - - 13
+      - 6
+      - speed_limit: 0.7
+    - - 13
+      - 20
+      - speed_limit: 0.7
+    - - 20
+      - 13
+      - speed_limit: 0.7
+    - - 20
+      - 27
+      - speed_limit: 0.7
+    - - 27
+      - 20
+      - speed_limit: 0.7
+    - - 27
+      - 34
+      - speed_limit: 0.7
+    - - 34
+      - 27
+      - speed_limit: 0.7
+    - - 34
+      - 41
+      - speed_limit: 0.7
+    - - 41
+      - 34
+      - speed_limit: 0.7
+    - - 51
+      - 52
+      - speed_limit: 0.7
+    - - 52
+      - 51
+      - speed_limit: 0.7
+    - - 52
+      - 42
+      - speed_limit: 0.7
+    - - 42
+      - 52
+      - speed_limit: 0.7
+    - - 53
+      - 54
+      - speed_limit: 0.7
+    - - 54
+      - 53
+      - speed_limit: 0.7
+    - - 54
+      - 43
+      - speed_limit: 0.7
+    - - 43
+      - 54
+      - speed_limit: 0.7
+    - - 55
+      - 56
+      - speed_limit: 0.7
+    - - 56
+      - 55
+      - speed_limit: 0.7
+    - - 56
+      - 44
+      - speed_limit: 0.7
+    - - 44
+      - 56
+      - speed_limit: 0.7
+    - - 57
+      - 58
+      - speed_limit: 0.7
+    - - 58
+      - 57
+      - speed_limit: 0.7
+    - - 58
+      - 45
+      - speed_limit: 0.7
+    - - 45
+      - 58
+      - speed_limit: 0.7
+    - - 59
+      - 46
+      - speed_limit: 0.7
+    - - 46
+      - 59
+      - speed_limit: 0.7
+    - - 60
+      - 47
+      - speed_limit: 0.7
+    - - 47
+      - 60
+      - speed_limit: 0.7
+    - - 61
+      - 48
+      - speed_limit: 0.7
+    - - 48
+      - 61
+      - speed_limit: 0.7
+    - - 62
+      - 49
+      - speed_limit: 0.7
+    - - 49
+      - 62
+      - speed_limit: 0.7
+    - - 63
+      - 50
+      - speed_limit: 0.7
+    - - 50
+      - 63
+      - speed_limit: 0.7
+    - - 37
+      - 70
+      - speed_limit: 0.7
+    - - 70
+      - 37
+      - speed_limit: 0.7
+    - - 70
+      - 71
+      - speed_limit: 0.7
+    - - 71
+      - 70
+      - speed_limit: 0.7
+    - - 71
+      - 64
+      - speed_limit: 0.7
+    - - 64
+      - 71
+      - speed_limit: 0.7
+    - - 39
+      - 72
+      - speed_limit: 0.7
+    - - 72
+      - 39
+      - speed_limit: 0.7
+    - - 72
+      - 73
+      - speed_limit: 0.7
+    - - 73
+      - 72
+      - speed_limit: 0.7
+    - - 73
+      - 65
+      - speed_limit: 0.7
+    - - 65
+      - 73
+      - speed_limit: 0.7
+    - - 66
+      - 74
+      - speed_limit: 0.7
+    - - 74
+      - 75
+      - speed_limit: 0.7
+    - - 75
+      - 67
+      - speed_limit: 0.7
+    - - 67
+      - 76
+      - speed_limit: 0.7
+    - - 76
+      - 77
+      - speed_limit: 0.7
+    - - 77
+      - 68
+      - speed_limit: 0.7
+    - - 68
+      - 78
+      - speed_limit: 0.7
+    - - 78
+      - 79
+      - speed_limit: 0.7
+    - - 79
+      - 69
+      - speed_limit: 0.7
+    - - 69
+      - 80
+      - speed_limit: 0.7
+    - - 80
+      - 81
+      - speed_limit: 0.7
+    - - 81
+      - 66
+      - speed_limit: 0.7
+    - - 4
+      - 82
+      - speed_limit: 0.7
+    - - 82
+      - 4
+      - speed_limit: 0.7
+    - - 82
+      - 83
+      - speed_limit: 0.7
+    - - 83
+      - 82
+      - speed_limit: 0.7
+    - - 83
+      - 66
+      - speed_limit: 0.7
+    - - 66
+      - 83
+      - speed_limit: 0.7
+    - - 58
+      - 84
+      - speed_limit: 0.7
+    - - 84
+      - 58
+      - speed_limit: 0.7
+    - - 84
+      - 85
+      - speed_limit: 0.7
+    - - 85
+      - 84
+      - speed_limit: 0.7
+    - - 85
+      - 7
+      - speed_limit: 0.7
+    - - 7
+      - 85
+      - speed_limit: 0.7
+    - - 60
+      - 86
+      - speed_limit: 0.7
+    - - 86
+      - 60
+      - speed_limit: 0.7
+    - - 86
+      - 87
+      - speed_limit: 0.7
+    - - 87
+      - 86
+      - speed_limit: 0.7
+    - - 87
+      - 21
+      - speed_limit: 0.7
+    - - 21
+      - 87
+      - speed_limit: 0.7
+    vertices:
+    - - 13.0
+      - 13.0
+      - name: LM_13_13
+    - - 13.0
+      - 20.0
+      - name: AP_PICK_01
+    - - 13.0
+      - 26.0
+      - name: LM_13_26
+    - - 13.0
+      - 32.0
+      - name: LM_13_32
+    - - 13.0
+      - 38.0
+      - name: LM_13_38
+    - - 13.0
+      - 44.0
+      - name: LM_13_44
+    - - 13.0
+      - 49.0
+      - name: LM_13_49
+    - - 23.0
+      - 13.0
+      - name: LM_23_13
+    - - 23.0
+      - 20.0
+      - name: LM_23_20
+    - - 23.0
+      - 26.0
+      - name: LM_23_26
+    - - 23.0
+      - 32.0
+      - name: LM_23_32
+    - - 23.0
+      - 38.0
+      - name: LM_23_38
+    - - 23.0
+      - 44.0
+      - name: LM_23_44
+    - - 23.0
+      - 49.0
+      - name: LM_23_49
+    - - 33.0
+      - 13.0
+      - name: LM_33_13
+    - - 33.0
+      - 20.0
+      - name: LM_33_20
+    - - 33.0
+      - 26.0
+      - name: LM_33_26
+    - - 33.0
+      - 32.0
+      - name: AP_PICK_02
+    - - 33.0
+      - 38.0
+      - name: LM_33_38
+    - - 33.0
+      - 44.0
+      - name: LM_33_44
+    - - 33.0
+      - 49.0
+      - name: LM_33_49
+    - - 43.0
+      - 13.0
+      - name: LM_43_13
+    - - 43.0
+      - 20.0
+      - name: LM_43_20
+    - - 43.0
+      - 26.0
+      - name: LM_43_26
+    - - 43.0
+      - 32.0
+      - name: LM_43_32
+    - - 43.0
+      - 38.0
+      - name: LM_43_38
+    - - 43.0
+      - 44.0
+      - name: LM_43_44
+    - - 43.0
+      - 49.0
+      - name: LM_43_49
+    - - 53.0
+      - 13.0
+      - name: LM_53_13
+    - - 53.0
+      - 20.0
+      - name: LM_53_20
+    - - 53.0
+      - 26.0
+      - name: LM_53_26
+    - - 53.0
+      - 32.0
+      - name: LM_53_32
+    - - 53.0
+      - 38.0
+      - name: LM_53_38
+    - - 53.0
+      - 44.0
+      - name: AP_PICK_03
+    - - 53.0
+      - 49.0
+      - name: LM_53_49
+    - - 63.0
+      - 13.0
+      - name: LM_63_13
+    - - 63.0
+      - 20.0
+      - name: LM_63_20
+    - - 63.0
+      - 26.0
+      - name: LM_63_26
+    - - 63.0
+      - 32.0
+      - name: LM_63_32
+    - - 63.0
+      - 38.0
+      - name: LM_63_38
+    - - 63.0
+      - 44.0
+      - name: LM_63_44
+    - - 63.0
+      - 49.0
+      - name: LM_63_49
+    - - 6.0
+      - 13.0
+      - name: LM_06_13
+    - - 12.0
+      - 13.0
+      - name: LM_12_13
+    - - 18.0
+      - 13.0
+      - name: LM_18_13
+    - - 24.0
+      - 13.0
+      - name: LM_24_13
+    - - 34.0
+      - 13.0
+      - name: LM_34_13
+    - - 40.0
+      - 13.0
+      - name: LM_40_13
+    - - 46.0
+      - 13.0
+      - name: LM_46_13
+    - - 56.0
+      - 13.0
+      - name: LM_56_13
+    - - 66.0
+      - 13.0
+      - name: LM_66_13
+    - - 6.0
+      - 5.0
+      - name: CP_06
+        is_charger: true
+    - - 6.0
+      - 10.0
+      - name: LM_DOCK_06
+    - - 12.0
+      - 5.0
+      - name: CP_12
+        is_charger: true
+    - - 12.0
+      - 10.0
+      - name: LM_DOCK_12
+    - - 18.0
+      - 5.0
+      - name: CP_18
+        is_charger: true
+    - - 18.0
+      - 10.0
+      - name: LM_DOCK_18
+    - - 24.0
+      - 5.0
+      - name: CP_24
+        is_charger: true
+    - - 24.0
+      - 10.0
+      - name: LM_DOCK_24
+    - - 34.0
+      - 9.0
+      - name: AP_SHIP_01
+    - - 40.0
+      - 9.0
+      - name: AP_SHIP_02
+    - - 46.0
+      - 9.0
+      - name: AP_RECEIVE_01
+    - - 56.0
+      - 9.0
+      - name: AP_RECEIVE_02
+    - - 66.0
+      - 9.0
+      - name: AP_RECEIVE_03
+    - - 68.0
+      - 26.0
+      - name: AP_BUFFER_01
+    - - 68.0
+      - 38.0
+      - name: AP_BUFFER_02
+    - - 10.0
+      - 42.0
+      - name: LM_QC_E
+    - - 7.0
+      - 39.0
+      - name: LM_QC_S
+    - - 4.0
+      - 42.0
+      - name: LM_QC_W
+    - - 7.0
+      - 45.0
+      - name: AP_QC_01
+    - - 64.740741
+      - 25.777778
+      - name: ''
+    - - 66.259259
+      - 26.222222
+      - name: ''
+    - - 64.740741
+      - 37.777778
+      - name: ''
+    - - 66.259259
+      - 38.222222
+      - name: ''
+    - - 9.590412
+      - 40.485843
+      - name: ''
+    - - 8.514157
+      - 39.409588
+      - name: ''
+    - - 5.485843
+      - 39.409588
+      - name: ''
+    - - 4.409588
+      - 40.485843
+      - name: ''
+    - - 4.409588
+      - 43.514157
+      - name: ''
+    - - 5.485843
+      - 44.590412
+      - name: ''
+    - - 8.514157
+      - 44.590412
+      - name: ''
+    - - 9.590412
+      - 43.514157
+      - name: ''
+    - - 12.666667
+      - 39.925926
+      - name: ''
+    - - 11.666667
+      - 41.407407
+      - name: ''
+    - - 23.740741
+      - 11.111111
+      - name: ''
+    - - 23.259259
+      - 11.888889
+      - name: ''
+    - - 41.444444
+      - 9.592593
+      - name: ''
+    - - 42.555556
+      - 11.074074
+      - name: ''
+lifts: {}
+offset:
+- 0
+- 0

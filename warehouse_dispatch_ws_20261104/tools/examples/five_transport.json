@@ -1,0 +1,7 @@
+[
+  {"id":"DEMO-CARGO-01","type":"transport","pickup":"AP_PICK_01","dropoff":"AP_SHIP_01","priority":0},
+  {"id":"DEMO-CARGO-02","type":"transport","pickup":"AP_RECEIVE_01","dropoff":"AP_SHIP_02","priority":0},
+  {"id":"DEMO-CARGO-03","type":"transport","pickup":"AP_RECEIVE_02","dropoff":"AP_RECEIVE_03","priority":0},
+  {"id":"DEMO-CARGO-04","type":"transport","pickup":"AP_PICK_02","dropoff":"AP_SHIP_01","priority":0},
+  {"id":"DEMO-CARGO-05","type":"transport","pickup":"AP_PICK_03","dropoff":"AP_BUFFER_02","priority":0}
+]

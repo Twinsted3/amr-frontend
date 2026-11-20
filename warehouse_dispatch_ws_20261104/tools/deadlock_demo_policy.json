@@ -1,0 +1,5 @@
+{
+  "waiting_points": ["LM_13_32"],
+  "yield_bays": ["LM_DOCK_18", "LM_13_26"],
+  "no_stop_stations": ["LM_13_13"]
+}

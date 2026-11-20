@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "checks": {
+    "form_offers_only_current_chargers_and_automatic": true,
+    "fixed_task_stays_queued_with_original_target": true,
+    "manual_charge_visible_in_main_queue": true,
+    "vehicle_shortcut_prefills_same_form": true,
+    "no_charge_dispatched_during_prior_task": true,
+    "fixed_waited_for_fresh_physical_departure": true,
+    "automatic_selected_nearest_after_prior_task": true,
+    "two_routes_then_charging_completed": true,
+    "both_charged_after_arrival": true,
+    "no_browser_exceptions": true
+  },
+  "robot_count": 4
+}

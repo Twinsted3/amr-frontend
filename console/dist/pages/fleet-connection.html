@@ -1,0 +1,8 @@
+<article class="panel connection-panel">
+  <div class="panel-head"><div><h2>连接仿真车队</h2><p>连接已启动的 Gazebo 场景后，自动读取车辆、地图和调度任务。</p></div><a class="button" href="/vehicles">车辆管理</a></div>
+  <form id="fleet-connection-form" class="panel-body form-line">
+    <label>仿真服务地址<input id="fleet-address" type="url" placeholder="http://127.0.0.1:8866" required></label>
+    <button type="submit" class="primary">保存并连接</button>
+  </form>
+  <p id="fleet-config-result" class="panel-body ruled" role="status">仿真模型由 Gazebo 场景启动，连接后会自动出现在运行地图上。</p>
+</article>

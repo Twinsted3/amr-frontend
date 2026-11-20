@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "checks": {
+    "joint_plan_observed": true,
+    "all_original_jobs_done": true,
+    "at_original_destinations": true,
+    "resolution_confirmed": true,
+    "saw_required_yield": true,
+    "no_reservation_overlap": true
+  }
+}

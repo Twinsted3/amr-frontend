@@ -1,0 +1,7 @@
+[
+  {"id":"DEMO-OUT-01","type":"standby","goal":"LM_DOCK_06","priority":0},
+  {"id":"DEMO-OUT-02","type":"standby","goal":"LM_DOCK_12","priority":0},
+  {"id":"DEMO-OUT-03","type":"standby","goal":"LM_DOCK_18","priority":0},
+  {"id":"DEMO-OUT-04","type":"standby","goal":"LM_DOCK_24","priority":0},
+  {"id":"DEMO-OUT-05","type":"standby","goal":"LM_63_49","priority":0}
+]

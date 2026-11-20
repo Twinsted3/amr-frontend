@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "checks": {
+    "joint_plan_observed": true,
+    "both_jobs_done": true,
+    "resolution_confirmed": true,
+    "saw_required_yield": true,
+    "same_cargo_remained_with_yielding_vehicle": true,
+    "unload_confirmed_at_original_destination": true,
+    "no_reservation_overlap": true
+  }
+}

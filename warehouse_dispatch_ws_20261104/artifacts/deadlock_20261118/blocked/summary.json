@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "checks": {
+    "no_safe_plan_still_reported": true,
+    "no_yield_for_cycle": true,
+    "blocked_robots_stayed": true,
+    "independent_job_done": true,
+    "no_reservation_overlap": true
+  }
+}
