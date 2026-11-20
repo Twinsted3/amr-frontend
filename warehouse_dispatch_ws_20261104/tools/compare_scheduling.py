@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 
 ROOT=Path(__file__).resolve().parents[1]
-sys.path[:0]=[str(ROOT/'.dispatch-deps'),str(ROOT/'src/warehouse_sim')]
+sys.path[:0]=[str(ROOT.parent),str(ROOT/'.dispatch-deps'),str(ROOT/'src/warehouse_sim')]
 from warehouse_sim.fleet_core import Fleet
 from warehouse_sim.route_graph import RouteGraph
 from warehouse_sim.assignment import match_jobs
