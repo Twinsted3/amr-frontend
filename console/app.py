@@ -12,6 +12,7 @@ import re
 import socket
 import sqlite3
 import threading
+import time
 from urllib.parse import quote, urlsplit
 import webbrowser
 
@@ -23,9 +24,10 @@ from common.views import DIST, NOT_FOUND, find_page, render_page, web_asset
 
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 12_000_000
+MAX_REPLAY = 32_000_000
 MAP_CAPABILITIES = {'archive': True, 'versioned_save': True}
 PORTS = {'field': 8081, 'sim': 8082}
-DB_IDS = {'field': 0x414D5201, 'sim': 0x414D5202}
+DB_IDS = {'field': 0x414D5201, 'sim': 0x414D5202, 'lightweight': 0x414D5203}
 
 
 def claim_database(path, mode):
@@ -43,6 +45,19 @@ def claim_database(path, mode):
 def simulation_route(path):
     return (path == '/api/fleet' or path.startswith('/api/fleet/')
             or path == '/api/telemetry/source')
+
+
+def open_replay(path):
+    with path.open('rb') as source:
+        data = source.read(MAX_REPLAY + 1)
+    if len(data) > MAX_REPLAY:
+        raise ValueError('联测回放文件超过 32 MB')
+    document = json.loads(data, parse_constant=invalid_constant)
+    if (not isinstance(document, dict) or type(document.get('schema_version')) is not int
+            or document['schema_version'] != 1 or document.get('source') != 'LIGHTWEIGHT_BENCHMARK'
+            or not isinstance(document.get('frames'), list) or not document['frames']):
+        raise ValueError('联测回放文件缺少支持的版本或有效时间帧')
+    return data
 
 
 class ConsoleServer(ThreadingHTTPServer):
@@ -99,6 +114,9 @@ class Handler(BaseHTTPRequestHandler):
             if path == '/api/state':
                 state = {**dispatch.map_snapshot(), 'map_capabilities': MAP_CAPABILITIES,
                          'vehicles': self.server.vehicles.snapshot()}
+                if getattr(self.server.fleet, 'lightweight', False):
+                    with self.server.fleet.lock:
+                        state['running_map_id'] = self.server.fleet.map_id
                 if self.server.telemetry:
                     state['telemetry'] = self.server.telemetry.snapshot()
                 self.reply(state)
@@ -109,6 +127,19 @@ class Handler(BaseHTTPRequestHandler):
                 return
             if path == '/api/fleet/state':
                 self.reply(self.server.fleet.snapshot())
+                return
+            if path == '/api/fleet/replay':
+                replay = getattr(self.server, 'fleet_replay', None)
+                if replay is None:
+                    self.reply({'error': '当前控制台尚未载入联测回放文件'}, 404)
+                else:
+                    self.reply(replay)
+                return
+            if path == '/api/fleet/scenario' and getattr(self.server.fleet, 'lightweight', False):
+                if self.server.fleet.batches:
+                    self.reply({'batches': self.server.fleet.batches})
+                else:
+                    self.reply({'error': '当前未启用百台联测场景'}, 404)
                 return
             if path == '/api/fleet/config':
                 self.reply(self.server.fleet.config())
@@ -137,8 +168,11 @@ class Handler(BaseHTTPRequestHandler):
             if path.startswith('/smap-editor/') and path.removeprefix('/smap-editor/') in editor_assets:
                 name = path.removeprefix('/smap-editor/')
                 content = (DIST/'smap-editor'/name).read_text(encoding='utf-8')
-                if self.server.mode == 'field' and name == 'index.html':
-                    content = content.replace('Gazebo 世界坐标', '地图坐标').replace('Gazebo 实体', '地图实体')
+                if name == 'index.html':
+                    if self.server.mode == 'field' or getattr(self.server.fleet, 'lightweight', False):
+                        content = content.replace('Gazebo 世界坐标', '地图坐标').replace('Gazebo 实体', '地图实体')
+                    if getattr(self.server.fleet, 'lightweight', False):
+                        content = content.replace('保存并使用', '保存并应用')
                 self.reply(content.encode(), media=editor_assets[name]+'; charset=utf-8', embedded=True)
                 return
             asset = web_asset(self.server.mode, path)
@@ -158,12 +192,14 @@ class Handler(BaseHTTPRequestHandler):
                         raise ValueError('车辆未登记')
             except ValueError:
                 page, record_id = NOT_FOUND, None
-            self.reply(render_page(page, record_id, self.server.mode),
+            self.reply(render_page(page, record_id, self.server.mode,
+                                   lightweight=getattr(self.server.fleet, 'lightweight', False)),
                        404 if page == NOT_FOUND else 200, 'text/html; charset=utf-8')
         except ValueError as error:
             self.reply({'error': str(error)}, 404)
 
     def do_POST(self):
+        received_ns = time.perf_counter_ns()
         if not self.allowed():
             self.reply({'error': '请通过本机地址访问'}, 403)
             return
@@ -184,7 +220,10 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(body, dict):
                 raise ValueError('请求必须是 JSON 对象')
             if path == '/api/fleet/commands':
-                status, result = self.server.fleet.command(body)
+                if getattr(self.server.fleet, 'lightweight', False):
+                    status, result = self.server.fleet.command(body, received_ns=received_ns)
+                else:
+                    status, result = self.server.fleet.command(body)
                 self.reply(result, status)
                 return
             if path == '/api/fleet/config':
@@ -195,10 +234,33 @@ class Handler(BaseHTTPRequestHandler):
             delete_map = re.fullmatch(r'/api/maps/([1-9][0-9]{0,17})/archive', path)
             if editor_map:
                 use = body.get('use') is True
-                if use and self.server.fleet and self.server.fleet.address:
+                if use and getattr(self.server.fleet, 'lightweight', False):
+                    fleet = self.server.fleet
+                    with fleet.lock:
+                        try:
+                            fleet.check_idle()
+                        except ValueError as error:
+                            self.reply({'error': str(error)}, 409)
+                            return
+                        result = dispatch.save_map_version(int(editor_map[1]), body.get('map'))
+                        try:
+                            result.update(fleet.apply_map(result['id']))
+                        except ValueError as error:
+                            self.reply({**result, 'error': f"已保存版本 #{result['id']}，应用失败：{error}"}, 409)
+                            return
+                elif use and self.server.fleet and self.server.fleet.address:
                     self.reply({'error': '车队换图尚未接通，请先用「保存新版本」保留修改。'}, 409)
                     return
-                result = dispatch.save_map_version(int(editor_map[1]), body.get('map'), use=use)
+                else:
+                    result = dispatch.save_map_version(int(editor_map[1]), body.get('map'), use=use)
+            elif path == '/api/field/map-application' and self.server.mode == 'field':
+                if type(body.get('id')) is not int:
+                    raise ValueError('地图编号无效')
+                coordinator = getattr(self.server, 'map_cutover', None)
+                if coordinator is None:
+                    self.reply({'error': '现场调度与车端地图确认接口尚未接通'}, 409)
+                    return
+                result = coordinator.apply(body['id'])
             elif delete_map:
                 result = dispatch.archive_map(int(delete_map[1]))
             elif vehicle_match:
@@ -207,6 +269,14 @@ class Handler(BaseHTTPRequestHandler):
                 result = self.server.vehicles.add(body)
             elif path == '/api/maps':
                 result = dispatch.add_map(body.get('document'))
+            elif path == '/api/fleet/map-application' and getattr(self.server.fleet, 'lightweight', False):
+                if type(body.get('id')) is not int:
+                    raise ValueError('地图编号无效')
+                try:
+                    result = self.server.fleet.apply_map(body['id'])
+                except ValueError as error:
+                    self.reply({'error': str(error)}, 409)
+                    return
             elif path == '/api/map-selection':
                 if type(body.get('id')) is not int:
                     raise ValueError('地图编号无效')
@@ -234,15 +304,35 @@ def main():
     parser.add_argument('--port', type=int)
     parser.add_argument('--db', type=Path)
     parser.add_argument('--gazebo-url', help='已运行的 ROS/Gazebo 调度接口，例如 http://127.0.0.1:8866')
+    parser.add_argument('--lightweight', action='store_true', help='启用控制台内置轻量仿真执行端')
+    parser.add_argument('--resume-sim', action='store_true', help='从一致的轻量仿真检查点接续')
+    parser.add_argument('--shared-vehicles', type=int, choices=(10, 100), help='启用共享路网的规模场景')
+    parser.add_argument('--fleet-benchmark-seed', type=int, help='启用百台跨区叉车联测和可复跑任务种子')
+    parser.add_argument('--fleet-replay', type=Path, help='载入百台联测实际记录以供网页回放')
     parser.add_argument('--open-browser', action='store_true', help='启动后打开控制台')
     args = parser.parse_args()
     if args.mode == 'field' and args.gazebo_url is not None:
         parser.error('实车部署不接受仿真服务地址，请明确选择 --mode sim')
+    if args.lightweight and (args.mode != 'sim' or args.gazebo_url is not None):
+        parser.error('--lightweight 需搭配 --mode sim 且独立于 Gazebo')
+    if (args.shared_vehicles or args.resume_sim) and not args.lightweight:
+        parser.error('--shared-vehicles 和 --resume-sim 需搭配 --lightweight')
+    if args.fleet_benchmark_seed is not None and args.shared_vehicles != 100:
+        parser.error('--fleet-benchmark-seed 需搭配 --lightweight --shared-vehicles 100')
+    if args.fleet_replay is not None and args.mode != 'sim':
+        parser.error('--fleet-replay 需搭配 --mode sim')
+    try:
+        replay = open_replay(args.fleet_replay) if args.fleet_replay else None
+    except (OSError, ValueError) as error:
+        parser.error(f'无法载入联测回放：{error}')
     other = 'sim' if args.mode == 'field' else 'field'
     port = PORTS[args.mode] if args.port is None else args.port
     if port == PORTS[other] or not 1 <= port <= 65535:
         parser.error('端口无效或为另一部署的默认端口')
-    db_path = (args.db or ROOT/'runtime'/args.mode/'console.sqlite3').resolve()
+    profile = 'lightweight' if args.lightweight else args.mode
+    default_file = (f'forklift-cross-100-{args.fleet_benchmark_seed}.sqlite3' if args.fleet_benchmark_seed is not None
+                    else f'shared-{args.shared_vehicles}.sqlite3' if args.shared_vehicles else 'console.sqlite3')
+    db_path = (args.db or ROOT/'runtime'/profile/default_file).resolve()
     try:
         server = ConsoleServer(('127.0.0.1', port), Handler)
     except OSError as error:
@@ -251,14 +341,22 @@ def main():
         raise
     try:
         db_path.parent.mkdir(parents=True, exist_ok=True)
-        claim_database(db_path, args.mode)
+        claim_database(db_path, profile)
         server.mode = args.mode
+        server.fleet_replay = replay
         if args.mode == 'sim':
             from sim.fleet import Fleet
             from sim.vehicles import SAMPLE_DIR, SAMPLE_PREFIX, SimVehicles
 
-            server.dispatch = Dispatch(db_path, SAMPLE_DIR, local_executor=False)
-            server.fleet = Fleet(args.gazebo_url, server.dispatch)
+            server.dispatch = Dispatch(db_path, None if args.lightweight else SAMPLE_DIR, local_executor=False)
+            if args.lightweight:
+                from sim.lightweight import LightweightFleet
+                simulation_db = db_path.with_suffix('.execution.sqlite3') if args.resume_sim else None
+                server.fleet = LightweightFleet(server.dispatch, db_path.parent / 'sessions',
+                                               args.shared_vehicles, resume_db=simulation_db,
+                                               benchmark_seed=args.fleet_benchmark_seed)
+            else:
+                server.fleet = Fleet(args.gazebo_url, server.dispatch)
             server.telemetry = Telemetry(SAMPLE_DIR, identity_prefix=SAMPLE_PREFIX)
             server.vehicles = SimVehicles(server.dispatch)
         else:
@@ -270,7 +368,7 @@ def main():
     except (OSError, sqlite3.Error, ValueError) as error:
         server.server_close()
         parser.error(str(error))
-    entry = 'fleet' if server.fleet else ''
+    entry = 'fleet/replay' if replay else 'fleet' if server.fleet else ''
     url = f'http://127.0.0.1:{server.server_port}/{entry}'
     print(f'AMR 控制台 {url}  mode={args.mode}  PID={os.getpid()}  数据库={db_path}', flush=True)
     if args.open_browser:
@@ -282,6 +380,8 @@ def main():
     finally:
         if server.telemetry:
             server.telemetry.stop.set()
+        if getattr(server.fleet, 'lightweight', False):
+            server.fleet.close()
         server.vehicles.close()
         server.server_close()
 

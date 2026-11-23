@@ -51,6 +51,20 @@ class BatchContractTests(unittest.TestCase):
         self.s.request(request,1);self.s.request(request,2);self.assertEqual(len(self.f.jobs),2)
         self.s.close();self.s=DurableDispatch(Fleet(self.graph,['agv01','agv02']),Path(self.tmp.name)/'state','warehouse')
         self.assertEqual(set(self.s.fleet.jobs),{'a','b'})
+    def test_hundred_task_limit_and_idempotent_retry(self):
+        tasks = [self.req(f'task-{index}') for index in range(100)]
+        body = dict(operation='submit_batch', tasks=tasks)
+        normalized = validate_request(body, self.graph.stations)
+        self.s.request(normalized, 1)
+        self.s.request(normalized, 2)
+        self.assertEqual(set(self.f.jobs), {item['id'] for item in tasks})
+        too_many = dict(body, tasks=tasks + [self.req('extra')])
+        with self.assertRaises(ValueError):
+            validate_request(too_many, self.graph.stations)
+        with self.assertRaises(ValueError):
+            self.s.request(too_many, 3)
+        self.assertEqual(len(self.f.jobs), 100)
+
     def test_bad_item_does_not_partially_create_batch(self):
         with self.assertRaises(ValueError):self.s.request(dict(operation='submit_batch',tasks=[self.req('a'),self.req('b','bad')]),1)
         self.assertEqual(self.f.jobs,{})

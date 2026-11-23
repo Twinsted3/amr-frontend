@@ -64,7 +64,7 @@ class Dashboard(Node):
                 request=None
                 try:
                     size=int(self.headers.get('Content-Length','0'))
-                    if not 0<size<=16384:raise ValueError('请求长度无效')
+                    if not 0<size<=262144:raise ValueError('请求长度无效')
                     self.connection.settimeout(5)
                     request=validate_request(json.loads(self.rfile.read(size)),owner.map['stations'])
                     waiter=dict(ready=threading.Event(),result=None,deadline=time.monotonic()+8)

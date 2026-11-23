@@ -1,5 +1,8 @@
 """Bounded, same-priority min-cost matching; no vehicle-side side effects."""
 import math
+from collections import Counter
+from heapq import heappop, heappush
+import time
 import networkx as nx
 
 SOLVER = 'networkx_min_cost_max_flow'
@@ -47,3 +50,62 @@ def match_jobs(jobs,window=32,max_candidates=None):
     flow=nx.max_flow_min_cost(graph,source,sink)
     return {j['id']:robot for j,bids in zip(jobs,rows) for robot,_ in bids
             if flow.get(('job',j['id']),{}).get(('robot',robot),0)}
+
+
+def match_job_resources(jobs, *, budget_s=.035, max_branches=24):
+    """Bounded optimization of a window with several exclusive resources per job."""
+    counts = Counter(resource for job in jobs for resource in job.get('resources', ()))
+    # Retain the most contested resource of each job in the flow relaxation.
+    primary = [dict(job, resource=max(job.get('resources', ()), key=lambda key: counts[key], default=None))
+               for job in jobs]
+    order = {job['id']: index for index, job in enumerate(jobs)}
+    by_id = {job['id']: job for job in jobs}
+    deadline = time.perf_counter() + budget_s
+
+    def score(selected):
+        return (-len(selected), tuple(sorted(order[job] for job in selected)),
+                sum(costs[job, robot] for job, robot in selected.items()))
+
+    def repair(selected):
+        feasible, claimed, conflict = {}, {}, None
+        for identity in sorted(selected, key=order.__getitem__):
+            resources = by_id[identity].get('resources', ())
+            shared = next((claimed[resource] for resource in resources if resource in claimed), None)
+            if shared is not None:
+                if conflict is None:
+                    conflict = (shared, identity)
+                continue
+            feasible[identity] = selected[identity]
+            claimed.update(dict.fromkeys(resources, identity))
+        return feasible, conflict
+
+    initial = match_jobs(primary)
+    best, conflict = repair(initial)
+    if conflict is None:
+        return initial, True
+    costs = {(job['id'], bid['robot']): round(bid['cost'] * 1e6) for job in jobs for bid in job['bids']}
+    seen = {frozenset()}
+    pending = [(score(initial), 0, frozenset(), conflict)]
+    explored = 0
+    while pending:
+        bound, _, excluded, conflicts = heappop(pending)
+        if bound >= score(best):
+            continue
+        for identity in conflicts:
+            branch = excluded | {identity}
+            if branch in seen:
+                continue
+            if explored >= max_branches or time.perf_counter() >= deadline:
+                return best, False
+            seen.add(branch)
+            explored += 1
+            result = match_jobs([job for job in primary if job['id'] not in branch])
+            bound = score(result)
+            if bound >= score(best):
+                continue
+            feasible, conflict = repair(result)
+            if score(feasible) < score(best):
+                best = feasible
+            if conflict is not None:
+                heappush(pending, (bound, explored, branch, conflict))
+    return best, True

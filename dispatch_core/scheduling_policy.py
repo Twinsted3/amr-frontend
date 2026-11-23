@@ -5,10 +5,33 @@ Policy changes never preempt an accepted vehicle execution.
 """
 import math
 
+BUSINESS_PRIORITIES = (-100, 0, 100)
+
+
+def valid_business_priority(value):
+    return not isinstance(value, bool) and value in BUSINESS_PRIORITIES
+
+
 DEFAULT_POLICY = dict(mode='adaptive', normal_wait_s=300., empty_speed_mps=.6,
                       loaded_speed_mps=.4, reserve_soc=.05, energy_per_m=.0005,
                       target_soc=.5, battery_penalty_s=300., occupied_wait_s=15.,
                       handling_s=4., weights=dict(travel=1., congestion=1., energy=1.))
+
+VEHICLE_PERFORMANCE_BOUNDS = {
+    'empty_speed_mps': (.05, 3.), 'loaded_speed_mps': (.05, 3.),
+    'empty_soc_per_m': (.000001, .01), 'loaded_soc_per_m': (.000001, .01),
+    'handling_s': (0., 300.),
+}
+
+
+def validate_vehicle_performance(value):
+    if not isinstance(value, dict) or value.keys() - VEHICLE_PERFORMANCE_BOUNDS.keys():
+        raise ValueError('车辆性能参数包含未知字段')
+    for key, number in value.items():
+        low, high = VEHICLE_PERFORMANCE_BOUNDS[key]
+        if type(number) not in (int, float) or not low <= number <= high:
+            raise ValueError(f'车辆性能参数超出范围：{key}')
+    return dict(value)
 
 def validate_policy(value):
     if not isinstance(value,dict) or set(value)!=set(DEFAULT_POLICY):
@@ -35,7 +58,8 @@ def priority(job,now,policy,robot_soc=None):
     if job.kind=='charge' and robot_soc is not None and robot_soc<.10:return 0,'极低电量充电'
     if job.kind!='return' and age>=policy['normal_wait_s']:return 1,'等待已超过优先处理阈值'
     if job.priority>=100:return 2,'紧急任务'
-    if job.kind=='return':return 4,'空闲返程'
+    if job.kind=='return':return 5,'空闲返程'
+    if job.priority == -100:return 4,'低优先级任务'
     return 3,'普通任务'
 
 def update_weights(policy,previous,low_ratio,waiting_ratio):

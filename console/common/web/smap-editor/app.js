@@ -492,7 +492,7 @@ async function save(use = false) {
     dirty = false;
     $("#saveState").textContent = "已保存";
     $("#saveState").className = "status saved";
-    if (use) window.top.location.assign("/");
+    if (use) window.top.location.assign(result.map_id ? "/maps" : "/");
     else showToast(`已保存为版本 #${result.id}：${result.name}`);
   } catch (error) {
     $("#saveState").textContent = "保存失败";

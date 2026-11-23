@@ -1,0 +1,151 @@
+#fleet-replay {
+  --replay-grid: #dbe5f1;
+  --replay-blue: #254cd1;
+  --replay-chart: #0b192a;
+  --replay-idle: #a0b2c8;
+  --replay-moving: #73c1ff;
+  --replay-waiting: #ffd075;
+  --replay-charging: #66e2bc;
+  --replay-handling: #f5a8db;
+  --replay-recovering: #c4b3ff;
+  --replay-offline: #ff8ca0;
+  display: grid;
+  gap: 14px;
+}
+
+.replay-source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #eaf1fe;
+  border: 1px solid #d1def7;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.replay-source-tag { color: #284173; font-weight: 750; }
+.replay-source p { font-size: 12px; }
+#replay-error { margin-bottom: 0; }
+#replay-content { display: grid; gap: 14px; }
+.replay-metrics {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.replay-metrics div {
+  min-width: 0;
+  border: 1px solid var(--replay-grid);
+  background: #fff;
+  border-radius: 8px;
+  padding: 9px 13px;
+}
+.replay-metrics dt { color: var(--muted); font-size: 12px; }
+.replay-metrics dd {
+  color: #233e6a;
+  margin: 0;
+  font-size: clamp(17px, 2.25vw, 27px);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.replay-metrics div:first-child dd { color: var(--replay-blue); }
+.replay-map-actions { justify-content: flex-end; }
+.replay-map-actions button { padding-inline: 10px; }
+.replay-map-wrap { position: relative; background: var(--replay-chart); }
+#replay-map {
+  display: block;
+  width: 100%;
+  height: clamp(220px, 30vh, 385px);
+  touch-action: none;
+  cursor: grab;
+}
+#replay-map:active { cursor: grabbing; }
+#replay-map:focus-visible { outline: 2px solid #92c4ff; outline-offset: -3px; }
+.replay-map-note, .replay-map-hover {
+  position: absolute;
+  color: #c9d8ea;
+  background: #12263b;
+  border: 1px solid #335170;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 11px;
+  pointer-events: none;
+}
+.replay-map-note { right: 11px; bottom: 10px; }
+.replay-map-hover { top: 10px; left: 10px; }
+.replay-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  list-style: none;
+  margin: 0;
+  padding: 9px 14px;
+  color: #536580;
+  font-size: 12px;
+  border-bottom: 1px solid var(--replay-grid);
+}
+.replay-legend li { display: inline-flex; align-items: center; gap: 5px; }
+.replay-legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--replay-state); border: 1px solid #32476380; }
+#fleet-replay [data-state="idle"] { --replay-state: var(--replay-idle); }
+#fleet-replay [data-state="moving"] { --replay-state: var(--replay-moving); }
+#fleet-replay [data-state="waiting"] { --replay-state: var(--replay-waiting); }
+#fleet-replay [data-state="low_power_waiting"] { --replay-state: #f8a266; }
+#fleet-replay [data-state="charging"] { --replay-state: var(--replay-charging); }
+#fleet-replay [data-state="handling"] { --replay-state: var(--replay-handling); }
+#fleet-replay [data-state="recovering"] { --replay-state: var(--replay-recovering); }
+#fleet-replay [data-state="offline"] { --replay-state: var(--replay-offline); }
+.replay-legend .replay-key-closure { width: 14px; height: 0; border: 0; border-top: 2px dashed #cf425a; border-radius: 0; }
+.replay-legend .replay-key-route { width: 14px; height: 0; border: 0; border-top: 2px solid #3167dc; border-radius: 0; }
+.replay-transport { display: flex; align-items: center; gap: 9px; padding: 10px 14px; }
+.replay-transport > select { width: 70px; min-width: 70px; }
+.replay-slider-group { display: grid; gap: 3px; flex: 1; min-width: 0; }
+.replay-slider-group label, .replay-speed-label { color: var(--muted); font-size: 12px; }
+#replay-timeline { padding: 0; margin: 0; min-height: 20px; accent-color: var(--replay-blue); }
+#replay-play { min-width: 70px; }
+.replay-lower { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.replay-filter { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+.replay-filter select { min-height: 34px; padding-block: 4px; width: auto; max-width: 178px; }
+.replay-events { list-style: none; margin: 0; padding: 0; max-height: 248px; overflow: auto; }
+.replay-events li + li { border-top: 1px solid #e9eff7; }
+.replay-events button {
+  display: grid;
+  grid-template-columns: 67px minmax(0, 1fr) auto;
+  width: 100%;
+  justify-items: start;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
+  white-space: normal;
+  padding: 8px 15px;
+}
+.replay-events button:focus-visible { outline-offset: -3px; }
+.replay-events button[aria-current="true"] { background: #eaf1ff; color: #1e45bc; box-shadow: inset 3px 0 #456bea; }
+.replay-step { color: #536580; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.replay-event-kind { justify-self: end; color: #4f648a; font-size: 11px; font-weight: 500; }
+.replay-empty-events { padding: 12px 15px; color: var(--muted); }
+.replay-car-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.replay-car-heading strong { font-size: 18px; }
+.replay-car-heading > span { border-radius: 10px; background: #e9eff8; padding: 1px 7px; color: #2a3855; font-size: 12px; }
+.replay-car-heading > span[data-state] { background: color-mix(in srgb, var(--replay-state, #a0b2c8), white 55%); }
+.replay-car-heading button { margin-left: auto; padding: 5px 8px; min-height: 29px; }
+.replay-car-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 15px; margin-bottom: 1px; }
+.replay-car-facts dt { color: var(--muted); font-size: 12px; }
+.replay-car-facts dd { margin: 0; color: #24395d; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.replay-result-list { margin: 0; padding: 12px 18px 12px 34px; }
+.replay-result-list li + li { margin-top: 6px; }
+
+@media (max-width: 1180px) {
+  .replay-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .replay-lower { grid-template-columns: minmax(0, 1fr); }
+  .replay-transport { flex-wrap: wrap; }
+  .replay-slider-group { flex-basis: 100%; order: 1; }
+}
+@media (max-width: 420px) {
+  .replay-source { align-items: flex-start; flex-direction: column; }
+  .replay-events button { grid-template-columns: 58px minmax(0, 1fr); }
+  .replay-event-kind { display: none; }
+}

@@ -13,7 +13,7 @@ from common.telemetry import finite_float, invalid_constant
 SOURCE = 'LIVE_ROS_GAZEBO_AMCL'
 MAX_RESPONSE = 12_000_000
 OPERATIONS = ('submit_batch', 'pause', 'resume', 'cancel', 'hold_dispatch', 'recover_execution', 'update',
-              'enable_vehicle', 'disable_vehicle', 'remove_vehicle', 'request_charge')
+              'enable_vehicle', 'disable_vehicle', 'remove_vehicle', 'request_charge', 'set_vehicle_profile')
 
 
 class Fleet:
@@ -129,8 +129,8 @@ class Fleet:
         request = body.get('request')
         if not isinstance(request, dict) or ('operation' in request and request['operation'] not in OPERATIONS):
             return 400, {'error': '仿真指令不受支持'}
-        if len(json.dumps(request, ensure_ascii=False).encode()) > 16384:
-            return 400, {'error': '仿真指令超过 16 KiB'}
+        if len(json.dumps(request, ensure_ascii=False).encode()) > 262144:
+            return 400, {'error': '仿真指令超过 256 KiB'}
         current = self.snapshot()
         if not current['can_command']:
             return 503, {'error': '调度或执行端尚未就绪，本次未提交'}

@@ -136,16 +136,24 @@ class FleetScheduler(Node):
                 self.sent_at[cmd['task_id']] = time.monotonic()
 
     def request(self, msg):
+        received = time.monotonic()
         try:
             req = json.loads(msg.data)
             if not isinstance(req, dict):
                 raise ValueError('request must be an object')
+            assignment = {}
             if req.get('operation')=='recover_execution':
                 self.recovery_preflight(req['id'])
                 _,commands=self.durable.recover_execution(req['id'])
                 for command in commands:self.send(command)
             elif self.durable:
-                _, commands = self.durable.request(req, time.monotonic())
+                is_new = 'operation' not in req and req.get('id') not in self.fleet.jobs
+                result, commands = self.durable.request(req, received, preassign=self.adapters_ready)
+                if is_new and result.next_robot:
+                    assignment = dict(assignments={result.id: {
+                        'robot': result.next_robot, 'pending_execution': True,
+                        'submission_to_assignment_ms': (time.monotonic() - received) * 1000,
+                    }})
                 for command in commands:self.send(command)
             elif req.get('operation') == 'cancel':
                 self.send(self.fleet.cancel(req['id'], now=time.monotonic()))
@@ -156,7 +164,11 @@ class FleetScheduler(Node):
                 if isinstance(result,dict):self.send(result)
             else:
                 self.fleet.submit(req, time.monotonic())
-            self.fleet.emit('request_accepted',request_id=req.get('request_id'),task_id=req.get('id'),operation=req.get('operation'),durable=self.durable is not None)
+            batch_ids = ({'task_ids': [item['id'] for item in req['tasks']]}
+                         if req.get('operation') == 'submit_batch' else {})
+            self.fleet.emit('request_accepted', request_id=req.get('request_id'),
+                            task_id=req.get('id'), operation=req.get('operation'),
+                            durable=self.durable is not None, **batch_ids, **assignment)
         except DurabilityError as error:
             self.get_logger().fatal(str(error))
             self.fleet.emit('request_rejected',request_id=req.get('request_id') if isinstance(locals().get('req'),dict) else None,reason=str(error),storage_fault=True)
@@ -175,6 +187,15 @@ class FleetScheduler(Node):
 
     def traffic_event(self, msg):
         self.traffic = json.loads(msg.data)
+        if 'closed_edges' in self.traffic:
+            try:
+                closures = {tuple(edge) for edge in self.traffic['closed_edges']}
+                if self.durable:
+                    closures.update(self.durable.regional_edges)
+                self.fleet.set_dispatch_closures(closures)
+                self.fleet.charge_closed_edges = frozenset(closures)
+            except (TypeError, ValueError):
+                self.get_logger().error('Ignoring invalid directed closure snapshot')
         if self.durable:self.durable.traffic = self.traffic
         self.fleet.reserved_cells = set()
         self.fleet.edge_wait_s={}
@@ -264,6 +285,8 @@ class FleetScheduler(Node):
         snapshot['execution_adapter'] = self.adapter_states.get('route',(None,{}))[1]
         snapshot['durability'] = dict(enabled=self.durable is not None, fenced=self.durable.fenced if self.durable else False, storage_fault=self.durable.failed if self.durable else False, revision=self.durable.revision if self.durable else None)
         snapshot['durability']['adapters_ready']=self.adapters_ready
+        if self.durable:
+            snapshot['durability']['regional_holds'] = self.durable.regional_holds
         self.state.publish(String(data=json.dumps(snapshot, ensure_ascii=False)))
 
 

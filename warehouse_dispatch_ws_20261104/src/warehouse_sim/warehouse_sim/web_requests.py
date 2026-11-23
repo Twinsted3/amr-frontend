@@ -1,13 +1,17 @@
 """Validation at the interactive dashboard boundary; ROS-independent."""
 import uuid
 
+from warehouse_sim.scheduling_policy import valid_business_priority
+
+MAX_BATCH_TASKS = 100
+
 def validate_request(value, stations):
     if not isinstance(value, dict):
         raise ValueError('请求必须是JSON对象')
     req = dict(value)
     if req.get('operation')=='submit_batch':
         items=req.get('tasks')
-        if not isinstance(items,list) or not 1<=len(items)<=32:raise ValueError('批量任务须为1至32项')
+        if not isinstance(items,list) or not 1<=len(items)<=MAX_BATCH_TASKS:raise ValueError(f'批量任务须为1至{MAX_BATCH_TASKS}项')
         normalized=[]
         for item in items:
             if not isinstance(item,dict) or 'operation' in item:raise ValueError('批量只接受任务，不接受控制操作')
@@ -15,7 +19,7 @@ def validate_request(value, stations):
         if len({t['id'] for t in normalized})!=len(normalized):raise ValueError('批内任务编号不能重复')
         req['tasks']=normalized
     elif 'operation' in req:
-        vehicle_operations = ('enable_vehicle', 'disable_vehicle', 'remove_vehicle', 'request_charge')
+        vehicle_operations = ('enable_vehicle', 'disable_vehicle', 'remove_vehicle', 'request_charge', 'set_vehicle_profile')
         if req['operation'] not in ('pause','resume','cancel','hold_dispatch','set_weights','set_policy','recover_execution','update', *vehicle_operations):
             raise ValueError('网页不支持该操作')
         if req['operation'] in vehicle_operations:
@@ -42,13 +46,13 @@ def validate_request(value, stations):
         if req.get('robot'):
             raise ValueError('网页任务由调度自动选车，不指定机器人')
         goals = [req.get('pickup'),req.get('dropoff')] if req['type']=='transport' else [req.get('goal')]
-        if any(g not in stations for g in goals):
+        if any(not isinstance(g, str) or g not in stations for g in goals):
             raise ValueError('请选择有效站点')
         if len(goals)==2 and goals[0]==goals[1]:
             raise ValueError('起点与终点不能相同')
         if not isinstance(req.get('id'),str) or not 1<=len(req['id'])<=120:
             raise ValueError('任务编号需为1至120个字符')
-        if req.get('priority',0) not in (0,100) or isinstance(req.get('priority'),bool):
-            raise ValueError('优先级只能为普通或紧急')
+        if not valid_business_priority(req.get('priority', 0)):
+            raise ValueError('优先级须为高、中或低')
     req['request_id'] = uuid.uuid4().hex
     return req
