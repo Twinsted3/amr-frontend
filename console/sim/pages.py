@@ -2,6 +2,7 @@
 
 PAGES = {
     '/fleet': ('fleet', 'fleet', '车队运行', '查看 Gazebo 车队位置、当前许可路线和路权状态。'),
+    '/fleet/replay': ('fleet-replay', 'replay', '百台联测回放', '查看联测记录中的车辆、任务与异常处置。'),
     '/fleet/task': ('fleet-task', 'fleet', '车队任务详情', '查看仿真调度、通行和到站反馈。'),
     '/vehicles/sim': ('sim-vehicle', 'vehicles', '仿真车辆详情', '查看车况并管理车辆调度。'),
     '/vehicles/telemetry': ('telemetry', 'vehicles', '临时车况', '查看历史样本，或临时接收指定地址的车辆推送。'),
@@ -15,6 +16,7 @@ NAVIGATION = (
     ('调度中心', (
         ('overview', '/', '地图', '首页'),
         ('fleet', '/fleet', '车队运行', '车队'),
+        ('replay', '/fleet/replay', '百台联测回放', '回放'),
         ('tasks', '/tasks', '任务管理', '任务'),
     )),
     ('资源管理', (
@@ -27,4 +29,5 @@ PAGE_SCRIPTS = {
     'fleet': 'fleet.js', 'fleet-task': 'fleet.js', 'tasks': 'fleet.js',
     'task-new': 'fleet.js', 'task-edit': 'fleet.js', 'vehicles': 'vehicles.js',
     'sim-vehicle': 'vehicles.js',
+    'fleet-replay': 'fleet-replay.js',
 }

@@ -86,4 +86,4 @@ input:disabled { color: #8090a2; }
 #toast { position: fixed; z-index: 20; left: 50%; bottom: 28px; transform: translate(-50%, 20px); padding: 10px 15px; border-radius: 8px; background: #e8f4fb; color: #102536; box-shadow: 0 10px 30px rgba(0,0,0,.35); opacity: 0; pointer-events: none; transition: .2s ease; font-size: 13px; }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 #toast.error { background: #fecdd3; color: #4c0519; }
-@media (max-width: 920px) { main { grid-template-columns: 62px minmax(0, 1fr) 240px; } .header-actions button:not(.primary) { display: none; } .brand small { display: none; } }
+@media (max-width: 920px) { main { grid-template-columns: 62px minmax(0, 1fr) 240px; } .header-actions button:not(.primary):not(#saveUseBtn) { display: none; } .brand small { display: none; } }

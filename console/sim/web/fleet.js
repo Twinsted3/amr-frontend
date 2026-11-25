@@ -14,10 +14,17 @@
     return kinds[job.kind] ?? job.kind;
   }
   function jobPriority(job) {
-    return job.kind === 'charge' ? '充电' : job.priority === 100 ? '紧急' : '普通';
+    return job.kind === 'charge' ? '充电' : job.kind === 'return' ? '返程' : job.priority === 100 ? '高' : job.priority === -100 ? '低' : '中';
   }
   function jobTarget(job) {
     return job.goals.at(-1) ?? (job.charge_mode === 'nearest' ? '自动选择最近可用桩' : '');
+  }
+  function currentTarget(job) {
+    const handoff = job.handoff;
+    if (handoff?.phase === 'to_bay') return handoff.bay;
+    if (handoff?.phase === 'clearing') return handoff.clearance;
+    const via = job.requirements?.via?.[job.via_index ?? 0];
+    return (job.kind !== 'transport' || job.index > 0 ? via : null) ?? job.goals[job.index] ?? jobTarget(job);
   }
   const events = {
     request_accepted: '调度已接收', request_rejected: '调度拒绝', batch_accepted: '批量任务已接收',
@@ -29,7 +36,13 @@
     traffic_deadlock_planned: '已找到死锁恢复顺序',
     traffic_deadlock_held: '死锁等待安全方案',
     traffic_deadlock_replan: '路权或反馈变化，重新规划',
-    traffic_deadlock_resolved: '互等已解除',
+    traffic_deadlock_resolved: '互等已解除', traffic_reroute: '已绕行冲突路段',
+    traffic_protective_stop: '路段阻断，保护停车并保留路权',
+    traffic_protective_resume: '保护条件解除，继续原路段',
+    traffic_feedback_reconciled: '已核对车辆位置和停稳反馈',
+    traffic_retreat_started: '保留路权，沿原轨迹退回',
+    traffic_retreat_confirmed: '已确认退回起点，重新申请路权',
+    traffic_yield_bay_opened: '联测避让位恢复可用', batch_dispatch_released: '已释放下一批派单', map_applied: '已应用仿真路网',
     failed: '执行失败', cancelled: '任务取消', dispatch_hold: '派单设置变更', updated: '任务参数已修改',
     policy_updated: '调度策略已更新', assignment_planned: '完成本轮车辆分配',
     pause: '排队已暂停', resume: '排队已继续', paused_active: '车辆已暂停',
@@ -37,8 +50,12 @@
     task_transferred: '取货前故障，原任务改派', execution_reconciled: '已核对原执行',
     restart_reconciliation_required: '调度重启，正在核对执行', reconciliation_complete: '执行核对完成',
     workstation_released: '装卸工位已释放', cargo_at_source: '作业端已确认原点货物',
+    next_vehicle_reserved: '已预分配车辆', next_vehicle_released: '已撤销车辆预分配',
+    loaded_handoff_started: '原车前往交接点', loaded_handoff_unloaded: '交接点已确认卸货',
+    loaded_handoff_cleared: '原车驶离并隔离，等待另一台车',
+    waypoint_reached: '已通过必经点',
   };
-  const workstationPhases = {reserved: '已预约', handling: '作业中', departing: '等待驶离', uncertain: '待核对'};
+  const workstationPhases = {reserved: '已预约', handling: '作业中', departing: '等待驶离', uncertain: '待核对', handoff: '接驳中'};
   const trafficReasons = {
     cycle_plan_wait: '按死锁恢复顺序等待',
     no_safe_plan: '当前候选未找到安全路线，保留占用',
@@ -52,8 +69,23 @@
     position_or_cargo_changed: '位置或载货状态已变化',
     movement_interrupted: '恢复途中执行中断',
     task_changed: '任务已变化',
+    zone_capacity: '前方限流区已满',
+    closed_topology: '道路封闭，暂无可达路线',
+    recovery_corridor: '等待死锁恢复通道释放',
   };
   const trafficReason = value => trafficReasons[value] ?? value;
+  const admissionLabels = {
+    incompatible: '车型、载荷或指定车辆不符', unavailable: '车辆不可用',
+    charging: '等待充电', busy_transition: '车辆状态切换中', charger_release: '等待充电桩解锁',
+    unreachable: '路线不可达', energy: '预计电量不足', slot_full: '下一单名额已占用',
+    dispatch_paused: '自动分配已暂停',
+  };
+  function admissionHint(job) {
+    if (job.admission?.state !== 'waiting') return '';
+    return job.admission.reason || Object.entries(job.admission.reasons ?? {})
+      .map(([reason, count]) => reason === 'dispatch_paused'
+        ? admissionLabels[reason] : `${admissionLabels[reason] ?? reason} ${count} 台`).join(' · ');
+  }
   function recoveryFor(state, robot) {
     return state.traffic?.deadlock_recovery?.find(entry => entry.robots.includes(robot));
   }
@@ -62,7 +94,7 @@
   const numeric = value => Number.isFinite(value) ? value.toFixed(1) : '—';
   const requestedJob = new URLSearchParams(window.location.search).get('job');
   function editable(job) {
-    return job && ['QUEUED','PAUSED'].includes(job.state) && !job.robot && !job.execution_id &&
+    return job && ['QUEUED','PAUSED'].includes(job.state) && !job.robot && !job.execution_id && !job.handoff?.phase &&
       ['transport','move','standby'].includes(job.kind);
   }
   function controls(job) {
@@ -90,7 +122,7 @@
         const state = data.state ?? {};
         const job = Object.values(state.jobs ?? {}).find(item => item.id === requestedJob);
         health.textContent = !fresh ? '仿真状态不可用 · 页面保留已读取记录'
-          : job ? '实时 ROS2 / Gazebo' : '当前仿真会话中未找到该任务';
+          : job ? (data.source === 'LIVE_LIGHTWEIGHT_SIMULATION' ? '轻量仿真' : '实时 ROS2 / Gazebo') : '当前仿真会话中未找到该任务';
         health.classList.toggle('fleet-warn', !fresh || !job);
         if (fresh && !job) {
           setMarkup($('fleet-record-info'), '');
@@ -101,19 +133,35 @@
           const waiting = state.robots?.[job.robot]?.job === job.id ? state.traffic?.waiting?.[job.robot] : null;
           const recovery = waiting && recoveryFor(state,job.robot);
           const bookings = Object.entries(state.workstations ?? {}).filter(([, booking]) => booking.job === job.id);
+          const requirements = job.requirements ?? {};
           $('fleet-record-route').textContent = [job.kind === 'transport' ? job.goals[0] : job.origin_station, jobTarget(job)].filter(Boolean).join(' → ');
           setMarkup($('fleet-record-info'), fields([
             ['状态', waiting ? '等待路权' : states[job.state] ?? job.state], ['类型', jobKind(job)],
             ['优先级', jobPriority(job)], ['运行地图', data.map_name],
-            ['执行车辆', job.robot ?? job.requested_robot], ['当前目标', job.goals[job.index] ?? jobTarget(job)], ['执行编号', job.execution_id],
+            ['执行车辆', job.robot ?? job.requested_robot], ['预分配车辆', job.next_robot], ['当前目标', currentTarget(job)], ['执行编号', job.execution_id],
+            ...(requirements.models?.length ? [['要求车型', requirements.models.join('、')]] : []),
+            ...(requirements.payload_kg ? [['搬运载荷', `${requirements.payload_kg} kg`]] : []),
+            ...(requirements.via?.length ? [['必经点', requirements.via.join(' → ')]] : []),
+            ...(requirements.deadline_s ? [['业务时限', `${requirements.deadline_s} 秒`]] : []),
+            ...(admissionHint(job) ? [['接单时等待原因', admissionHint(job)]] : []),
             ...(job.charge_mode ? [['选桩方式', job.charge_mode === 'fixed' ? '指定充电位' : '自动选择最近可用桩']] : []),
             ...(job.transfer_from ? [['故障改派来源', job.transfer_from]] : []),
             ...(bookings.length ? [['工位预约', bookings.map(([station, booking]) =>
               `${station} ${workstationPhases[booking.phase] ?? booking.phase}`).join('、')]] : []),
             ['原因', trafficReason(recovery?.status ?? waiting?.reason ?? job.reason)], ['创建时间', formatTime(job.created_at)],
+            ...(job.first_allocation_at ? [['首次分配', formatTime(job.first_allocation_at)]] : []),
             ['分配时间', formatTime(job.assigned_at)], ['完成时间', formatTime(job.finished_at)],
           ]));
-          setMarkup($('fleet-record-actions'), controls(job) || '<span class="muted">任务已结束</span>');
+          const sites = data.handoff_sites;
+          const mayHandoff = job.kind === 'transport' && job.loaded && job.state === 'EXECUTING' && !job.handoff?.phase &&
+            sites?.bays.length && sites.parking.length && !state.traffic?.active?.[job.robot] &&
+            !state.traffic?.feedback_unavailable?.includes(job.robot);
+          const options = names => names.map(name => `<option value="${escape(name)}">${escape(name)}</option>`).join('');
+          const handoffControls = mayHandoff ? `<div class="actions">
+            <label>交接点 <select id="fleet-handoff-bay">${options(sites.bays)}</select></label>
+            <label>隔离停车位 <select id="fleet-handoff-clearance">${options(sites.parking)}</select></label>
+            <button type="button" data-fleet-operation="handoff_loaded">申请载货交接</button></div>` : '';
+          setMarkup($('fleet-record-actions'), (controls(job) || '<span class="muted">任务已结束</span>') + handoffControls);
           const history = (data.events ?? []).filter(event => {
             if (['segment_released','localization_wait','localization_resumed','traffic_yield'].includes(event.event)) {
               return event.task_id?.replace(/:\d+$/, '') === job.id;
@@ -137,9 +185,14 @@
       submitting = true;
       button.disabled = true;
       try {
+        const command = {operation:button.dataset.fleetOperation,id:requestedJob};
+        if (command.operation === 'handoff_loaded') {
+          command.bay = $('fleet-handoff-bay').value;
+          command.clearance = $('fleet-handoff-clearance').value;
+        }
         const response = await fetch('/api/fleet/commands', {method:'POST',headers:{'Content-Type':'application/json'},
           body:JSON.stringify({session:recordData.session,connection:recordData.connection,
-            request:{operation:button.dataset.fleetOperation,id:requestedJob}})});
+            request:command})});
         const value = await response.json();
         $('fleet-result').textContent = value.event === 'request_accepted' ? '调度已接收操作，等待执行反馈。' : value.error ?? value.reason ?? '请核对任务状态';
       } catch {
@@ -243,7 +296,7 @@
     if (!$('fleet-kind')) return;
     const transport = $('fleet-kind').value === 'transport';
     const charge = $('fleet-kind').value === 'charge';
-    const names = Object.keys(geometry?.stations ?? {}).sort();
+    const names = Object.keys(geometry?.stations ?? {}).filter(name => !name.startsWith('HP_')).sort();
     const eligible = transport ? names.filter(name => !name.startsWith('CP_') && !name.startsWith('PP_')) : names;
     for (const [id, fallback] of [['fleet-pickup', 'AP_RECEIVE_01'], ['fleet-target', 'AP_SHIP_01']]) {
       const input = $(id);
@@ -303,8 +356,13 @@
   function updateButtons() {
     for (const id of buttons) if ($(id)) $(id).disabled = pending || !ready();
     if ($('fleet-hold')) $('fleet-hold').textContent = state().dispatch_paused ? '恢复新分配' : '冻结新分配';
-    if ($('fleet-out')) $('fleet-out').disabled = editing || pending || !templateReady(false);
-    if ($('fleet-home')) $('fleet-home').disabled = editing || pending || !templateReady(true);
+    const scenario = live?.simulation?.scenario_vehicles;
+    if (scenario && $('fleet-out') && $('fleet-home')) {
+      $('fleet-out').textContent = '填入联测第一批';
+      $('fleet-home').textContent = '填入联测第二批';
+    }
+    if ($('fleet-out')) $('fleet-out').disabled = editing || pending || !(scenario ? ready() : templateReady(false));
+    if ($('fleet-home')) $('fleet-home').disabled = editing || pending || !(scenario ? ready() : templateReady(true));
     for (const button of panel.querySelectorAll('[data-fleet-operation]')) button.disabled = pending || !ready();
   }
 
@@ -337,7 +395,7 @@
     const status = !live?.connected ? (live?.error ?? '等待仿真连接') + history
       : !live.fresh ? '调度状态已过期' + history
       : !ready() ? '已连接 ROS2 / Gazebo · 等待地图和执行端就绪'
-      : `实时 ROS2 / Gazebo · ${robots.length} 台车 · ${s.dispatch_paused ? '新分配已冻结' : '允许自动分配'}`;
+      : `${live.source === 'LIVE_LIGHTWEIGHT_SIMULATION' ? '轻量仿真' : '实时 ROS2 / Gazebo'} · ${robots.length} 台车 · ${s.dispatch_paused ? '新分配已冻结' : '允许自动分配'}`;
     banner.textContent = status;
     banner.classList.toggle('fleet-warn', !ready());
     if (ready() && $('fleet-result')?.textContent === '等待仿真调度就绪') result('调度已就绪。');
@@ -351,14 +409,14 @@
     const list = jobs().filter(j => ($('fleet-system').checked || (j.kind !== 'return' &&
       (j.kind !== 'charge' || j.charge_trigger === 'manual'))) &&
       (filter === 'all' || (filter === 'active' ? !terminal.has(j.state) : filter === j.state)) &&
-      [j.id, j.robot ?? j.requested_robot, ...j.goals].join(' ').toLowerCase().includes(search));
+      [j.id, j.robot ?? j.next_robot ?? j.requested_robot, ...j.goals].join(' ').toLowerCase().includes(search));
     list.sort((a, b) => (b.created_at ?? '').localeCompare(a.created_at ?? ''));
     setMarkup($('fleet-jobs'), table(['任务 / 类型', '创建时间', '起点 → 终点', '当前目标', '优先级 / 车辆', '状态 / 等待'], list.map(j => {
       const wait = s.robots?.[j.robot]?.job === j.id ? s.traffic?.waiting?.[j.robot] : null;
       const recovery = wait && recoveryFor(s,j.robot);
       return `<tr><td><a class="record-link" href="/tasks/detail?job=${encodeURIComponent(j.id)}">${escape(j.id)}</a><br><small>${escape(jobKind(j))}</small></td>
         <td>${escape(formatTime(j.created_at))}</td><td>${escape(j.kind === 'transport' ? j.goals[0] : j.origin_station)} → ${escape(jobTarget(j))}</td>
-        <td>${escape(j.goals[j.index] ?? jobTarget(j))}</td><td>${jobPriority(j)} · ${escape(j.robot ?? j.requested_robot)}</td>
+        <td>${escape(currentTarget(j))}</td><td>${jobPriority(j)} · ${escape(j.robot ?? j.next_robot ?? j.requested_robot)}${j.next_robot ? '（待执行）' : ''}</td>
         <td><span class="badge ${j.state === 'DONE' ? 'done' : wait ? 'paused' : ''}">${escape(wait ? '等待路权' : states[j.state] ?? j.state)}</span>
         ${wait || j.reason ? `<br><small>${escape(trafficReason(recovery?.status ?? wait?.reason ?? j.reason))}${wait?.blockers?.length ? ' · ' + escape(wait.blockers.join('、')) : ''}</small>` : ''}<div class="row-actions">${controls(j)}</div></td></tr>`;
     })));
@@ -375,7 +433,7 @@
       operations.push(['recover_execution', '核对并申请原车续行']);
     }
     setMarkup($('fleet-detail'), `<div class="card-heading"><strong>${escape(j.id)}</strong><span class="badge">${escape(states[j.state] ?? j.state)}</span></div>
-      ${fields([['车辆', j.robot], ['执行编号', j.execution_id], ['分配时间', formatTime(j.assigned_at)],
+      ${fields([['车辆', j.robot ?? j.next_robot], ['执行编号', j.execution_id], ['分配时间', formatTime(j.assigned_at)],
         ['首次执行', formatTime(j.started_at)], ['完成时间', formatTime(j.finished_at)], ['货物', j.loaded ? '载货' : '空载']])}
       <p>${escape(j.reason || '黄色线为该任务采集到的实际行迹。')}</p>
       <div class="actions">${operations.map(([op, name]) =>
@@ -464,7 +522,12 @@
           window.location.assign(`/tasks/detail?job=${encodeURIComponent(command.id)}`);
         }
         if (!command.operation && $('fleet-job-id')) $('fleet-job-id').value = newId('WEB');
-        result('调度已接收。执行状态和结果见车队任务队列。');
+        if (command.operation === 'submit_batch' && Object.keys(receipt.admission ?? {}).length) {
+          const known = Object.keys(receipt.assignments ?? {}).length;
+          result(`已接收 ${receipt.task_ids.length} 项，${known} 项已登记车辆，其余等待分配。详情见车队任务队列。`);
+        } else {
+          result('调度已接收。执行状态和结果见车队任务队列。');
+        }
       } else {
         result(receipt.reason ?? receipt.error ?? '未收到调度确认，请先核对队列', true);
       }
@@ -481,7 +544,18 @@
     return `${prefix}-${crypto.randomUUID().slice(0, 12)}`;
   }
 
-  function fillTemplate(home) {
+  async function fillTemplate(home) {
+    if (live?.simulation?.scenario_vehicles) {
+      try {
+        const {batches} = await request('/api/fleet/scenario');
+        const tasks = batches[home ? 1 : 0];
+        $('fleet-batch').value = JSON.stringify(tasks, null, 2);
+        result(`已填入第 ${home ? 2 : 1} 批 ${tasks.length} 项任务。核对后提交。`);
+      } catch {
+        result('联测任务模板读取失败。', true);
+      }
+      return;
+    }
     if (!templateReady(home)) return;
     const prefix = newId(home ? 'HOME' : 'OUT');
     const goals = home ? Object.values(homes) : ['LM_DOCK_06', 'LM_DOCK_12', 'LM_DOCK_18', 'LM_DOCK_24', 'LM_63_49'];
@@ -518,10 +592,10 @@
   $('fleet-send-batch')?.addEventListener('click', () => {
     try {
       const tasks = JSON.parse($('fleet-batch').value);
-      if (!Array.isArray(tasks) || !tasks.length || tasks.length > 32) throw new Error();
+      if (!Array.isArray(tasks) || !tasks.length || tasks.length > 100) throw new Error();
       send({operation: 'submit_batch', tasks});
     } catch {
-      result('请填写包含 1 至 32 项任务的 JSON 数组。', true);
+      result('请填写包含 1 至 100 项任务的 JSON 数组。', true);
     }
   });
   for (const id of ['fleet-search', 'fleet-filter', 'fleet-system']) $(id)?.addEventListener('input', () => {

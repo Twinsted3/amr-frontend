@@ -55,7 +55,7 @@ def find_page(path, mode='sim'):
     return NOT_FOUND, None
 
 
-def render_page(page, record_id=None, mode='sim'):
+def render_page(page, record_id=None, mode='sim', *, lightweight=False):
     name, active, title, subtitle = page
     pages = mode_pages(mode)
     navigation = []
@@ -80,6 +80,7 @@ def render_page(page, record_id=None, mode='sim'):
         page=name, record_id=record_id or '', title=title, subtitle=subtitle,
         navigation=''.join(navigation), content=content,
         mode=mode, mode_suffix='（仿真）' if mode == 'sim' else '',
-        environment='ROS2 / Gazebo' if mode == 'sim' else '车辆管理',
+        environment=('仿真回放' if name == 'fleet-replay' else '轻量仿真' if lightweight
+                     else 'ROS2 / Gazebo' if mode == 'sim' else '车辆管理'),
         page_scripts=scripts,
     ).encode('utf-8')

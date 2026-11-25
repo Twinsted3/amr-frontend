@@ -14,13 +14,14 @@ sys.path.insert(0, str(ROOT/'src/warehouse_sim'))
 from warehouse_sim.route_graph import RouteError, RouteGraph, occupied_cells
 from warehouse_sim.navigation_recovery import remaining_route
 from warehouse_sim.cycle_recovery import CycleMove
-from warehouse_sim.traffic_policy import STOP_FOOTPRINT_RADIUS, STOP_TOLERANCE, TrafficStops, next_segment, wait_cycles
+from warehouse_sim.traffic_policy import STOP_FOOTPRINT_RADIUS, STOP_TOLERANCE, TrafficStops, next_segment, traffic_order, wait_cycles
 
 tree = ast.parse((ROOT/'src/warehouse_sim/warehouse_sim/route_dispatcher.py').read_text(encoding='utf8'))
 definition = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'RouteDispatcher')
 namespace = dict(Node=object, math=math, time=__import__('time'), json=json,
+                 String=NS,
                  RouteError=RouteError, occupied_cells=occupied_cells,
-                 next_segment=next_segment, wait_cycles=wait_cycles,
+                 next_segment=next_segment, traffic_order=traffic_order, wait_cycles=wait_cycles,
                  STOP_FOOTPRINT_RADIUS=STOP_FOOTPRINT_RADIUS, STOP_TOLERANCE=STOP_TOLERANCE,
                  remaining_route=remaining_route, FollowPath=NS(Result=NS(TF_ERROR=102)),
                  GoalStatus=NS(STATUS_SUCCEEDED=4,STATUS_CANCELED=5,STATUS_ABORTED=6))
@@ -197,6 +198,33 @@ class CallbackTests(unittest.TestCase):
         self.assertIn(station, whole[1:-1])
         segment = next_segment(n.graph,'CP_06','LM_13_32',{station},set(),set(),blocked)
         self.assertEqual(segment, whole[:whole.index(station)+1])
+
+    def test_verified_directed_closures_are_published_and_gate_motion(self):
+        n = self.node
+        closed = [['CP_06', neighbor] for neighbor, _ in n.graph.adj['CP_06']]
+        self.assertTrue(closed)
+        with TemporaryDirectory() as folder:
+            policy_file = Path(folder) / 'closures.json'
+            policy = dict(waiting_points=[], yield_bays=[], no_stop_stations=[], closed_edges=closed)
+            policy_file.write_text(json.dumps(policy), encoding='utf8')
+            n.traffic_stops = TrafficStops.load(n.graph.stations, policy_file)
+            n.traffic_stops.validate_closures(n.graph)
+            policy['closed_edges'] = [['CP_06', 'CP_24']]
+            policy_file.write_text(json.dumps(policy), encoding='utf8')
+            with self.assertRaisesRegex(ValueError, 'absent from the active map'):
+                TrafficStops.load(n.graph.stations, policy_file).validate_closures(n.graph)
+        messages = []
+        n.traffic_pub = NS(publish=messages.append)
+        n.robot_ids = ['agv01']
+        n.pose_first_seen = {'agv01': time.monotonic() - 3}
+        n.refresh_graph = lambda: True
+        n.resolve_cycle = lambda: None
+        n.action_clients = {'agv01': NS(server_is_ready=lambda: True)}
+        n.pending = [dict(robot='agv01', goal='LM_DOCK_06', goals=['LM_DOCK_06'], index=0)]
+        n.process()
+        self.assertFalse(n.active)
+        self.assertEqual(n.waits['agv01']['reason'], 'closed_topology')
+        self.assertEqual(json.loads(messages[0].data)['closed_edges'], sorted(closed))
 
     def test_deadlock_move_holds_if_cargo_ownership_is_uncertain(self):
         n = self.node

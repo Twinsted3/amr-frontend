@@ -24,9 +24,9 @@ from std_msgs.msg import String
 from warehouse_sim.pose_tracker import PoseTracker
 from warehouse_sim.route_graph import RouteError, RouteGraph, occupied_cells
 from warehouse_sim.execution_store import ExecutionStore
-from warehouse_sim.cycle_recovery import CycleVehicle, plan_cycle
+from warehouse_sim.cycle_recovery import CycleVehicle, move_envelope, plan_cycle
 from rclpy.clock import Clock, ClockType
-from warehouse_sim.traffic_policy import STOP_FOOTPRINT_RADIUS, STOP_TOLERANCE, TrafficStops, next_segment, wait_cycles
+from warehouse_sim.traffic_policy import STOP_FOOTPRINT_RADIUS, STOP_TOLERANCE, TrafficStops, next_segment, wait_cycles, traffic_order
 from warehouse_sim.domain_owner import DomainOwner
 from warehouse_sim.navigation_recovery import remaining_route,restore_reservation,latest_executions
 
@@ -78,6 +78,8 @@ class RouteDispatcher(Node):
         self.refresh_graph()
         self.traffic_stops = TrafficStops.load(
             self.graph.stations if self.graph else (), os.environ.get('SIM_TRAFFIC_POLICY'))
+        if self.graph:
+            self.traffic_stops.validate_closures(self.graph)
         self.segmented = os.environ.get('SIM_ROUTE_MODE', 'whole_route') == 'segmented'
         if self.segmented and (not database or not self.traffic_stops.waiting_points):
             raise ValueError('segmented routing requires a durable executor database and configured waiting points')
@@ -317,9 +319,10 @@ class RouteDispatcher(Node):
         self.io_state=json.loads(msg.data);self.io_at=time.monotonic()
 
     def blockers(self,robot,start,goal):
+        closed = self.traffic_stops.closed_edges
         try:
-            path = (next_segment(self.graph,start,goal,self.traffic_stops.waiting_points,set(),set(),set())
-                    if self.segmented else self.graph.route(start,goal))
+            path = (next_segment(self.graph,start,goal,self.traffic_stops.waiting_points,(),(),(),closed_edges=closed)
+                    if self.segmented else self.graph.route(start,goal,forbidden_directed_edges=closed))
         except RouteError:return []
         desired = occupied_cells(self.graph.path_points(path))
         if self.segmented:
@@ -384,11 +387,13 @@ class RouteDispatcher(Node):
                 vehicles.append(CycleVehicle(name,self.nearest_station(name),tasks[name]['goal'],
                                              loads.get(name),frozenset(cells),pose))
             external = self.reserved(None, exclude=cycle)
-            moves,status = plan_cycle(self.graph,vehicles,self.traffic_stops,*external)
+            moves,status = plan_cycle(self.graph, vehicles, self.traffic_stops, *external, waits=self.waits,
+                                      closed_edges=self.traffic_stops.closed_edges)
             self.report_cycle(cycle,status)
             if moves:
                 self.cycle_plan = dict(robots=cycle, moves=list(moves), moving=None,
-                                       tasks={name:self.task_ids[name] for name in cycle})
+                                       tasks={name:self.task_ids[name] for name in cycle},
+                                       envelopes=[move_envelope(self.graph, move.nodes) for move in moves])
                 self.publish('traffic_deadlock_planned', cycle=list(cycle),
                              moves=[dict(robot=step.robot, station=step.nodes[-1], loaded=step.cargo is not None)
                                     for step in moves])
@@ -443,7 +448,8 @@ class RouteDispatcher(Node):
                 for cp in sorted(self.traffic_stops.yield_bays):
                     if cp==start or cp in nodes:continue
                     try:
-                        path=self.graph.route(start,cp,nodes,forbidden)
+                        path=self.graph.route(start,cp,nodes,forbidden,
+                                              forbidden_directed_edges=self.traffic_stops.closed_edges)
                         points=self.graph.path_points(path)
                         if not occupied_cells(points).isdisjoint(cells):continue
                         length=sum(self.graph.edges[a,b][1] for a,b in zip(path,path[1:]))
@@ -580,6 +586,7 @@ class RouteDispatcher(Node):
         detail = dict(reason=reason, blockers=sorted(blockers))
         if not previous or previous['reason'] != reason or previous['blockers'] != detail['blockers']:
             detail['since'] = time.monotonic()
+            detail['first_since'] = previous.get('first_since', previous['since']) if previous else detail['since']
             self.waits[robot] = detail
             self.publish('traffic_wait', robot=robot, **detail)
 
@@ -596,6 +603,7 @@ class RouteDispatcher(Node):
         self.waits = {n:w for n,w in self.waits.items() if n in pending}
         stops = self.traffic_stops
         self.traffic_pub.publish(String(data=json.dumps(dict(active=active, waiting=self.waits,
+            closed_edges=sorted(stops.closed_edges),
             deadlocks=wait_cycles(self.waits), overlap_cells=overlap, waiting_points=sorted(stops.waiting_points),
             deadlock_recovery=[dict(robots=list(cycle),status=status) for cycle,status in self.deadlock_reports.items()],
             reservation_mode='segmented' if self.segmented else 'whole_route',
@@ -629,7 +637,11 @@ class RouteDispatcher(Node):
             for task in self.pending:self.wait(task['robot'],'fleet_localization_unavailable',unknown)
             return
         self.resolve_cycle()
-        for task in sorted(list(self.pending), key=lambda t: -t.get('priority', 0)):
+        closed = self.traffic_stops.closed_edges
+        guard = frozenset().union(*(self.cycle_plan or {}).get('envelopes', ()))
+        now = time.monotonic()
+        for task in sorted(self.pending, key=lambda task: traffic_order(
+                task.get('priority', 0), self.waits.get(task['robot'], {}).get('first_since'), now, 30.)):
             if task.get('paused'):continue
             robot, goal = task['robot'], task['goal']
             plan = self.cycle_plan
@@ -689,8 +701,13 @@ class RouteDispatcher(Node):
             if not self.action_clients[robot].server_is_ready():
                 continue
             reserved_nodes, reserved_edges, reserved_cells = self.reserved(robot)
+            if self.cycle_plan and not step:
+                reserved_cells.update(guard)
             if recovering:
                 nodes,points=task['recovery_nodes'],task['recovery_points']
+                if not closed.isdisjoint(zip(nodes, nodes[1:])):
+                    self.wait(robot,'closed_topology')
+                    continue
                 active = {**task, 'nodes':nodes, 'points':points}
                 if 'segment_goal' in active:
                     target = self.graph.stations[active['segment_goal']]['pos']
@@ -707,7 +724,7 @@ class RouteDispatcher(Node):
                 else:
                     self.start_action(robot,points)
                 continue
-            directed_blocked=set()
+            directed_blocked=set(closed)
             for edge, cells in self.graph.edge_cells.items():
                 if not cells.isdisjoint(reserved_cells):
                     directed_blocked.add(edge)
@@ -722,10 +739,16 @@ class RouteDispatcher(Node):
                         continue
                 elif self.segmented:
                     nodes = next_segment(self.graph,start,goal,self.traffic_stops.waiting_points,
-                                         reserved_nodes,reserved_edges,directed_blocked)
+                                         reserved_nodes,reserved_edges,directed_blocked,closed_edges=closed)
                 else:
                     nodes = self.graph.route(start, goal, reserved_nodes, reserved_edges,forbidden_directed_edges=directed_blocked)
             except RouteError:
+                if closed:
+                    try:
+                        self.graph.bid_distance(start, goal, closed)
+                    except RouteError:
+                        self.wait(robot, 'closed_topology')
+                        continue
                 self.wait(robot, 'resource_conflict', self.blockers(robot,start,goal))
                 # A route may become available when another robot releases its reservation.
                 continue
@@ -767,6 +790,8 @@ class RouteDispatcher(Node):
         plan = self.cycle_plan
         if task.get('cycle_move') and plan and plan['moving']==robot:
             plan['moves'].pop(0)
+            if 'envelopes' in plan:
+                plan['envelopes'].pop(0)
             plan['moving'] = None
             if not plan['moves']:
                 self.publish('traffic_deadlock_resolved', cycle=list(plan['robots']))

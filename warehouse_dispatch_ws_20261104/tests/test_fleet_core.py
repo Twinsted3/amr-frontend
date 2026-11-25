@@ -27,6 +27,16 @@ class FleetTests(unittest.TestCase):
         self.f.on_route(dict(event='arrived', robot=j.robot,
                              station=j.goals[j.index], task_id=j.execution_id), now)
 
+    def test_charger_choice_accounts_for_charging_rate_and_physical_occupancy(self):
+        self.f.robots['agv01'].soc = .4
+        self.f.destinations['CP_24'] = 'other'
+        self.assertEqual(self.f.available_charger('agv01'), 'CP_06')
+        self.f.charger_rates.update(CP_06=.001, CP_18=.02)
+        self.assertEqual(self.f.available_charger('agv01'), 'CP_18')
+        self.f.robots['agv02'].station = 'CP_18'
+        self.f.destinations['CP_12'] = 'other'
+        self.assertEqual(self.f.available_charger('agv01'), 'CP_06')
+
     def test_factory_graph_all_pairs(self):
         for a in self.graph.stations:
             for b in self.graph.stations:
