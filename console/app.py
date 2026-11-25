@@ -15,12 +15,10 @@ import threading
 from urllib.parse import quote, urlsplit
 import webbrowser
 
-from dispatch import Dispatch
-from fleet import Fleet
-from maps import export_name
-from telemetry import Telemetry, invalid_constant
-from vehicles import SAMPLE_PREFIX, Vehicles
-from views import DIST, NOT_FOUND, find_page, render_page
+from common.dispatch import Dispatch
+from common.maps import export_name
+from common.telemetry import Telemetry, invalid_constant
+from common.views import DIST, NOT_FOUND, find_page, render_page, web_asset
 
 
 ROOT = Path(__file__).resolve().parent
@@ -43,7 +41,7 @@ def claim_database(path, mode):
 
 
 def simulation_route(path):
-    return (path in ('/fleet.js', '/vehicles.js', '/api/fleet') or path.startswith('/api/fleet/')
+    return (path == '/api/fleet' or path.startswith('/api/fleet/')
             or path == '/api/telemetry/source')
 
 
@@ -143,12 +141,10 @@ class Handler(BaseHTTPRequestHandler):
                     content = content.replace('Gazebo 世界坐标', '地图坐标').replace('Gazebo 实体', '地图实体')
                 self.reply(content.encode(), media=editor_assets[name]+'; charset=utf-8', embedded=True)
                 return
-            assets = {'/app.js': ('app.js', 'application/javascript'), '/fleet.js': ('fleet.js', 'application/javascript'),
-                      '/vehicles.js': ('vehicles.js', 'application/javascript'),
-                      '/style.css': ('style.css', 'text/css'), '/favicon.svg': ('favicon.svg', 'image/svg+xml')}
-            if path in assets:
-                name, media = assets[path]
-                self.reply((DIST/name).read_bytes(), media=media+'; charset=utf-8')
+            asset = web_asset(self.server.mode, path)
+            if asset:
+                file, media = asset
+                self.reply(file.read_bytes(), media=media+'; charset=utf-8')
                 return
             if path.startswith('/api/'):
                 self.reply({'error': '接口不存在'}, 404)
@@ -257,11 +253,20 @@ def main():
         db_path.parent.mkdir(parents=True, exist_ok=True)
         claim_database(db_path, args.mode)
         server.mode = args.mode
-        seed_maps = ROOT/'samples' if args.mode == 'sim' else None
-        server.dispatch = Dispatch(db_path, seed_maps, local_executor=False)
-        server.fleet = Fleet(args.gazebo_url, server.dispatch) if args.mode == 'sim' else None
-        server.telemetry = Telemetry(ROOT/'samples', identity_prefix=SAMPLE_PREFIX) if server.fleet else None
-        server.vehicles = Vehicles(server.dispatch, mode=args.mode)
+        if args.mode == 'sim':
+            from sim.fleet import Fleet
+            from sim.vehicles import SAMPLE_DIR, SAMPLE_PREFIX, SimVehicles
+
+            server.dispatch = Dispatch(db_path, SAMPLE_DIR, local_executor=False)
+            server.fleet = Fleet(args.gazebo_url, server.dispatch)
+            server.telemetry = Telemetry(SAMPLE_DIR, identity_prefix=SAMPLE_PREFIX)
+            server.vehicles = SimVehicles(server.dispatch)
+        else:
+            from field.vehicles import FieldVehicles
+
+            server.dispatch = Dispatch(db_path, None, local_executor=False)
+            server.fleet = server.telemetry = None
+            server.vehicles = FieldVehicles(server.dispatch)
     except (OSError, sqlite3.Error, ValueError) as error:
         server.server_close()
         parser.error(str(error))

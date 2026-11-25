@@ -7,7 +7,7 @@ import threading
 import uuid
 from urllib.parse import urlsplit
 
-from telemetry import finite_float, invalid_constant
+from common.telemetry import finite_float, invalid_constant
 
 
 SOURCE = 'LIVE_ROS_GAZEBO_AMCL'

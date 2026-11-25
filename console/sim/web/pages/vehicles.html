@@ -1,20 +1,19 @@
 <article class="panel">
-      <div class="panel-head"><h2>车队与设备</h2><!-- BEGIN SIM --><a class="button" href="/vehicles/telemetry">历史车况</a><!-- END SIM --></div>
+      <div class="panel-head"><h2>车队与设备</h2><a class="button" href="/vehicles/telemetry">历史车况</a></div>
       <div id="registered-vehicles"></div>
     </article>
     <article class="panel recent">
-      <div class="panel-head"><h2>添加叉车</h2><!-- BEGIN SIM --><label>车辆来源<select id="vehicle-source"><option value="simulation">仿真车</option><option value="sample">历史样本</option></select></label><!-- END SIM --></div>
-      <!-- BEGIN SIM -->
+      <div class="panel-head"><h2>添加叉车</h2><label>车辆来源<select id="vehicle-source"><option value="simulation">仿真车</option><option value="sample">历史样本</option></select></label></div>
+
       <form id="simulation-add" class="panel-body form-line">
         <label>Gazebo 已发现车辆<select id="simulation-vehicle" required></select></label>
         <button id="simulation-add-button" type="submit" class="primary" disabled>纳入调度</button>
       </form>
       <p class="panel-body" id="simulation-discovery"></p>
-      <!-- END SIM -->
+
       <form id="vehicle-add" class="panel-body form-line" hidden>
         <label>车辆编号<input id="new-vehicle-id" maxlength="120" required></label>
         <label>显示名称<input id="new-vehicle-name" maxlength="120" required></label>
-        <!-- FIELD CONNECTION -->
         <button type="submit" class="primary">添加叉车</button>
       </form>
     </article>
