@@ -16,6 +16,7 @@ class TrafficStops:
     yield_bays: frozenset[str]
     no_stop_stations: frozenset[str]
     dedicated_yield: bool = True
+    closed_edges: frozenset[tuple[str, str]] = frozenset()
 
     @classmethod
     def load(cls, stations, path=None):
@@ -25,7 +26,7 @@ class TrafficStops:
         document = json.loads(Path(path).read_text(encoding='utf-8-sig'))
         fields = ('waiting_points', 'yield_bays', 'no_stop_stations')
         if (not isinstance(document, dict) or not set(fields) <= set(document)
-                or set(document) - {*fields, 'no_stop_regions'}):
+                or set(document) - {*fields, 'no_stop_regions', 'closed_edges'}):
             raise ValueError('traffic policy must define waiting_points, yield_bays and no_stop_stations')
         groups = {}
         for field in fields:
@@ -57,7 +58,16 @@ class TrafficStops:
                 raise ValueError(f'{field} overlaps no_stop_stations')
         if groups['waiting_points'] & groups['yield_bays']:
             raise ValueError('waiting_points overlaps yield_bays')
-        return cls(**groups)
+        closed = document.get('closed_edges', [])
+        if not isinstance(closed, list) or any(
+                not isinstance(edge, list) or len(edge) != 2 or edge[0] == edge[1]
+                or any(not isinstance(node, str) or node not in stations for node in edge) for edge in closed):
+            raise ValueError('closed_edges must contain directed pairs of distinct map stations')
+        return cls(**groups, closed_edges=frozenset(map(tuple, closed)))
+
+    def validate_closures(self, graph):
+        if self.closed_edges - graph.edges.keys():
+            raise ValueError('closed_edges include a directed edge absent from the active map')
 
     def validate_destinations(self, goals):
         forbidden = self.no_stop_stations.intersection(goals)
@@ -68,23 +78,72 @@ class TrafficStops:
             raise ValueError(f"station reserved for traffic yielding: {', '.join(sorted(dedicated))}")
 
 
-def next_segment(graph, start, goal, waiting_points, reserved_nodes, reserved_edges, blocked_edges):
+def traffic_order(priority, waiting_since, now, overdue_after):
+    """Let a prolonged waiter precede later traffic at the next safe grant."""
+    since = now if waiting_since is None else waiting_since
+    if now - since >= overdue_after:
+        return (0, since, -priority)
+    return (1, -priority, since)
+
+
+def next_segment(graph, start, goal, waiting_points, reserved_nodes, reserved_edges, blocked_edges,
+                 *, penalties=None, closed_edges=(), forbidden_turns=(), geometry_edges=(),
+                 split_reverse=False, no_stop_stations=()):
     """Return a free prefix ending at the destination or an approved waiting point."""
+    closed = set(closed_edges)
+    unavailable = set(blocked_edges) | closed | set(geometry_edges)
+    penalties = penalties or {}
+
     def available(destination):
         return graph.route(start, destination, reserved_nodes, reserved_edges,
-                           forbidden_directed_edges=blocked_edges)
+                           forbidden_directed_edges=unavailable, penalties=penalties,
+                           forbidden_turns=forbidden_turns)
+
+    def prefix(route):
+        for index, station in enumerate(route[1:-1], start=1):
+            changed_direction = split_reverse and (
+                ((route[index - 1], station) in graph.reverse_edges)
+                != ((station, route[index + 1]) in graph.reverse_edges))
+            if changed_direction and station in no_stop_stations:
+                raise RouteError(f'Forklift gear change requires a permitted stop at {station}')
+            if station in waiting_points or changed_direction:
+                return route[:index + 1]
+        return route
+
+    def unoccupied_route(origin, destination):
+        if geometry_edges or forbidden_turns:
+            path = graph.route(origin, destination, forbidden_directed_edges=closed | set(geometry_edges),
+                               forbidden_turns=forbidden_turns)
+            return path, sum(graph.edges[edge][1] for edge in zip(path, path[1:]))
+        return graph.bid_route(origin, destination, closed)
+
+    def cost(route):
+        return sum(graph.edges[edge][1] + penalties.get(edge, 0.)
+                   for edge in zip(route, route[1:]))
 
     try:
-        route = available(goal)
-    except RouteError:
-        nominal = graph.route(start, goal)
-        entrance = next((station for station in nominal[1:-1] if station in waiting_points), None)
-        if entrance is None:
+        return prefix(available(goal))
+    except RouteError as blocked:
+        if not waiting_points:
             raise
-        route = available(entrance)
-    end = next((index for index, station in enumerate(route[1:-1], start=1)
-                if station in waiting_points), len(route)-1)
-    return route[:end+1]
+        nominal_cost = unoccupied_route(start, goal)[1]
+        candidates = {}
+        for station in sorted(waiting_points - set(reserved_nodes) - {start, goal}):
+            try:
+                path = prefix(available(station))
+                endpoint = path[-1]
+                if endpoint in candidates:
+                    continue
+                remainder, remaining_cost = unoccupied_route(endpoint, goal)
+            except RouteError:
+                continue
+            # Require real progress on a route that can still reach the goal after
+            # temporary claims clear. A closed downstream connection cannot be a refuge.
+            if remaining_cost < nominal_cost:
+                candidates[endpoint] = (cost(path) + cost(remainder), remaining_cost, path)
+        if not candidates:
+            raise blocked
+        return min(candidates.values())[2]
 
 
 def wait_cycles(waiting):

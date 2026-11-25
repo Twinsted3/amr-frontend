@@ -1,6 +1,16 @@
 # amr-frontend
 AMR Intelligent Chache Server frontend code
 
+## 百台轻量仿真协作版
+
+本版交接包目录为 `amr-dispatch-forklift-fleet100-20261123`。从仓库根目录或解压后的该目录执行。联测回放不依赖 ROS 或本地历史数据库。
+
+```powershell
+python console/app.py --mode sim --lightweight --port 18086 --db runtime/fleet-replay-demo/maps.sqlite3 --fleet-replay docs/evidence/forklift-fleet100-20261123/forklift-replay-100.json --open-browser
+```
+
+浏览器进入「百台联测回放」，可按事件查看共享路网、六车死锁恢复、断联重启和满桩等待。本版在两套轻量仿真来单中各完成 317 项任务。批量高峰全量 1 秒派单、充电效率提升 25% 和实车验收仍待完成。[联测报告](docs/evidence/forklift-fleet100-20261123/forklift-report-100.json)
+
 ## AMR 联合开发基线
 
 - `console/field/` 保存实车 8081 的页面、导航配置和车况连接规则。

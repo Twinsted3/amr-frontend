@@ -14,6 +14,7 @@ import time
 import uuid
 
 from warehouse_sim.fleet_core import Job, Robot
+from warehouse_sim.web_requests import MAX_BATCH_TASKS
 from warehouse_sim.scheduling_policy import validate_policy
 from warehouse_sim.traffic_policy import STOP_FOOTPRINT_RADIUS, STOP_TOLERANCE
 
@@ -23,7 +24,7 @@ class DurabilityError(RuntimeError):
 
 
 class Journal:
-    def __init__(self, path):
+    def __init__(self, path, *, threaded=False):
         self.path = Path(path).resolve()
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.lock = open(str(self.path)+'.lock', 'a+b')
@@ -41,7 +42,7 @@ class Journal:
             self.lock.close()
             raise DurabilityError('another dispatcher owns this database') from error
         try:
-            self.db = sqlite3.connect(self.path, isolation_level=None, timeout=2)
+            self.db = sqlite3.connect(self.path, isolation_level=None, timeout=2, check_same_thread=not threaded)
             self.db.execute('PRAGMA journal_mode=WAL')
             self.db.execute('PRAGMA synchronous=FULL')
             self.db.executescript('''
@@ -103,9 +104,9 @@ class Journal:
 class DurableDispatch:
     schema = 1
 
-    def __init__(self, fleet, path, map_name, *, now=None,simulation_controls=False):
+    def __init__(self, fleet, path, map_name, *, now=None,simulation_controls=False, threaded=False):
         self.fleet = fleet
-        self.journal = Journal(path)
+        self.journal = Journal(path, threaded=threaded)
         self.map_name = map_name
         self.simulation_controls=simulation_controls
         self.failed = False
@@ -115,6 +116,9 @@ class DurableDispatch:
         self.event_cursor = 0
         self.adapter_ids={}
         self.resume_hold=False
+        self.regional_holds = {}
+        self.regional_edges = frozenset()
+        self.regional_recheck = frozenset()
         try:
             if saved:
                 self.restore(saved, time.monotonic() if now is None else now)
@@ -123,12 +127,15 @@ class DurableDispatch:
             self.journal.close()
             raise
 
-    def state(self):
+    def state(self, *, for_storage=False):
         return dict(schema=self.schema, map_name=self.map_name,simulation_controls=self.simulation_controls,
-                    fleet=self.fleet.snapshot(), serial=self.fleet.serial, adapter_ids=self.adapter_ids,
+                    fleet=self.fleet.snapshot(for_storage=for_storage), serial=self.fleet.serial, adapter_ids=self.adapter_ids,
                     policy={key:getattr(self.fleet,key) for key in ('low_soc','release_soc','freshness','handling_seconds','feedback_handling')},
                     finished_at=self.fleet.finished_at, unavailable=sorted(self.fleet.unavailable),
-                    traffic=self.traffic, fenced=self.fenced, resume_hold=self.resume_hold, monotonic=time.monotonic(), wall=time.time())
+                    charger_rates=self.fleet.charger_rates, predictive_charging=self.fleet.predictive_charging,
+                    traffic=self.traffic, fenced=self.fenced, resume_hold=self.resume_hold,
+                    regional_holds=self.regional_holds, regional_recheck=sorted(self.regional_recheck),
+                    monotonic=time.monotonic(), wall=time.time())
 
     def restore(self, saved, now):
         if saved.get('schema') != self.schema or saved.get('map_name') != self.map_name:
@@ -158,6 +165,9 @@ class DurableDispatch:
                     f.robots[j.robot].job = j.id
         for r in f.robots.values():
             r.seen, r.soc = -1e30, None
+        f.configure_charger_profiles(snapshot.get('charger_profiles', {}))
+        f.configure_workload_charging(snapshot.get('workload_charging'))
+        f.charger_observations.clear()  # Require current health after a process restart.
         f.chargers = snapshot['chargers']
         f.charger_occupancy = snapshot.get('charger_occupancy',{})
         f.destinations=snapshot.get('destinations',dict(f.chargers))
@@ -178,6 +188,8 @@ class DurableDispatch:
         f.serial = saved['serial']
         f.finished_at = saved.get('finished_at', {})
         f.unavailable = set(saved.get('unavailable', []))
+        f.charger_rates = saved.get('charger_rates', {})
+        f.predictive_charging = saved.get('predictive_charging', True)
         f.weights = snapshot.get('weights', f.weights)
         scheduling=snapshot.get('scheduling')
         if scheduling:
@@ -187,22 +199,36 @@ class DurableDispatch:
         f.policy_updated_at=-1e30
         self.traffic = saved.get('traffic', {})
         self.adapter_ids=saved.get('adapter_ids',{})
+        self.regional_holds = saved.get('regional_holds', {})
+        self.regional_recheck = frozenset(saved.get('regional_recheck', self.regional_holds))
+        held_stations = {station for hold in self.regional_holds.values() for station in hold['stations']}
+        self.regional_edges = frozenset(edge for edge in f.graph.edges if held_stations.intersection(edge))
         self.fenced = True
         self.resume_hold=bool(saved.get('resume_hold',False)) if saved.get('fenced') else bool(snapshot.get('dispatch_paused',False))
         f.dispatch_paused = True
         f.emit('restart_reconciliation_required', pending_commands=len(self.journal.commands()))
 
     def checkpoint(self, commands=(), acknowledgements=(), uncertain=False):
-        self.revision = self.journal.commit(self.revision, self.state(), commands,
+        self.revision = self.journal.commit(self.revision, self.state(for_storage=True), commands,
                                             self.fleet.events[self.event_cursor:], acknowledgements, uncertain)
         self.event_cursor = len(self.fleet.events)
 
-    def apply(self, action):
+    def apply(self, action, *, fresh_admission=None):
         if self.failed:
             raise DurabilityError('storage fault latched; new dispatch disabled')
-        before = copy.deepcopy({k:v for k,v in self.fleet.__dict__.items() if k != 'graph'})
+        footprint = self.fleet.reserved_cells
+        # The lightweight executor provides an immutable footprint snapshot.
+        immutable = {id(footprint): footprint} if isinstance(footprint, frozenset) else {}
+        # New submissions and their provisional slots mutate only those new jobs.
+        # Existing tasks and vehicle ownership are untouched by this action.
+        before = (copy.deepcopy({k:v for k,v in self.fleet.__dict__.items() if k not in ('graph', 'events')}, immutable)
+                  if fresh_admission is None else {})
+        previous_events = len(self.fleet.events)
         traffic_before, fenced_before = copy.deepcopy(self.traffic), self.fenced
         identities_before=dict(self.adapter_ids)
+        holds_before, edges_before = self.regional_holds, self.regional_edges
+        recheck_before = self.regional_recheck
+        resume_before = self.resume_hold
         try:
             result, commands, acknowledgements = action()
             for c in commands:
@@ -212,45 +238,83 @@ class DurableDispatch:
             # Events have become durable; ROS delivery is a separate operation.
             return result, commands
         except (ValueError, KeyError, TypeError):
+            for identity in fresh_admission or ():
+                self.fleet.jobs.pop(identity, None)
             for k,v in before.items():setattr(self.fleet,k,v)
+            del self.fleet.events[previous_events:]
             self.traffic, self.fenced = traffic_before, fenced_before
             self.adapter_ids=identities_before
+            self.regional_holds, self.regional_edges = holds_before, edges_before
+            self.regional_recheck = recheck_before
+            self.resume_hold = resume_before
             raise
         except Exception as error:
+            for identity in fresh_admission or ():
+                self.fleet.jobs.pop(identity, None)
             for k,v in before.items():setattr(self.fleet,k,v)
+            del self.fleet.events[previous_events:]
             self.traffic, self.fenced = traffic_before, fenced_before
             self.adapter_ids=identities_before
+            self.regional_holds, self.regional_edges = holds_before, edges_before
+            self.regional_recheck = recheck_before
+            self.resume_hold = resume_before
             self.failed = True
             self.fleet.dispatch_paused = True
             raise DurabilityError('durable transaction failed; no new command may be published') from error
 
-    def request(self, req, now):
+    def request(self, req, now, *, preassign=False, preassign_batch=False, feedback_unavailable=()):
+        operation = req.get('operation')
+        fresh = None
+        if 'operation' not in req and isinstance(req.get('id'), str):
+            fresh = (req['id'],) if req['id'] not in self.fleet.jobs else None
+        elif operation == 'submit_batch' and isinstance(req.get('tasks'), list):
+            fresh = {item['id'] for item in req['tasks'] if isinstance(item, dict)
+                     and isinstance(item.get('id'), str) and item['id'] not in self.fleet.jobs}
         def action():
             commands = []
             if 'operation' not in req:
                 result = self.fleet.submit(req, now)
+                if preassign and not self.fenced:
+                    self.fleet.reserve_next(result, now, set(feedback_unavailable) | self.regional_holds.keys())
             elif req['operation']=='submit_batch':
                 items=req.get('tasks')
-                if not isinstance(items,list) or not 1<=len(items)<=32:raise ValueError('batch requires 1..32 tasks')
-                if any(not isinstance(item,dict) or 'operation' in item for item in items):raise ValueError('batch contains invalid task/control')
+                if not isinstance(items,list) or not 1<=len(items)<=MAX_BATCH_TASKS:raise ValueError(f'batch requires 1..{MAX_BATCH_TASKS} tasks')
+                if any(not isinstance(item,dict) or 'operation' in item or not isinstance(item.get('id'), str) for item in items):raise ValueError('batch contains invalid task/control')
                 if len({item.get('id') for item in items})!=len(items):raise ValueError('duplicate id in batch')
                 result=[self.fleet.submit(item,now) for item in items]
+                if preassign_batch and fresh:
+                    new_jobs = [job for job in result if job.id in fresh]
+                    if self.fenced:
+                        for job in new_jobs:
+                            job.admission = {'state': 'waiting', 'reason': '执行状态待核对，任务已入队',
+                                             'reasons': {'reconciling': 1}}
+                    else:
+                        self.fleet.reserve_batch_next(new_jobs, now,
+                                                      set(feedback_unavailable) | self.regional_holds.keys())
                 self.fleet.emit('batch_accepted',task_ids=[j.id for j in result],count=len(result))
             elif req['operation'] == 'cancel':
+                j = self.fleet.jobs.get(req['id'])
+                if j and j.robot in self.regional_holds:
+                    raise ValueError('区域保留车辆须先核对执行状态')
                 cmd = self.fleet.cancel(req['id'], now=now)
                 if cmd:commands.append(cmd)
                 result = None
             else:
-                allowed=('pause','priority','resume','hold_dispatch','set_weights','set_policy','update',
+                allowed=('pause','priority','resume','hold_dispatch','set_weights','set_policy','update','set_vehicle_profile',
                          'enable_vehicle','disable_vehicle','remove_vehicle','request_charge')
                 if self.simulation_controls:
                     allowed += ('fault_idle','clear_idle_fault')
                 if req['operation'] not in allowed:
                     raise ValueError('operation is not enabled in durable profile')
+                j = self.fleet.jobs.get(req.get('id'))
+                if (req.get('robot') in self.regional_holds or (j and j.robot in self.regional_holds)):
+                    raise ValueError('区域保留车辆须先核对执行状态')
                 if self.fenced and req['operation'] not in ('pause','priority','hold_dispatch'):
                     raise ValueError('restart reconciliation fence is active')
                 if self.fenced and req['operation']=='hold_dispatch' and req.get('enabled') is not True:
                     raise ValueError('generic resume cannot remove reconciliation fence')
+                if self.fenced and req['operation'] == 'hold_dispatch':
+                    self.resume_hold = True
                 if req['operation'] == 'remove_vehicle':
                     name = req['robot']
                     if name in self.traffic.get('active', {}) or name in self.traffic.get('waiting', {}):
@@ -264,11 +328,25 @@ class DurableDispatch:
                 result=self.fleet.operation(req, now)
                 if isinstance(result,dict):commands.append(result)
             return result, commands, []
-        return self.apply(action)
+        return self.apply(action, fresh_admission=fresh)
 
     def recover_execution(self, job_id):
-        if self.fenced:raise ValueError('reconciliation must finish before recovery')
+        if self.fenced or self.fleet.jobs[job_id].robot in self.regional_holds:
+            raise ValueError('reconciliation must finish before recovery')
         return self.apply(lambda:(None,[self.fleet.recover_execution(job_id)],[]))
+
+    def redirect_loaded_handoff(self, job, previous, bay, clearance):
+        if self.fenced or not self.fleet.feedback_handling:
+            raise ValueError('仅已就绪的轻量仿真支持受控载货交接')
+
+        def action():
+            row = self.journal.db.execute('SELECT body FROM commands WHERE id=?',
+                                          (previous['command_id'],)).fetchone()
+            if not row or json.loads(row[0]) != previous or previous['task_id'] != job.execution_id:
+                raise ValueError('旧执行指令无法核对')
+            return None, [self.fleet.begin_loaded_handoff(job, bay, clearance)], [(previous['task_id'], 'goal')]
+
+        return self.apply(action)[1][0]
 
     @staticmethod
     def cargo_at_source(job, actions):
@@ -343,24 +421,95 @@ class DurableDispatch:
             else:
                 self.fleet.release_unused_workstations(job)
 
-    def queue_returns(self,homes,now):
+    def queue_returns(self,homes,now, *, charging_only=False):
         if self.fenced:return
-        plans=self.fleet.return_plan(homes)
+        available_homes = {name: station for name, station in homes.items() if name not in self.regional_holds}
+        plans=self.fleet.return_plan(available_homes, charging_only=charging_only)
         if plans:self.apply(lambda:(self.fleet.queue_returns(plans,now),[],[]))
 
-    def tick(self, now, *, positions=None, executor=None, actions=None, stopped=None):
+    def configure_charger_profiles(self, profiles):
+        if self.fenced:
+            raise ValueError('调度尚未恢复，请先核对执行状态')
+
+        def action():
+            self.fleet.configure_charger_profiles(profiles)
+            return None, [], []
+
+        return self.apply(action)[0]
+
+    def tick(self, now, *, positions=None, executor=None, actions=None, stopped=None, eligible=None, feedback_unavailable=()):
+        if not self.fenced and not self.regional_proof_current(executor, actions):
+            return self.refence_regional_restart()
+
         def action():
             if self.fenced:
                 return None, [], []
-            self.fleet.clear_departed_workstations(positions or {})
-            self.fleet.update_charger_occupancy(positions or {})
+            observed_positions = {name: pose for name, pose in (positions or {}).items()
+                                  if name not in self.regional_holds}
+            self.fleet.clear_departed_workstations(observed_positions)
+            self.fleet.update_charger_occupancy(observed_positions)
             supplied = None
             if self.simulation_controls and self.fleet.feedback_handling and actions is not None:
                 supplied = {j.id for j in self.fleet.jobs.values() if j.kind=='transport'
                             and self.cargo_at_source(j,actions)}
                 if executor is not None:
                     self.checked_transfers(executor,actions,stopped or {})
-            return None, [c for c in self.fleet.tick(now,supplied=supplied) if c], []
+            return None, [c for c in self.fleet.tick(now, supplied=supplied, eligible=eligible,
+                                                    feedback_unavailable=set(feedback_unavailable) | self.regional_holds.keys()) if c], []
+        return self.apply(action)[1]
+
+    def verified_regional_holds(self, executor):
+        """Accept containment only from the bound executor with its boundary already locked."""
+        reports = executor.get('regional_holds', {})
+        if not isinstance(reports, dict):
+            return {}, frozenset()
+        raw_edges = executor.get('closed_edges', ())
+        if not isinstance(raw_edges, (list, tuple)):
+            return {}, frozenset()
+        closed = {tuple(edge) for edge in raw_edges
+                  if isinstance(edge, (list, tuple)) and len(edge) == 2 and all(isinstance(n, str) for n in edge)}
+        holds, boundary = {}, set()
+        for name, report in reports.items():
+            robot = self.fleet.robots.get(name)
+            if not robot or not isinstance(report, dict) or report.get('confirmed') is not True:
+                continue
+            stations = report.get('stations')
+            if (not isinstance(stations, list) or not stations
+                    or any(not isinstance(n, str) or n not in self.fleet.graph.stations for n in stations)
+                    or robot.station not in stations):
+                continue
+            job = self.fleet.jobs.get(robot.job)
+            if 'execution_id' not in report or report['execution_id'] != (job.execution_id if job else None):
+                continue
+            area = set(stations)
+            edges = {edge for edge in self.fleet.graph.edges if area.intersection(edge)}
+            if not edges.issubset(closed):
+                continue
+            holds[name] = {'stations': sorted(area), 'execution_id': report['execution_id']}
+            boundary.update(edges)
+        return holds, frozenset(boundary)
+
+    def regional_proof_current(self, executor, actions):
+        if not self.regional_holds:
+            return True
+        for key, snapshot in (('route', executor), ('actions', actions)):
+            if (not snapshot or snapshot.get('map_name') != self.map_name
+                    or snapshot.get('database_id') != self.adapter_ids.get(key)
+                    or snapshot.get('map_change_requires_restart')):
+                return False
+        holds, _ = self.verified_regional_holds(executor)
+        return all(holds.get(name) == record for name, record in self.regional_holds.items())
+
+    def refence_regional_restart(self):
+        if self.fenced or not self.regional_holds:
+            return []
+
+        def action():
+            self.resume_hold = self.fleet.dispatch_paused
+            self.fenced = self.fleet.dispatch_paused = True
+            self.fleet.emit('regional_reconciliation_fence_restored')
+            return None, [], []
+
         return self.apply(action)[1]
 
     def reconcile(self, executor, actions, now):
@@ -370,12 +519,20 @@ class DurableDispatch:
         tasks remain fenced. Scheduler-only crashes can resume unchanged work.
         """
         adapters=dict(route=executor,actions=actions)
-        if any(not v or v.get('map_name')!=self.map_name or not v.get('database_id') for v in adapters.values()):
-            return []
+        if any(not v or v.get('map_name')!=self.map_name or not v.get('database_id')
+               or v.get('map_change_requires_restart') for v in adapters.values()):
+            return self.refence_regional_restart()
         identities={k:v['database_id'] for k,v in adapters.items()}
-        if self.adapter_ids and self.adapter_ids!=identities:return []
-        if self.adapter_ids and not self.fenced:return []
-        if any(now-r.seen>self.fleet.freshness for r in self.fleet.robots.values()):return []
+        if self.adapter_ids and self.adapter_ids!=identities:
+            return self.refence_regional_restart()
+        if self.adapter_ids and not self.fenced and not self.regional_holds:
+            return []
+        holds, boundary = self.verified_regional_holds(executor)
+        stale = {name for name, r in self.fleet.robots.items() if now-r.seen>self.fleet.freshness}
+        if stale - holds.keys():
+            return self.refence_regional_restart()
+        if self.adapter_ids and not self.fenced and self.regional_holds == holds and self.regional_edges == boundary:
+            return []
         def action():
             commands=[]
             outbox = [entry['body'] for entry in self.journal.commands()]
@@ -383,7 +540,7 @@ class DurableDispatch:
                 self.adapter_ids=identities
                 self.fleet.emit('adapters_bound',identities=identities)
             for j in self.fleet.jobs.values():
-                if j.state!='RECONCILING':continue
+                if j.state!='RECONCILING' or j.robot in holds:continue
                 previous=j.reconcile_state
                 is_action=previous=='HANDLING' or (j.execution_id or '').endswith((':pickup',':dropoff'))
                 records=adapters['actions' if is_action else 'route']['records']
@@ -419,7 +576,7 @@ class DurableDispatch:
                     elif previous=='RESUMING' and record and record['state']=='ACTIVE' and event=='resumed':
                         j.state='EXECUTING'
                     else:
-                        if sent and not receipt:
+                        if sent and not receipt and j.robot not in self.regional_recheck:
                             commands.append(sent)
                         continue
                 elif previous in ('CHARGING','NEXT_LEG'):
@@ -435,6 +592,8 @@ class DurableDispatch:
                         self.fleet.on_route(record['result'],now)
                 else:
                     # Re-publish ONLY the committed command, using the exact ID.
+                    if j.robot in self.regional_recheck:
+                        continue
                     if original:
                         commands.append(original);j.state=previous
                     elif is_action and not j.action_sent:
@@ -443,41 +602,69 @@ class DurableDispatch:
                 if j.state not in ('FAILED','CANCELLED'):self.fleet.robots[j.robot].blocked=False
                 if j.state not in ('FAILED','CANCELLED'):j.reason=''
                 self.fleet.emit('execution_reconciled',task_id=j.id,robot=j.robot,state=j.state)
-            if self.fenced and not any(j.state=='RECONCILING' for j in self.fleet.jobs.values()):
+            unresolved = {j.robot for j in self.fleet.jobs.values() if j.state == 'RECONCILING'}
+            if self.regional_holds != holds:
+                self.fleet.emit('regional_reconciliation_changed', holds=holds)
+            self.regional_holds, self.regional_edges = holds, boundary
+            self.regional_recheck = frozenset(unresolved.intersection(self.regional_recheck) | holds.keys())
+            normal_closures = {tuple(edge) for edge in self.traffic.get('closed_edges', ())}
+            self.fleet.set_dispatch_closures(normal_closures | boundary)
+            self.fleet.charge_closed_edges = frozenset(normal_closures) | boundary
+            if self.fenced and unresolved.issubset(holds):
                 self.fenced=False
                 self.fleet.dispatch_paused=self.resume_hold
-                self.fleet.emit('reconciliation_complete')
+                if holds:
+                    self.fleet.emit('regional_reconciliation_active', isolated=sorted(holds))
+                else:
+                    self.fleet.emit('reconciliation_complete')
+            elif not unresolved.issubset(holds):
+                if not self.fenced:
+                    self.resume_hold = self.fleet.dispatch_paused
+                    self.fleet.emit('regional_reconciliation_fence_restored')
+                self.fenced = self.fleet.dispatch_paused = True
             return None,commands,[]
         return self.apply(action)[1]
 
     def route_event(self, event, now):
+        return self.route_events((event,), now)
+
+    def route_events(self, events, now):
         def action():
-            execution, name = event.get('task_id'), event.get('robot')
-            r = self.fleet.robots.get(name)
-            if not r or not r.job or execution != self.fleet.jobs[r.job].execution_id:
-                return None, [], []
-            if self.fleet.feedback_handling:
-                command=next((v['body'] for v in self.journal.commands() if v['id']==event.get('command_id')),None)
-                if not command or command.get('task_id')!=execution or command.get('robot')!=name:
-                    return None,[],[]
-            if self.fenced:
-                self.fleet.emit('reconciliation_observation', robot=name, execution_id=execution,
-                                observed_event=event.get('event'))
-                return None, [], []
-            self.fleet.on_route(event, now)
-            ack=[]
-            if event.get('event') in ('queued','dispatched','arrived','failed','rejected','handling_accepted','handling_done','handling_failed'):
-                ack.append((execution,'goal'))
-            if event.get('event') in ('cancel_requested','cancelled'):
-                ack.append((execution,'cancel'))
-            if event.get('event')=='paused':ack.append((execution,'pause'))
-            if event.get('event')=='resumed':ack.append((execution,'resume'))
-            return None, [], ack
+            acknowledgements = []
+            for event in events:
+                execution, name = event.get('task_id'), event.get('robot')
+                r = self.fleet.robots.get(name)
+                if not r or not r.job or execution != self.fleet.jobs[r.job].execution_id:
+                    continue
+                if self.fleet.feedback_handling:
+                    row = self.journal.db.execute(
+                        'SELECT body FROM commands WHERE id=?', (event.get('command_id'),)).fetchone()
+                    command = json.loads(row[0]) if row else None
+                    if not command or command.get('task_id') != execution or command.get('robot') != name:
+                        continue
+                if self.fenced or name in self.regional_holds:
+                    self.fleet.emit('reconciliation_observation', robot=name, execution_id=execution,
+                                    observed_event=event.get('event'))
+                    continue
+                self.fleet.on_route(event, now)
+                kind = {
+                    'queued': 'goal', 'dispatched': 'goal', 'arrived': 'goal',
+                    'failed': 'goal', 'rejected': 'goal', 'handling_accepted': 'goal',
+                    'handling_done': 'goal', 'handling_failed': 'goal',
+                    'cancel_requested': 'cancel', 'cancelled': 'cancel',
+                    'paused': 'pause', 'resumed': 'resume',
+                }.get(event.get('event'))
+                if kind:
+                    acknowledgements.append((execution, kind))
+            return None, [], acknowledgements
+
         return self.apply(action)
 
     def synchronize(self,executor,actions,now):
         """Recover lost ROS deliveries/results from the authoritative inboxes."""
         if self.fenced or self.failed:return []
+        if not self.regional_proof_current(executor, actions):
+            return self.refence_regional_restart()
         adapters=dict(route=executor,actions=actions)
         if any(not value or value.get('map_name')!=self.map_name or value.get('database_id')!=self.adapter_ids.get(key) for key,value in adapters.items()):return []
         outbox=self.journal.commands()
@@ -493,7 +680,7 @@ class DurableDispatch:
                 continue
             if not robot or not robot.job:continue
             j=self.fleet.jobs[robot.job]
-            if j.execution_id!=c['task_id']:continue
+            if j.execution_id!=c['task_id'] or (c['robot'] in self.regional_holds):continue
             record=records['actions' if c.get('action') else 'route'].get(c['command_id'])
             if record:
                 if record['body']!=c:

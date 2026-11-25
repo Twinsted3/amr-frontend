@@ -4,7 +4,7 @@
         <div class="form-line">
           <label>任务编号<input id="fleet-job-id" maxlength="120" required></label>
           <label>任务类型<select id="fleet-kind"><option value="transport">搬运</option><option value="move">移动后返程</option><option value="standby">到站待命</option><option value="charge">充电</option></select></label>
-          <label id="fleet-priority-field">优先级<select id="fleet-priority"><option value="0">普通</option><option value="100">紧急</option></select></label>
+          <label id="fleet-priority-field">优先级<select id="fleet-priority"><option value="100">高</option><option value="0" selected>中</option><option value="-100">低</option></select></label>
         </div>
         <div class="form-line">
           <label id="fleet-pickup-field">取货站点<select id="fleet-pickup" required></select></label>
@@ -18,7 +18,7 @@
       <details class="panel-body ruled">
         <summary>批量任务</summary>
         <div class="actions fleet-batch-actions"><button id="fleet-out" type="button" disabled>填入五车短程待命</button><button id="fleet-home" type="button" disabled>填入五车回停靠点</button></div>
-        <label>任务 JSON（最多 32 项）<textarea id="fleet-batch" rows="6" spellcheck="false"></textarea></label>
+        <label>任务 JSON（最多 100 项）<textarea id="fleet-batch" rows="6" spellcheck="false"></textarea></label>
         <button id="fleet-send-batch" type="button" disabled>提交批量任务</button>
       </details>
       <div class="panel-body ruled actions"><p id="fleet-result" role="status">等待仿真调度就绪</p><a class="button" href="/fleet">查看运行地图</a></div>

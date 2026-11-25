@@ -90,7 +90,8 @@ class Dispatch:
         with self.lock, self.db:
             self.map(map_id)
             state = self.state()
-            if map_id == state.get('preview_map_id', state['map_id']) or state.get('vehicle_id') and map_id == state['map_id']:
+            cutover = state.get('map_cutover') or {}
+            if map_id in {state['map_id'], state.get('preview_map_id'), cutover.get('old'), cutover.get('target')}:
                 raise ValueError('当前使用的地图或本地运行地图不能删除')
             self.db.execute('INSERT INTO archived_maps(id) VALUES(?)', (map_id,))
         return {'id': map_id}

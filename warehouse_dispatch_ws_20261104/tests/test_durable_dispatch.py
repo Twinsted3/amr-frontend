@@ -33,6 +33,45 @@ class DurableTests(unittest.TestCase):
         s=self.service();self.create(s);s.close();s=self.service();self.create(s)
         self.assertEqual(list(s.fleet.jobs),['business-1']);self.assertTrue(s.fenced)
 
+    def test_batch_booking_maximizes_unique_slots_and_is_durable(self):
+        service = self.service()
+        now = self.ready(service)
+        service.fleet.robots['agv01'].model = 'lift'
+        request = dict(operation='submit_batch', tasks=[
+            dict(id='A', type='standby', goal='LM_DOCK_06'),
+            dict(id='B', type='standby', goal='LM_DOCK_12', requirements={'models': ['lift']}),
+            dict(id='C', type='standby', goal='LM_DOCK_18'),
+        ])
+        jobs, commands = service.request(request, now, preassign_batch=True)
+        self.assertEqual(commands, [])
+        self.assertEqual([job.next_robot for job in jobs], ['agv02', 'agv01', None])
+        self.assertEqual(jobs[2].admission['reasons'], {'slot_full': 2})
+        self.assertTrue(all(job.state == 'QUEUED' for job in jobs))
+        first = [job.first_allocation_at for job in jobs]
+        self.assertTrue(all(first[:2]))
+        service.request(request, now + .25, preassign_batch=True)
+        self.assertEqual([job.first_allocation_at for job in jobs], first)
+        self.assertFalse(service.fleet.destinations)
+        self.assertFalse(service.fleet.workstations)
+        _, snapshot = service.journal.load()
+        self.assertEqual([snapshot['fleet']['jobs'][job.id]['next_robot'] for job in jobs],
+                         ['agv02', 'agv01', None])
+
+    def test_mixed_retry_batch_preserves_original_bookings_on_failure(self):
+        service = self.service()
+        now = self.ready(service)
+        original = dict(id='existing', type='standby', goal='LM_DOCK_06')
+        service.request(original, now, preassign=True)
+        job = service.fleet.jobs['existing']
+        booking = (job.next_robot, job.first_allocation_at)
+        request = dict(operation='submit_batch', tasks=[dict(original, id='new'), dict(original, goal='LM_DOCK_12')])
+        with self.assertRaisesRegex(ValueError, 'reused'):
+            service.request(request, now, preassign_batch=True)
+        self.assertNotIn('new', service.fleet.jobs)
+        self.assertEqual((job.next_robot, job.first_allocation_at), booking)
+        _, snapshot = service.journal.load()
+        self.assertNotIn('new', snapshot['fleet']['jobs'])
+
     def test_queued_edit_persists_and_rejects_stale_or_started_updates(self):
         s = self.service()
         self.create(s)
@@ -170,6 +209,60 @@ class DurableTests(unittest.TestCase):
         self.assertEqual(s.fleet.jobs['business-1'].state,'RECONCILING')
         self.assertEqual(s.tick(time.monotonic()),[])
         self.assertTrue(all(r.soc is None for r in s.fleet.robots.values()))
+
+    def test_restart_unfences_only_while_the_unverified_region_is_contained(self):
+        first = self.service(feedback_handling=True)
+        now = self.ready(first)
+        route = dict(map_name='map-v1', database_id='route-v1', records=[])
+        actions = dict(map_name='map-v1', database_id='actions-v1', records=[], loads={})
+        first.reconcile(route, actions, now)
+        first.request(dict(id='isolated', type='transport', robot='agv01',
+                           pickup='LM_DOCK_06', dropoff='LM_06_13'), now)
+        interrupted = first.tick(now)[0]
+        first.close()
+
+        resumed = self.service(feedback_handling=True)
+        now = time.monotonic()
+        resumed.fleet.update('agv02', 'CP_12', .8, now)
+        held = resumed.fleet.jobs['isolated']
+        route['records'] = [dict(body=interrupted, state='INTERRUPTED', result={})]
+        route['regional_holds'] = {'agv01': dict(confirmed=True, stations=['CP_06'], execution_id=held.execution_id)}
+        route['closed_edges'] = []
+        self.assertEqual(resumed.reconcile(route, actions, now), [])
+        self.assertTrue(resumed.fenced)
+
+        boundary = {edge for edge in self.graph.edges if 'CP_06' in edge}
+        route['closed_edges'] = sorted(boundary)
+        self.assertEqual(resumed.reconcile(route, actions, now), [])
+        self.assertFalse(resumed.fenced)
+        self.assertEqual(resumed.fleet.dispatch_closed_edges, boundary)
+        self.assertEqual(held.state, 'RECONCILING')
+        self.assertEqual(resumed.fleet.workstations['LM_DOCK_06']['job'], held.id)
+        resumed.request(dict(id='outside', type='move', robot='agv02', goal='LM_DOCK_12'), now)
+        unrelated = resumed.tick(now, executor=route, actions=actions)[0]
+        self.assertEqual(unrelated['robot'], 'agv02')
+        self.assertNotIn(interrupted, resumed.synchronize(route, actions, now))
+        resumed.route_event(dict(event='arrived', robot='agv01', task_id=interrupted['task_id'],
+                                 command_id=interrupted['command_id'], station='LM_DOCK_06'), now)
+        self.assertEqual(held.state, 'RECONCILING')
+        resumed.route_event(dict(event='arrived', robot='agv02', task_id=unrelated['task_id'],
+                                 command_id=unrelated['command_id'], station='LM_DOCK_12'), now)
+        self.assertEqual(resumed.fleet.jobs['outside'].state, 'DONE')
+
+        route['closed_edges'] = []
+        self.assertEqual(resumed.synchronize(route, actions, now), [])
+        self.assertTrue(resumed.fenced)
+        self.assertEqual(resumed.tick(now), [])
+        self.assertIn('agv01', resumed.regional_holds)
+
+        route['regional_holds'] = {}
+        resumed.fleet.update('agv01', 'CP_06', .8, now)
+        route['records'] = []
+        self.assertEqual(resumed.reconcile(route, actions, now), [])
+        self.assertTrue(resumed.fenced)
+        self.assertEqual(held.state, 'RECONCILING')
+        self.assertEqual(resumed.reconcile(route, actions, now), [])
+        self.assertTrue(resumed.fenced)
     def test_resume_cannot_bypass_restart_fence(self):
         s=self.service();self.create(s);s.close();s=self.service()
         with self.assertRaises(ValueError):s.request(dict(operation='hold_dispatch',enabled=False),time.monotonic())
@@ -209,6 +302,24 @@ class DurableTests(unittest.TestCase):
         self.assertEqual(s.journal.commands(),[])
         with self.assertRaises(DurabilityError):s.tick(time.monotonic())
         s.journal.commit=original
+
+    def test_failed_first_allocation_does_not_change_existing_tasks_or_journal(self):
+        service = self.service()
+        self.create(service)
+        now = self.ready(service)
+        previous_revision, previous_state = service.journal.load()
+        previous_job = service.fleet.jobs['business-1']
+        previous_events = list(service.fleet.events)
+        def broken(*args, **kwargs):
+            raise sqlite3.OperationalError('disk unavailable during admission')
+        service.journal.commit = broken
+        with self.assertRaises(DurabilityError):
+            service.request(dict(id='new-task', type='move', goal='LM_DOCK_06'), now, preassign=True)
+        self.assertNotIn('new-task', service.fleet.jobs)
+        self.assertIs(service.fleet.jobs['business-1'], previous_job)
+        self.assertEqual(service.fleet.events, previous_events)
+        self.assertEqual(service.journal.load(), (previous_revision, previous_state))
+        self.assertTrue(service.failed)
     def test_sql_transaction_rolls_back_snapshot_and_duplicate_command_together(self):
         s=self.service();self.create(s);command=s.tick(self.ready(s))[0];revision=s.revision
         with self.assertRaises(DurabilityError):

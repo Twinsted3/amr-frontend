@@ -1,0 +1,61 @@
+{
+  "vehicles": 100,
+  "seed": 22,
+  "same_tick": [
+    {
+      "batch": 1,
+      "tick": 0,
+      "submitted": 100,
+      "booked": 85,
+      "busy_vehicles": 0,
+      "booked_to_busy": 0,
+      "client_ms": 366.01559999689925,
+      "waiting_order_reasons": {
+        "energy": 15,
+        "slot_full": 15
+      }
+    },
+    {
+      "batch": 2,
+      "tick": 0,
+      "submitted": 100,
+      "booked": 0,
+      "busy_vehicles": 0,
+      "booked_to_busy": 0,
+      "client_ms": 176.11440000473522,
+      "waiting_order_reasons": {
+        "energy": 100,
+        "slot_full": 100
+      }
+    }
+  ],
+  "during_execution": [
+    {
+      "batch": 1,
+      "tick": 0,
+      "submitted": 100,
+      "booked": 85,
+      "busy_vehicles": 0,
+      "booked_to_busy": 0,
+      "client_ms": 376.8022000003839,
+      "waiting_order_reasons": {
+        "energy": 15,
+        "slot_full": 15
+      }
+    },
+    {
+      "batch": 2,
+      "tick": 3,
+      "submitted": 100,
+      "booked": 55,
+      "busy_vehicles": 42,
+      "booked_to_busy": 34,
+      "client_ms": 360.9340999973938,
+      "waiting_order_reasons": {
+        "energy": 45,
+        "slot_full": 45,
+        "busy_transition": 45
+      }
+    }
+  ]
+}

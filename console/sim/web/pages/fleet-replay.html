@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="/fleet-replay.css">
+<div class="replay-source">
+  <div>
+    <span class="replay-source-tag">轻量仿真记录 · 只读回放</span>
+    <p id="replay-source-detail">正在读取联测记录</p>
+  </div>
+  <button id="replay-open" type="button">打开回放文件</button>
+  <input id="replay-file" type="file" accept="application/json,.json" hidden>
+</div>
+<p id="replay-error" class="notice error" role="status" hidden></p>
+<div id="replay-content" hidden>
+  <dl class="replay-metrics" aria-label="当前节拍的联测指标">
+    <div><dt>任务完成 / 已接单</dt><dd id="replay-tasks">—</dd></div>
+    <div><dt>行驶车辆</dt><dd id="replay-moving">—</dd></div>
+    <div><dt>路权等待</dt><dd id="replay-waiting">—</dd></div>
+    <div><dt>正在充电</dt><dd id="replay-charging">—</dd></div>
+    <div><dt>低电等待</dt><dd id="replay-low">—</dd></div>
+    <div><dt>反馈不可用</dt><dd id="replay-outages">—</dd></div>
+  </dl>
+  <article class="panel replay-map-panel">
+    <header class="panel-head">
+      <div><h2>共享路网</h2><p id="replay-map-title">—</p></div>
+      <div class="actions replay-map-actions">
+        <button id="replay-zoom-out" type="button" aria-label="缩小地图">−</button>
+        <button id="replay-zoom-in" type="button" aria-label="放大地图">＋</button>
+        <button id="replay-fit" type="button">全场</button>
+      </div>
+    </header>
+    <div class="replay-map-wrap">
+      <canvas id="replay-map" tabindex="0" aria-label="百台叉车共享路网回放。点击车辆查看详情，拖动或按方向键移动地图。"></canvas>
+      <span class="replay-map-note" aria-hidden="true">拖动查看 · 点击车辆定位</span>
+      <output class="replay-map-hover" id="replay-hover" hidden></output>
+    </div>
+    <ul class="replay-legend" aria-label="地图图例">
+      <li><i data-state="idle"></i>空闲</li>
+      <li><i data-state="moving"></i>行驶</li>
+      <li><i data-state="waiting"></i>路权等待</li>
+      <li><i data-state="low_power_waiting"></i>低电等待</li>
+      <li><i data-state="charging"></i>充电</li>
+      <li><i data-state="handling"></i>装卸</li>
+      <li><i data-state="recovering"></i>恢复</li>
+      <li><i data-state="offline"></i>反馈不可用</li>
+      <li><i class="replay-key-closure"></i>封闭路段</li>
+      <li><i class="replay-key-route"></i>所选车辆的授权路线</li>
+    </ul>
+    <div class="replay-transport" aria-label="播放控制">
+      <button class="primary" id="replay-play" type="button">播放</button>
+      <button id="replay-start" type="button">回到开头</button>
+      <div class="replay-slider-group">
+        <label for="replay-timeline" id="replay-time">仿真步 0 / 0</label>
+        <input id="replay-timeline" type="range" min="0" max="0" value="0">
+      </div>
+      <label class="replay-speed-label" for="replay-speed">倍速</label>
+      <select id="replay-speed" aria-label="回放倍速">
+        <option value="1">1×</option><option value="2" selected>2×</option>
+        <option value="4">4×</option><option value="8">8×</option><option value="16">16×</option>
+      </select>
+    </div>
+  </article>
+  <div class="replay-lower">
+    <article class="panel replay-events-panel">
+      <header class="panel-head"><div><h2>联测事件</h2><p>点击事件跳到对应仿真步</p></div>
+        <label class="replay-filter" for="replay-event-filter"><span>筛选</span>
+          <select id="replay-event-filter"><option value="all">全部事件</option></select>
+        </label>
+      </header>
+      <ol id="replay-events" class="replay-events"></ol>
+    </article>
+    <article class="panel replay-car-panel">
+      <header class="panel-head"><div><h2>车辆详情</h2></div>
+        <label class="replay-filter" for="replay-vehicle"><span>车辆</span>
+          <select id="replay-vehicle"><option value="">选择车辆</option></select>
+        </label>
+      </header>
+      <p id="replay-car-empty" class="panel-body">点击地图中的车辆，或按车号查看。</p>
+      <div id="replay-car-detail" class="panel-body" hidden>
+        <div class="replay-car-heading"><strong id="replay-car-id"></strong><span id="replay-car-state"></span>
+          <button id="replay-focus" type="button">聚焦车辆</button>
+        </div>
+        <dl class="replay-car-facts">
+          <div><dt>电量</dt><dd id="replay-car-soc"></dd></div>
+          <div><dt>任务</dt><dd id="replay-car-task"></dd></div>
+          <div><dt>货物</dt><dd id="replay-car-load"></dd></div>
+          <div><dt>当前位置</dt><dd id="replay-car-position"></dd></div>
+          <div><dt>授权路线</dt><dd id="replay-car-grant"></dd></div>
+          <div><dt>等待原因</dt><dd id="replay-car-wait"></dd></div>
+        </dl>
+      </div>
+    </article>
+  </div>
+  <article class="panel" id="replay-result" hidden>
+    <header class="panel-head"><h2>联测结果</h2></header>
+    <ul class="replay-result-list" id="replay-result-list"></ul>
+  </article>
+</div>

@@ -194,16 +194,20 @@ function render() {
   }
   if (activePage === 'maps') {
     const canDeleteMap = snapshot.map_capabilities?.archive === true;
+    const running = snapshot.running_map_id;
+    const selected = running ?? snapshot.preview_map_id;
     $('map-service-version').hidden = canDeleteMap;
     setMarkup($('map-list'), table(['编号', '地图名称', '状态', '操作'], snapshot.maps.map(map =>
       `<tr><td>#${map.id}</td><td><a class="record-link" href="/maps/${map.id}">${escape(map.name)}</a></td>
-      <td><span class="badge ${map.id === snapshot.preview_map_id ? 'teal' : ''}">${map.id === snapshot.preview_map_id ? '使用中' : '已导入'}</span></td>
-      <td><div class="row-actions"><a class="button" href="/maps/${map.id}">预览</a><button data-map="${map.id}" ${map.id === snapshot.preview_map_id ? 'disabled' : ''}>使用</button><a class="button" href="/api/maps/${map.id}/file" download>下载</a><a class="button" href="/map-editor?id=${map.id}">编辑</a><button data-delete-map="${map.id}" ${!canDeleteMap || snapshot.preview_map_id === map.id ? 'disabled' : ''}>删除</button></div></td></tr>`)));
+      <td><span class="badge ${map.id === selected ? 'teal' : ''}">${map.id === selected ? (running ? '运行中' : '使用中') : '已导入'}</span></td>
+      <td><div class="row-actions"><a class="button" href="/maps/${map.id}">预览</a><button data-map="${map.id}" ${map.id === selected ? 'disabled' : ''}>${running ? '应用' : '使用'}</button><a class="button" href="/api/maps/${map.id}/file" download>下载</a><a class="button" href="/map-editor?id=${map.id}">编辑</a><button data-delete-map="${map.id}" ${!canDeleteMap || selected === map.id || snapshot.preview_map_id === map.id ? 'disabled' : ''}>删除</button></div></td></tr>`)));
   }
   if (activePage === 'overview' && geometry) drawMap();
   if (activePage === 'map-detail' && geometry) {
-    const enabled = recordId === snapshot.preview_map_id;
-    $('map-detail-status').textContent = enabled ? '使用中' : '已导入';
+    const running = snapshot.running_map_id;
+    const enabled = recordId === (running ?? snapshot.preview_map_id);
+    $('map-detail-status').textContent = enabled ? (running ? '运行中' : '使用中') : '已导入';
+    $('map-enable').textContent = running ? '应用到仿真' : '使用';
     $('map-detail-status').classList.toggle('teal', enabled);
     $('map-enable').disabled = enabled;
     setMarkup($('map-detail-stats'), fields([['地图版本', `#${recordId}`],
@@ -413,7 +417,8 @@ document.addEventListener('click', event => {
       perform(() => request(`/api/maps/${target.id}/archive`, {}), '已从地图库移除地图');
     }
   }
-  if (map) perform(() => request('/api/map-selection', {id: Number(map)}), '已使用地图');
+  if (map) perform(() => request(snapshot.running_map_id ? '/api/fleet/map-application' : '/api/map-selection',
+    {id: Number(map)}), snapshot.running_map_id ? '已应用仿真地图' : '已使用地图');
   if (vehicleCommand) {
     if (vehicleCommand === 'remove') {
       perform(async () => {
@@ -433,7 +438,8 @@ $('vehicle-record-remove')?.addEventListener('click', () => { $('vehicle-remove-
 $('vehicle-remove-cancel')?.addEventListener('click', () => { $('vehicle-remove-confirm').hidden = true; });
 
 $('map-enable')?.addEventListener('click', () => {
-  perform(() => request('/api/map-selection', {id: recordId}), '已使用地图');
+  perform(() => request(snapshot.running_map_id ? '/api/fleet/map-application' : '/api/map-selection',
+    {id: recordId}), snapshot.running_map_id ? '已应用仿真地图' : '已使用地图');
 });
 
 $('map-import')?.addEventListener('submit', event => {
