@@ -1,0 +1,2791 @@
+{
+  "CAS-Backend/biz/controller.CDW": [
+    {
+      "name": "Id",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"vehicleCode\""
+    },
+    {
+      "name": "Ip",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"vehicleIp\""
+    },
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 32,
+      "tag": "json:\"x\""
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 40,
+      "tag": "json:\"y\""
+    },
+    {
+      "name": "ANGLE",
+      "type": "float64",
+      "offset": 48,
+      "tag": "json:\"angle\""
+    },
+    {
+      "name": "LENGTH",
+      "type": "float64",
+      "offset": 56,
+      "tag": "json:\"length\""
+    }
+  ],
+  "CAS-Backend/biz/controller.Controllamr": [
+    {
+      "name": "Id",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"vehicleCode\""
+    },
+    {
+      "name": "Ip",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"vehicleIp\""
+    },
+    {
+      "name": "Status",
+      "type": "int",
+      "offset": 32,
+      "tag": "json:\"status\""
+    },
+    {
+      "name": "V",
+      "type": "float64",
+      "offset": 40,
+      "tag": "json:\"v\""
+    },
+    {
+      "name": "H",
+      "type": "float64",
+      "offset": 48,
+      "tag": "json:\"h\""
+    },
+    {
+      "name": "W",
+      "type": "float64",
+      "offset": 56,
+      "tag": "json:\"w\""
+    },
+    {
+      "name": "D",
+      "type": "float64",
+      "offset": 64,
+      "tag": "json:\"d\""
+    },
+    {
+      "name": "R",
+      "type": "float64",
+      "offset": 72,
+      "tag": "json:\"r\""
+    }
+  ],
+  "CAS-Backend/biz/controller.DownloadMapRequest": [
+    {
+      "name": "Id",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"code\""
+    },
+    {
+      "name": "Ip",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"ip\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 32,
+      "tag": "json:\"name\""
+    }
+  ],
+  "CAS-Backend/biz/controller.LoginRequest": [
+    {
+      "name": "No",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"username\""
+    },
+    {
+      "name": "Pwd",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"password\""
+    }
+  ],
+  "CAS-Backend/biz/controller.MapJieshou": [
+    {
+      "name": "MapData",
+      "type": "map[string]interface {}",
+      "offset": 0,
+      "tag": "json:\"mapData\" "
+    },
+    {
+      "name": "MapName",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"mapName\" "
+    },
+    {
+      "name": "MapDir",
+      "type": "string",
+      "offset": 24,
+      "tag": "json:\"mapDir\""
+    },
+    {
+      "name": "Id",
+      "type": "string",
+      "offset": 40,
+      "tag": "json:\"id\""
+    }
+  ],
+  "CAS-Backend/biz/controller.MapRequest": [
+    {
+      "name": "Id",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"id\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"name\""
+    },
+    {
+      "name": "Path",
+      "type": "string",
+      "offset": 24,
+      "tag": "json:\"path\""
+    },
+    {
+      "name": "Version",
+      "type": "string",
+      "offset": 40,
+      "tag": "json:\"version\""
+    },
+    {
+      "name": "CreateTi",
+      "type": "time.Time",
+      "offset": 56,
+      "tag": "json:\"createTi\""
+    },
+    {
+      "name": "Data",
+      "type": "[]uint8",
+      "offset": 80,
+      "tag": "json:\"data\""
+    }
+  ],
+  "CAS-Backend/biz/controller.MappingManager": [
+    {
+      "name": "RWMutex",
+      "type": "sync.RWMutex",
+      "offset": 0
+    },
+    {
+      "name": "sessions",
+      "type": "map[string]*CAS-Backend/biz/controller.MappingSession",
+      "offset": 24
+    }
+  ],
+  "CAS-Backend/biz/controller.MappingSession": [
+    {
+      "name": "IP",
+      "type": "string",
+      "offset": 0,
+      "tag": ""
+    },
+    {
+      "name": "IsMapping",
+      "type": "bool",
+      "offset": 16,
+      "tag": ""
+    },
+    {
+      "name": "StopChan",
+      "type": "chan struct {}",
+      "offset": 24,
+      "tag": ""
+    },
+    {
+      "name": "LastImage",
+      "type": "[]uint8",
+      "offset": 32,
+      "tag": ""
+    },
+    {
+      "name": "Mutex",
+      "type": "sync.RWMutex",
+      "offset": 56,
+      "tag": ""
+    }
+  ],
+  "CAS-Backend/biz/controller.MonitorTrafficPushRequest": [
+    {
+      "name": "VehicleID",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"vehicle_id\""
+    },
+    {
+      "name": "MonitorTarget",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"monitor_target\""
+    },
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 32,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "TaskStatusPackage",
+      "type": "CAS-Backend/pkg/diapdu.MonitorTaskStatusPackage",
+      "offset": 40,
+      "tag": "json:\"task_status_package\""
+    }
+  ],
+  "CAS-Backend/biz/controller.RegisterRequest": [
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"name\""
+    },
+    {
+      "name": "No",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"username\""
+    },
+    {
+      "name": "Pwd",
+      "type": "string",
+      "offset": 32,
+      "tag": "json:\"password\""
+    }
+  ],
+  "CAS-Backend/biz/controller.TaskChainRequest": [
+    {
+      "name": "Id",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"id\""
+    },
+    {
+      "name": "ChainName",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"chainName\""
+    },
+    {
+      "name": "Desc",
+      "type": "string",
+      "offset": 24,
+      "tag": "json:\"desc\""
+    },
+    {
+      "name": "ChainJson",
+      "type": "string",
+      "offset": 40,
+      "tag": "json:\"chainJson\""
+    },
+    {
+      "name": "Status",
+      "type": "int",
+      "offset": 56,
+      "tag": "json:\"status\""
+    }
+  ],
+  "CAS-Backend/biz/controller.TaskRequest": [
+    {
+      "name": "Id",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"id\""
+    },
+    {
+      "name": "TaskType",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"taskType\""
+    },
+    {
+      "name": "PubUser",
+      "type": "int",
+      "offset": 24,
+      "tag": "json:\"pubUser\""
+    },
+    {
+      "name": "Pry",
+      "type": "string",
+      "offset": 32,
+      "tag": "json:\"pry\""
+    },
+    {
+      "name": "Status",
+      "type": "int",
+      "offset": 48,
+      "tag": "json:\"status\""
+    },
+    {
+      "name": "Desc",
+      "type": "string",
+      "offset": 56,
+      "tag": "json:\"desc\""
+    },
+    {
+      "name": "CreateTime",
+      "type": "time.Time",
+      "offset": 72,
+      "tag": "json:\"createTime\""
+    },
+    {
+      "name": "FinTime",
+      "type": "time.Time",
+      "offset": 96,
+      "tag": "json:\"finTime\""
+    },
+    {
+      "name": "Del",
+      "type": "bool",
+      "offset": 120,
+      "tag": "json:\"del\""
+    },
+    {
+      "name": "VehId",
+      "type": "string",
+      "offset": 128,
+      "tag": "json:\"vehNo\""
+    },
+    {
+      "name": "StartPos",
+      "type": "string",
+      "offset": 144,
+      "tag": "json:\"startPos\""
+    },
+    {
+      "name": "EndPos",
+      "type": "string",
+      "offset": 160,
+      "tag": "json:\"endPos\""
+    },
+    {
+      "name": "RoadPoint",
+      "type": "string",
+      "offset": 176,
+      "tag": "json:\"waypoint\""
+    },
+    {
+      "name": "EndPoint",
+      "type": "string",
+      "offset": 192,
+      "tag": "json:\"endPoint\""
+    },
+    {
+      "name": "IsCycle",
+      "type": "bool",
+      "offset": 208,
+      "tag": "json:\"isCycle\""
+    },
+    {
+      "name": "TaskName",
+      "type": "string",
+      "offset": 216,
+      "tag": "json:\"taskName\""
+    },
+    {
+      "name": "MaxSpeed",
+      "type": "string",
+      "offset": 232,
+      "tag": "json:\"maxSpeed\""
+    },
+    {
+      "name": "RunHeight",
+      "type": "float64",
+      "offset": 248,
+      "tag": "json:\"runHeight\""
+    }
+  ],
+  "CAS-Backend/biz/controller.UploadMapRequest": [
+    {
+      "name": "Ip",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"ip\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"name\""
+    },
+    {
+      "name": "Dir",
+      "type": "string",
+      "offset": 32,
+      "tag": "json:\"filePath\""
+    }
+  ],
+  "CAS-Backend/biz/controller.VehRequest": [
+    {
+      "name": "Id",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"code\""
+    },
+    {
+      "name": "Ip",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"ip\""
+    },
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 32,
+      "tag": "json:\"port\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 40,
+      "tag": "json:\"name\""
+    },
+    {
+      "name": "Type",
+      "type": "string",
+      "offset": 56,
+      "tag": "json:\"type\""
+    },
+    {
+      "name": "Brand",
+      "type": "string",
+      "offset": 72,
+      "tag": "json:\"brand\""
+    },
+    {
+      "name": "RadarBrand",
+      "type": "string",
+      "offset": 88,
+      "tag": "json:\"radarBrand\""
+    },
+    {
+      "name": "MotorBrand",
+      "type": "string",
+      "offset": 104,
+      "tag": "json:\"motorBrand\""
+    }
+  ],
+  "CAS-Backend/biz/dao.Map": [
+    {
+      "name": "ID",
+      "type": "int",
+      "offset": 0,
+      "tag": "gorm:\"primaryKey;autoIncrement:true;column:id\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 8,
+      "tag": "gorm:\"column:name;type:text\""
+    },
+    {
+      "name": "Path",
+      "type": "string",
+      "offset": 24,
+      "tag": "gorm:\"column:path;type:text\""
+    },
+    {
+      "name": "Version",
+      "type": "string",
+      "offset": 40,
+      "tag": "gorm:\"column:version;type:text\""
+    },
+    {
+      "name": "CreateTi",
+      "type": "time.Time",
+      "offset": 56,
+      "tag": "gorm:\"column:createTi;type:timestamp\""
+    }
+  ],
+  "CAS-Backend/biz/dao.Task": [
+    {
+      "name": "ID",
+      "type": "int",
+      "offset": 0,
+      "tag": "gorm:\"primaryKey;autoIncrement;column:id\""
+    },
+    {
+      "name": "TaskType",
+      "type": "string",
+      "offset": 8,
+      "tag": "gorm:\"column:taskType;type:text\""
+    },
+    {
+      "name": "PubUser",
+      "type": "int",
+      "offset": 24,
+      "tag": "gorm:\"column:pubUser\""
+    },
+    {
+      "name": "Pry",
+      "type": "string",
+      "offset": 32,
+      "tag": "gorm:\"column:pry;type:text\""
+    },
+    {
+      "name": "Status",
+      "type": "int",
+      "offset": 48,
+      "tag": "gorm:\"column:status\""
+    },
+    {
+      "name": "Desc",
+      "type": "string",
+      "offset": 56,
+      "tag": "gorm:\"column:descr;type:text\""
+    },
+    {
+      "name": "CreateTime",
+      "type": "time.Time",
+      "offset": 72,
+      "tag": "gorm:\"column:createTime;type:timestamp;default:CURRENT_TIMESTAMP\""
+    },
+    {
+      "name": "FinTime",
+      "type": "time.Time",
+      "offset": 96,
+      "tag": "gorm:\"column:finTime;type:timestamp\""
+    },
+    {
+      "name": "Del",
+      "type": "bool",
+      "offset": 120,
+      "tag": "gorm:\"column:del\""
+    },
+    {
+      "name": "VehId",
+      "type": "string",
+      "offset": 128,
+      "tag": "gorm:\"column:vehid;type:text\""
+    },
+    {
+      "name": "StartPos",
+      "type": "string",
+      "offset": 144,
+      "tag": "gorm:\"column:startPos;type:text\""
+    },
+    {
+      "name": "EndPos",
+      "type": "string",
+      "offset": 160,
+      "tag": "gorm:\"column:endPos;type:text\""
+    },
+    {
+      "name": "RoadPoint",
+      "type": "string",
+      "offset": 176,
+      "tag": "gorm:\"column:roadPoint;type:text\""
+    },
+    {
+      "name": "TaskName",
+      "type": "string",
+      "offset": 192,
+      "tag": "gorm:\"column:taskName;type:text\""
+    },
+    {
+      "name": "EndPoint",
+      "type": "string",
+      "offset": 208,
+      "tag": "gorm:\"column:endPoint;type:text\""
+    },
+    {
+      "name": "IsCycle",
+      "type": "bool",
+      "offset": 224,
+      "tag": "gorm:\"column:isCycle\""
+    },
+    {
+      "name": "RunHeight",
+      "type": "float64",
+      "offset": 232,
+      "tag": "gorm:\"column:runHeight;type:real\""
+    }
+  ],
+  "CAS-Backend/biz/dao.TaskChain": [
+    {
+      "name": "ID",
+      "type": "int",
+      "offset": 0,
+      "tag": "gorm:\"primaryKey;autoIncrement;column:id\""
+    },
+    {
+      "name": "ChainName",
+      "type": "string",
+      "offset": 8,
+      "tag": "gorm:\"column:chainName;type:text\""
+    },
+    {
+      "name": "Desc",
+      "type": "string",
+      "offset": 24,
+      "tag": "gorm:\"column:descr;type:text\""
+    },
+    {
+      "name": "ChainJson",
+      "type": "string",
+      "offset": 40,
+      "tag": "gorm:\"column:chainJson;type:text\""
+    },
+    {
+      "name": "Status",
+      "type": "int",
+      "offset": 56,
+      "tag": "gorm:\"column:status\""
+    },
+    {
+      "name": "CreateTime",
+      "type": "time.Time",
+      "offset": 64,
+      "tag": "gorm:\"column:createTime;type:timestamp;default:CURRENT_TIMESTAMP\""
+    },
+    {
+      "name": "FinTime",
+      "type": "time.Time",
+      "offset": 88,
+      "tag": "gorm:\"column:finTime;type:timestamp\""
+    },
+    {
+      "name": "Del",
+      "type": "bool",
+      "offset": 112,
+      "tag": "gorm:\"column:del\""
+    }
+  ],
+  "CAS-Backend/biz/dao.User": [
+    {
+      "name": "ID",
+      "type": "int",
+      "offset": 0,
+      "tag": "gorm:\"primaryKey;autoIncrement;column:id\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 8,
+      "tag": "gorm:\"column:name;type:text\""
+    },
+    {
+      "name": "No",
+      "type": "string",
+      "offset": 24,
+      "tag": "gorm:\"column:no;type:text;uniqueIndex\""
+    },
+    {
+      "name": "Pwd",
+      "type": "string",
+      "offset": 40,
+      "tag": "gorm:\"column:pwd;type:text\""
+    },
+    {
+      "name": "Roles",
+      "type": "int",
+      "offset": 56,
+      "tag": "gorm:\"column:roles\""
+    }
+  ],
+  "CAS-Backend/biz/dao.Vehicle": [
+    {
+      "name": "ID",
+      "type": "string",
+      "offset": 0,
+      "tag": "gorm:\"primaryKey;type:text;column:id\""
+    },
+    {
+      "name": "Ip",
+      "type": "string",
+      "offset": 16,
+      "tag": "gorm:\"column:ip;type:text\""
+    },
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 32,
+      "tag": "gorm:\"column:port\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 40,
+      "tag": "gorm:\"column:name;type:text\""
+    },
+    {
+      "name": "Type",
+      "type": "string",
+      "offset": 56,
+      "tag": "gorm:\"column:type;type:text\""
+    },
+    {
+      "name": "Brand",
+      "type": "string",
+      "offset": 72,
+      "tag": "gorm:\"column:brand;type:text\""
+    },
+    {
+      "name": "RadarBrand",
+      "type": "string",
+      "offset": 88,
+      "tag": "gorm:\"column:radarBrand;type:text\""
+    },
+    {
+      "name": "MotorBrand",
+      "type": "string",
+      "offset": 104,
+      "tag": "gorm:\"column:motorBrand;type:text\""
+    }
+  ],
+  "CAS-Backend/config.Config": [
+    {
+      "name": "Server",
+      "type": "CAS-Backend/config.ServerConfig",
+      "offset": 0,
+      "tag": "mapstructure:\"server\""
+    },
+    {
+      "name": "Prometheus",
+      "type": "CAS-Backend/config.PrometheusConfig",
+      "offset": 24,
+      "tag": "mapstructure:\"prometheus\""
+    },
+    {
+      "name": "Diaodu",
+      "type": "CAS-Backend/config.DiaoduConfig",
+      "offset": 48,
+      "tag": "mapstructure:\"diaodu\""
+    },
+    {
+      "name": "Database",
+      "type": "CAS-Backend/config.DatabaseConfig",
+      "offset": 80,
+      "tag": "yaml:\"database\" json:\"database\""
+    }
+  ],
+  "CAS-Backend/config.DatabaseConfig": [
+    {
+      "name": "Host",
+      "type": "string",
+      "offset": 0,
+      "tag": "yaml:\"host\" json:\"host\""
+    },
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 16,
+      "tag": "yaml:\"port\" json:\"port\""
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 24,
+      "tag": "yaml:\"name\" json:\"name\""
+    },
+    {
+      "name": "User",
+      "type": "string",
+      "offset": 40,
+      "tag": "yaml:\"user\" json:\"user\""
+    },
+    {
+      "name": "Password",
+      "type": "string",
+      "offset": 56,
+      "tag": "yaml:\"password\" json:\"password\""
+    },
+    {
+      "name": "Charset",
+      "type": "string",
+      "offset": 72,
+      "tag": "yaml:\"charset\" json:\"charset\""
+    },
+    {
+      "name": "FilePath",
+      "type": "string",
+      "offset": 88,
+      "tag": "yaml:\"file_path\" json:\"file_path\""
+    },
+    {
+      "name": "Cache",
+      "type": "string",
+      "offset": 104,
+      "tag": "yaml:\"cache\" json:\"cache\""
+    },
+    {
+      "name": "Mode",
+      "type": "string",
+      "offset": 120,
+      "tag": "yaml:\"mode\" json:\"mode\""
+    }
+  ],
+  "CAS-Backend/config.DiaoduConfig": [
+    {
+      "name": "VehicleHost",
+      "type": "string",
+      "offset": 0,
+      "tag": "mapstructure:\"vehicle_host\""
+    },
+    {
+      "name": "MapFileDir",
+      "type": "string",
+      "offset": 16,
+      "tag": "mapstructure:\"map_file_dir\""
+    }
+  ],
+  "CAS-Backend/config.PrometheusConfig": [
+    {
+      "name": "URL",
+      "type": "string",
+      "offset": 0,
+      "tag": "mapstructure:\"url\""
+    },
+    {
+      "name": "EnableProxy",
+      "type": "bool",
+      "offset": 16,
+      "tag": "mapstructure:\"enable_proxy\""
+    }
+  ],
+  "CAS-Backend/config.ServerConfig": [
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 0,
+      "tag": "mapstructure:\"port\""
+    },
+    {
+      "name": "Mode",
+      "type": "string",
+      "offset": 8,
+      "tag": "mapstructure:\"mode\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.AGVClient": [
+    {
+      "name": "mu",
+      "type": "sync.Mutex",
+      "offset": 0,
+      "tag": ""
+    },
+    {
+      "name": "conn",
+      "type": "net.Conn",
+      "offset": 8,
+      "tag": ""
+    },
+    {
+      "name": "host",
+      "type": "string",
+      "offset": 24,
+      "tag": ""
+    },
+    {
+      "name": "port",
+      "type": "int",
+      "offset": 40,
+      "tag": ""
+    },
+    {
+      "name": "sequence",
+      "type": "uint16",
+      "offset": 48,
+      "tag": ""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ChongdingweiReq": [
+    {
+      "name": "IsAuto",
+      "type": "bool",
+      "offset": 0,
+      "tag": "json:\"isAuto\""
+    },
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 8,
+      "tag": "json:\"x\""
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 16,
+      "tag": "json:\"y\""
+    },
+    {
+      "name": "ANGLE",
+      "type": "float64",
+      "offset": 24,
+      "tag": "json:\"angle\""
+    },
+    {
+      "name": "LENGTH",
+      "type": "float64",
+      "offset": 32,
+      "tag": "json:\"length\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.CircularMotionRequest": [
+    {
+      "name": "RotRadius",
+      "type": "float64",
+      "offset": 0,
+      "tag": "json:\"rot_radius\""
+    },
+    {
+      "name": "RotDegree",
+      "type": "float64",
+      "offset": 8,
+      "tag": "json:\"rot_degree\""
+    },
+    {
+      "name": "RotSpeed",
+      "type": "float64",
+      "offset": 16,
+      "tag": "json:\"rot_speed\""
+    },
+    {
+      "name": "Mode",
+      "type": "int",
+      "offset": 24,
+      "tag": "json:\"mode\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ClientPool": [
+    {
+      "name": "mu",
+      "type": "sync.Mutex",
+      "offset": 0
+    },
+    {
+      "name": "clients",
+      "type": "map[string]*CAS-Backend/pkg/agvcontrol.AGVClient",
+      "offset": 8
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ControlOwnerResponse": [
+    {
+      "name": "Locked",
+      "type": "bool",
+      "offset": 0,
+      "tag": "json:\"locked\""
+    },
+    {
+      "name": "IP",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"ip,omitempty\""
+    },
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 24,
+      "tag": "json:\"port,omitempty\""
+    },
+    {
+      "name": "Type",
+      "type": "uint8",
+      "offset": 32,
+      "tag": "json:\"type,omitempty\""
+    },
+    {
+      "name": "CurrentLock",
+      "type": "interface {}",
+      "offset": 40,
+      "tag": "json:\"current_lock,omitempty\""
+    },
+    {
+      "name": "NickName",
+      "type": "string",
+      "offset": 56,
+      "tag": "json:\"nick_name,omitempty\""
+    },
+    {
+      "name": "TimeT",
+      "type": "int64",
+      "offset": 72,
+      "tag": "json:\"time_t,omitempty\""
+    },
+    {
+      "name": "Desc",
+      "type": "string",
+      "offset": 80,
+      "tag": "json:\"desc,omitempty\""
+    },
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 96,
+      "tag": "json:\"ret_code,omitempty\""
+    },
+    {
+      "name": "CreateOn",
+      "type": "string",
+      "offset": 104,
+      "tag": "json:\"create_on,omitempty\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 120,
+      "tag": "json:\"err_msg,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.DownloadMapReq": [
+    {
+      "name": "MapName",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"map_name\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ForkStatusDetail": [
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"err_msg,omitempty\""
+    },
+    {
+      "name": "ForkHeight",
+      "type": "float64",
+      "offset": 24,
+      "tag": "json:\"fork_height,omitempty\""
+    },
+    {
+      "name": "ForkWeight",
+      "type": "float64",
+      "offset": 32,
+      "tag": "json:\"fork_weight,omitempty\""
+    },
+    {
+      "name": "ForkState",
+      "type": "int",
+      "offset": 40,
+      "tag": "json:\"fork_state,omitempty\""
+    },
+    {
+      "name": "IsLoaded",
+      "type": "bool",
+      "offset": 48,
+      "tag": "json:\"is_loaded,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ForkliftSpecifiedPathRequest": [
+    {
+      "name": "MoveTaskList",
+      "type": "[]CAS-Backend/pkg/agvcontrol.ForkliftTask",
+      "offset": 0,
+      "tag": "json:\"move_task_list\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ForkliftTask": [
+    {
+      "name": "SourceID",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"source_id\""
+    },
+    {
+      "name": "ID",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"id\""
+    },
+    {
+      "name": "TaskID",
+      "type": "string",
+      "offset": 32,
+      "tag": "json:\"task_id\""
+    },
+    {
+      "name": "Angle",
+      "type": "float64",
+      "offset": 48,
+      "tag": "json:\"angle\""
+    },
+    {
+      "name": "Method",
+      "type": "string",
+      "offset": 56,
+      "tag": "json:\"method\""
+    },
+    {
+      "name": "MaxSpeed",
+      "type": "float64",
+      "offset": 72,
+      "tag": "json:\"maxSpeed\""
+    },
+    {
+      "name": "MaxwSpeed",
+      "type": "float64",
+      "offset": 80,
+      "tag": "json:\"max_wspeed\""
+    },
+    {
+      "name": "MaxAcc",
+      "type": "float64",
+      "offset": 88,
+      "tag": "json:\"max_acc\""
+    },
+    {
+      "name": "MaxwAcc",
+      "type": "float64",
+      "offset": 96,
+      "tag": "json:\"max_wacc\""
+    },
+    {
+      "name": "Duration",
+      "type": "float64",
+      "offset": 104,
+      "tag": "json:\"duration\""
+    },
+    {
+      "name": "Delay",
+      "type": "float64",
+      "offset": 112,
+      "tag": "json:\"delay\""
+    },
+    {
+      "name": "StartRotDir",
+      "type": "float64",
+      "offset": 120,
+      "tag": "json:\"start_rot_dir\""
+    },
+    {
+      "name": "EndRotDir",
+      "type": "float64",
+      "offset": 128,
+      "tag": "json:\"end_rot_dir\""
+    },
+    {
+      "name": "ReachDist",
+      "type": "float64",
+      "offset": 136,
+      "tag": "json:\"reach_dist\""
+    },
+    {
+      "name": "ReachAngle",
+      "type": "float64",
+      "offset": 144,
+      "tag": "json:\"reach_angle\""
+    },
+    {
+      "name": "Operation",
+      "type": "string",
+      "offset": 152,
+      "tag": "json:\"operation\""
+    },
+    {
+      "name": "StartHeight",
+      "type": "float64",
+      "offset": 168,
+      "tag": "json:\"start_height\""
+    },
+    {
+      "name": "EndHeight",
+      "type": "float64",
+      "offset": 176,
+      "tag": "json:\"end_height\""
+    },
+    {
+      "name": "ForkMidHeight",
+      "type": "float64",
+      "offset": 184,
+      "tag": "json:\"fork_mid_height\""
+    },
+    {
+      "name": "ForkDist",
+      "type": "float64",
+      "offset": 192,
+      "tag": "json:\"fork_dist\""
+    },
+    {
+      "name": "PrePoint",
+      "type": "bool",
+      "offset": 200,
+      "tag": "json:\"prepoint\""
+    },
+    {
+      "name": "LineType",
+      "type": "string",
+      "offset": 208,
+      "tag": "json:\"lineType\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.MapResponse": [
+    {
+      "name": "CurrentMap",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"current_map\""
+    },
+    {
+      "name": "NewMap",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"new_map\""
+    },
+    {
+      "name": "Maps",
+      "type": "[]string",
+      "offset": 32,
+      "tag": "json:\"maps\""
+    },
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 56,
+      "tag": "json:\"ret_code,omitempty\""
+    },
+    {
+      "name": "CreateOn",
+      "type": "string",
+      "offset": 64,
+      "tag": "json:\"create_on,omitempty\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 80,
+      "tag": "json:\"err_msg,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.MotionRequest": [
+    {
+      "name": "VX",
+      "type": "float64",
+      "offset": 0,
+      "tag": "json:\"vx,omitempty\""
+    },
+    {
+      "name": "VY",
+      "type": "float64",
+      "offset": 8,
+      "tag": "json:\"vy,omitempty\""
+    },
+    {
+      "name": "W",
+      "type": "float64",
+      "offset": 16,
+      "tag": "json:\"w,omitempty\""
+    },
+    {
+      "name": "Steer",
+      "type": "int",
+      "offset": 24,
+      "tag": "json:\"steer,omitempty\""
+    },
+    {
+      "name": "RealSteer",
+      "type": "float64",
+      "offset": 32,
+      "tag": "json:\"real_steer,omitempty\""
+    },
+    {
+      "name": "Duration",
+      "type": "int",
+      "offset": 40,
+      "tag": "json:\"duration,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.PacketHeader": [
+    {
+      "name": "SyncHeader",
+      "type": "uint8",
+      "offset": 0,
+      "tag": ""
+    },
+    {
+      "name": "ProtocolVer",
+      "type": "uint8",
+      "offset": 1,
+      "tag": ""
+    },
+    {
+      "name": "Sequence",
+      "type": "uint16",
+      "offset": 2,
+      "tag": ""
+    },
+    {
+      "name": "DataLength",
+      "type": "uint32",
+      "offset": 4,
+      "tag": ""
+    },
+    {
+      "name": "APINumber",
+      "type": "uint16",
+      "offset": 8,
+      "tag": ""
+    },
+    {
+      "name": "InternalUsage",
+      "type": "[6]uint8",
+      "offset": 10,
+      "tag": ""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.ProtocolHeader": [
+    {
+      "name": "Sync",
+      "type": "uint8",
+      "offset": 0,
+      "tag": ""
+    },
+    {
+      "name": "Version",
+      "type": "uint8",
+      "offset": 1,
+      "tag": ""
+    },
+    {
+      "name": "Number",
+      "type": "uint16",
+      "offset": 2,
+      "tag": ""
+    },
+    {
+      "name": "Length",
+      "type": "uint32",
+      "offset": 4,
+      "tag": ""
+    },
+    {
+      "name": "Type",
+      "type": "uint16",
+      "offset": 8,
+      "tag": ""
+    },
+    {
+      "name": "Reserved",
+      "type": "[6]uint8",
+      "offset": 10,
+      "tag": ""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.Response": [
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "CreateOn",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"create_on\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 24,
+      "tag": "json:\"err_msg\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotBatchData1Request": [
+    {
+      "name": "Keys",
+      "type": "[]string",
+      "offset": 0,
+      "tag": "json:\"keys,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotBatchData1Response": [
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"err_msg\""
+    },
+    {
+      "name": "CurrentLock",
+      "type": "interface {}",
+      "offset": 24,
+      "tag": "json:\"current_lock\""
+    },
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 40,
+      "tag": "json:\"x\""
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 48,
+      "tag": "json:\"y\""
+    },
+    {
+      "name": "CurrentStation",
+      "type": "string",
+      "offset": 56,
+      "tag": "json:\"current_station\""
+    },
+    {
+      "name": "BatteryLevel",
+      "type": "float64",
+      "offset": 72,
+      "tag": "json:\"battery_level\""
+    },
+    {
+      "name": "Blocked",
+      "type": "bool",
+      "offset": 80,
+      "tag": "json:\"blocked\""
+    },
+    {
+      "name": "Emergency",
+      "type": "bool",
+      "offset": 81,
+      "tag": "json:\"emergency\""
+    },
+    {
+      "name": "SoftEmc",
+      "type": "bool",
+      "offset": 82,
+      "tag": "json:\"soft_emc\""
+    },
+    {
+      "name": "DriverEmc",
+      "type": "bool",
+      "offset": 83,
+      "tag": "json:\"driver_emc\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotConfigLockReq": [
+    {
+      "name": "NickName",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"nick_name\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotTaskListStatusReq": [
+    {
+      "name": "TaskListName",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"task_list_name\""
+    },
+    {
+      "name": "WithRobotStatus",
+      "type": "bool",
+      "offset": 16,
+      "tag": "json:\"with_robot_status\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotTaskListStatusRes": [
+    {
+      "name": "CreateOn",
+      "type": "string",
+      "offset": 0,
+      "tag": "json:\"create_on\""
+    },
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 16,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "TaskListStatus",
+      "type": "struct { ActionGroupId int \"json:\\\"actionGroupId\\\"\"; ActionIds []int \"json:\\\"actionIds\\\"\"; Loop bool \"json:\\\"loop\\\"\"; TaskId int \"json:\\\"taskId\\\"\"; TaskListName string \"json:\\\"taskListName\\\"\"; TaskListStatus int \"json:\\\"taskListStatus\\\"\" }",
+      "offset": 24,
+      "tag": "json:\"tasklist_status\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotTaskStatusReq": [
+    {
+      "name": "TaskIds",
+      "type": "[]string",
+      "offset": 0,
+      "tag": "json:\"task_ids\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RobotTaskStatusRes": [
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "CreateOn",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"create_on\""
+    },
+    {
+      "name": "ErrMessage",
+      "type": "string",
+      "offset": 24,
+      "tag": "json:\"err_message\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 40,
+      "tag": "json:\"err_msg\""
+    },
+    {
+      "name": "TaskStatusPackage",
+      "type": "struct { ClosestLabel string \"json:\\\"closest_label\\\"\"; ClosestTarget string \"json:\\\"closest_target\\\"\"; Distance float32 \"json:\\\"distance\\\"\"; Info string \"json:\\\"info\\\"\"; Percentage float32 \"json:\\\"percentage\\\"\"; SourceLabel string \"json:\\\"source_label\\\"\"; SourceName string \"json:\\\"source_name\\\"\"; TargetLabel string \"json:\\\"target_label\\\"\"; TargetName string \"json:\\\"target_name\\\"\"; TaskStatusList []struct { TaskID string \"json:\\\"task_id\\\"\"; Status int \"json:\\\"status\\\"\"; Type int \"json:\\\"type\\\"\" } \"json:\\\"task_status_list\\\"\" }",
+      "offset": 56,
+      "tag": "json:\"task_status_package\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.RuanjitingReq": [
+    {
+      "name": "Status",
+      "type": "bool",
+      "offset": 0,
+      "tag": "json:\"status\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.SlamResponse": [
+    {
+      "name": "Slam_status",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"slam_status\""
+    },
+    {
+      "name": "Ret_code",
+      "type": "int",
+      "offset": 8,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "Create_on",
+      "type": "string",
+      "offset": 16,
+      "tag": "json:\"create_on\""
+    },
+    {
+      "name": "Errmsg",
+      "type": "string",
+      "offset": 32,
+      "tag": "json:\"err_msg\""
+    },
+    {
+      "name": "Resultmap",
+      "type": "map[string]interface {}",
+      "offset": 48,
+      "tag": "json:\"resultmap\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.StartSlamRequest": [
+    {
+      "name": "RealTime",
+      "type": "bool",
+      "offset": 0,
+      "tag": "json:\"real_time\""
+    },
+    {
+      "name": "SlamType",
+      "type": "int",
+      "offset": 8,
+      "tag": "json:\"slam_type,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.TranslateRequest": [
+    {
+      "name": "Dist",
+      "type": "float64",
+      "offset": 0,
+      "tag": "json:\"dist\""
+    },
+    {
+      "name": "Vx",
+      "type": "float64",
+      "offset": 8,
+      "tag": "json:\"vx\""
+    },
+    {
+      "name": "Vy",
+      "type": "float64",
+      "offset": 16,
+      "tag": "json:\"vy\""
+    },
+    {
+      "name": "Mode",
+      "type": "int",
+      "offset": 24,
+      "tag": "json:\"mode\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.UnlockResponse": [
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"err_msg\""
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.VechileLocation": [
+    {
+      "name": "RetCode",
+      "type": "int",
+      "offset": 0,
+      "tag": "json:\"ret_code\""
+    },
+    {
+      "name": "Createon",
+      "type": "string",
+      "offset": 8,
+      "tag": "json:\"create_on\""
+    },
+    {
+      "name": "ErrMsg",
+      "type": "string",
+      "offset": 24,
+      "tag": "json:\"err_msg,omitempty\""
+    },
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 40,
+      "tag": "json:\"x,omitempty\""
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 48,
+      "tag": "json:\"y,omitempty\""
+    },
+    {
+      "name": "Angle",
+      "type": "float64",
+      "offset": 56,
+      "tag": "json:\"angle,omitempty\""
+    },
+    {
+      "name": "Confidence",
+      "type": "float64",
+      "offset": 64,
+      "tag": "json:\"confidence,omitempty\""
+    },
+    {
+      "name": "Current_Station",
+      "type": "string",
+      "offset": 72,
+      "tag": "json:\"current_station,omitempty\""
+    },
+    {
+      "name": "Last_Station",
+      "type": "string",
+      "offset": 88,
+      "tag": "json:\"last_station,omitempty\""
+    },
+    {
+      "name": "Loc_Method",
+      "type": "int",
+      "offset": 104,
+      "tag": "json:\"loc_method,omitempty\""
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.ActiveMapInfo": [
+    {
+      "name": "Ready",
+      "type": "bool",
+      "offset": 0
+    },
+    {
+      "name": "MapName",
+      "type": "string",
+      "offset": 8
+    },
+    {
+      "name": "MapPath",
+      "type": "string",
+      "offset": 24
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Document": [
+    {
+      "name": "Header",
+      "type": "struct { MapType string \"json:\\\"mapType\\\"\"; MapName string \"json:\\\"mapName\\\"\"; MinPos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"minPos\\\"\"; MaxPos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"maxPos\\\"\"; Resolution float64 \"json:\\\"resolution\\\"\"; Version string \"json:\\\"version\\\"\" }",
+      "offset": 0
+    },
+    {
+      "name": "AdvancedPointList",
+      "type": "[]struct { ClassName string \"json:\\\"className\\\"\"; InstanceName string \"json:\\\"instanceName\\\"\"; Pos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"pos\\\"\"; Property []struct { Key string \"json:\\\"key\\\"\"; Type string \"json:\\\"type\\\"\"; Value string \"json:\\\"value\\\"\"; BoolValue bool \"json:\\\"boolValue,omitempty\\\"\"; StringValue string \"json:\\\"stringValue,omitempty\\\"\"; DoubleValue float64 \"json:\\\"doubleValue,omitempty\\\"\"; Int32Value int32 \"json:\\\"int32Value,omitempty\\\"\" } \"json:\\\"property\\\"\"; IgnoreDir bool \"json:\\\"ignoreDir\\\"\" }",
+      "offset": 88
+    },
+    {
+      "name": "AdvancedLineList",
+      "type": "[]struct { ClassName string \"json:\\\"className\\\"\"; InstanceName string \"json:\\\"instanceName\\\"\"; Line struct { StartPos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"startPos\\\"\"; EndPos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"endPos\\\"\" } \"json:\\\"line\\\"\"; Property []struct { Key string \"json:\\\"key\\\"\"; Type string \"json:\\\"type\\\"\"; Value string \"json:\\\"value\\\"\"; DoubleValue float64 \"json:\\\"doubleValue\\\"\" } \"json:\\\"property\\\"\" }",
+      "offset": 112
+    },
+    {
+      "name": "AdvancedCurveList",
+      "type": "[]struct { ClassName string \"json:\\\"className\\\"\"; InstanceName string \"json:\\\"instanceName\\\"\"; StartPos struct { InstanceName string \"json:\\\"instanceName\\\"\"; Pos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"pos\\\"\" } \"json:\\\"startPos\\\"\"; EndPos struct { InstanceName string \"json:\\\"instanceName\\\"\"; Pos struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"pos\\\"\" } \"json:\\\"endPos\\\"\"; ControlPos1 struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"controlPos1\\\"\"; ControlPos2 struct { X float64 \"json:\\\"x\\\"\"; Y float64 \"json:\\\"y\\\"\" } \"json:\\\"controlPos2\\\"\"; Property []struct { Key string \"json:\\\"key\\\"\"; Type string \"json:\\\"type\\\"\"; Value string \"json:\\\"value\\\"\"; Int32Value int32 \"json:\\\"int32Value\\\"\" } \"json:\\\"property\\\"\" }",
+      "offset": 136
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.DynamicTrafficController": [
+    {
+      "name": "mu",
+      "type": "sync.Mutex",
+      "offset": 0
+    },
+    {
+      "name": "routes",
+      "type": "map[string][]string",
+      "offset": 8
+    },
+    {
+      "name": "priorities",
+      "type": "map[string]int",
+      "offset": 16
+    },
+    {
+      "name": "lastSnap",
+      "type": "map[string]*CAS-Backend/pkg/diapdu.MonitorTaskStatusPackage",
+      "offset": 24
+    },
+    {
+      "name": "lastSnapAt",
+      "type": "map[string]time.Time",
+      "offset": 32
+    },
+    {
+      "name": "paused",
+      "type": "map[string]bool",
+      "offset": 40
+    },
+    {
+      "name": "firstOppositeEnter",
+      "type": "map[string]map[string]int64",
+      "offset": 48
+    },
+    {
+      "name": "lastLogLocks",
+      "type": "string",
+      "offset": 56
+    },
+    {
+      "name": "lastLogEdge",
+      "type": "map[string]string",
+      "offset": 72
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Edge": [
+    {
+      "name": "From",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "To",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "Distance",
+      "type": "float64",
+      "offset": 32
+    },
+    {
+      "name": "Weight",
+      "type": "int",
+      "offset": 40
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.ExcNavBuildResult": [
+    {
+      "name": "Tasks",
+      "type": "[]CAS-Backend/pkg/agvcontrol.ForkliftTask",
+      "offset": 0
+    },
+    {
+      "name": "TaskIDs",
+      "type": "[]string",
+      "offset": 24
+    },
+    {
+      "name": "OK",
+      "type": "bool",
+      "offset": 48
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.ExcNavInput": [
+    {
+      "name": "CurrentStation",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "StartPosJSON",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "EndPosJSON",
+      "type": "string",
+      "offset": 32
+    },
+    {
+      "name": "RoadPoint",
+      "type": "string",
+      "offset": 48
+    },
+    {
+      "name": "EndPoint",
+      "type": "string",
+      "offset": 64
+    },
+    {
+      "name": "RunHeight",
+      "type": "float64",
+      "offset": 80
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Forklift": [
+    {
+      "name": "ID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "Status",
+      "type": "CAS-Backend/pkg/diapdu.VehStatus",
+      "offset": 32
+    },
+    {
+      "name": "Position",
+      "type": "struct { X float64; Y float64 }",
+      "offset": 40
+    },
+    {
+      "name": "IP",
+      "type": "string",
+      "offset": 56
+    },
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 72
+    },
+    {
+      "name": "CurrentTaskID",
+      "type": "int",
+      "offset": 80
+    },
+    {
+      "name": "Battery",
+      "type": "int",
+      "offset": 88
+    },
+    {
+      "name": "LastUpdated",
+      "type": "time.Time",
+      "offset": 96
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.ForkliftStatus": [
+    {
+      "name": "ID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "TaskStatus",
+      "type": "string",
+      "offset": 32
+    },
+    {
+      "name": "Battery",
+      "type": "int",
+      "offset": 48
+    },
+    {
+      "name": "PositionX",
+      "type": "float64",
+      "offset": 56
+    },
+    {
+      "name": "PositionY",
+      "type": "float64",
+      "offset": 64
+    },
+    {
+      "name": "CurrentTask",
+      "type": "string",
+      "offset": 72
+    },
+    {
+      "name": "LastUpdated",
+      "type": "time.Time",
+      "offset": 88
+    },
+    {
+      "name": "Error",
+      "type": "string",
+      "offset": 112
+    },
+    {
+      "name": "IP",
+      "type": "string",
+      "offset": 128
+    },
+    {
+      "name": "Port",
+      "type": "int",
+      "offset": 144
+    },
+    {
+      "name": "CurrentLock",
+      "type": "int",
+      "offset": 152
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.ForkliftUpdater": [
+    {
+      "name": "interval",
+      "type": "time.Duration",
+      "offset": 0
+    },
+    {
+      "name": "pushOnly",
+      "type": "bool",
+      "offset": 8
+    },
+    {
+      "name": "stopChan",
+      "type": "chan bool",
+      "offset": 16
+    },
+    {
+      "name": "updateMutex",
+      "type": "sync.RWMutex",
+      "offset": 24
+    },
+    {
+      "name": "forklifts",
+      "type": "map[string]*CAS-Backend/pkg/diapdu.Forklift",
+      "offset": 48
+    },
+    {
+      "name": "onlineLogged",
+      "type": "map[string]bool",
+      "offset": 56
+    },
+    {
+      "name": "lastOnlineCount",
+      "type": "int",
+      "offset": 64
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Graph": [
+    {
+      "name": "Nodes",
+      "type": "[]*CAS-Backend/pkg/diapdu.Node",
+      "offset": 0
+    },
+    {
+      "name": "Edges",
+      "type": "[]*CAS-Backend/pkg/diapdu.Edge",
+      "offset": 24
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Location": [
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 0
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 8
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.MonitorTaskStatusPackage": [
+    {
+      "name": "ClosestTarget",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "Distance",
+      "type": "float64",
+      "offset": 16
+    },
+    {
+      "name": "Info",
+      "type": "string",
+      "offset": 24
+    },
+    {
+      "name": "Percentage",
+      "type": "float64",
+      "offset": 40
+    },
+    {
+      "name": "SourceName",
+      "type": "string",
+      "offset": 48
+    },
+    {
+      "name": "TargetName",
+      "type": "string",
+      "offset": 64
+    },
+    {
+      "name": "TaskStatusList",
+      "type": "[]CAS-Backend/pkg/diapdu.TaskStatusSnap",
+      "offset": 80
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Node": [
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "Position",
+      "type": "CAS-Backend/pkg/diapdu.Position",
+      "offset": 16
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Position": [
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 0
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 8
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.PositionData": [
+    {
+      "name": "SourceID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "ID",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "Operation",
+      "type": "string",
+      "offset": 32
+    },
+    {
+      "name": "ForkMidHeight",
+      "type": "float64",
+      "offset": 48
+    },
+    {
+      "name": "Method",
+      "type": "string",
+      "offset": 56
+    },
+    {
+      "name": "MaxSpeed",
+      "type": "float64",
+      "offset": 72
+    },
+    {
+      "name": "StartHeight",
+      "type": "float64",
+      "offset": 80
+    },
+    {
+      "name": "EndHeight",
+      "type": "float64",
+      "offset": 88
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.Task1": [
+    {
+      "name": "ID",
+      "type": "int",
+      "offset": 0
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "offset": 8
+    },
+    {
+      "name": "Priority",
+      "type": "CAS-Backend/pkg/diapdu.TaskPriority",
+      "offset": 24
+    },
+    {
+      "name": "From",
+      "type": "CAS-Backend/pkg/diapdu.Location",
+      "offset": 32
+    },
+    {
+      "name": "To",
+      "type": "CAS-Backend/pkg/diapdu.Location",
+      "offset": 48
+    },
+    {
+      "name": "Status",
+      "type": "CAS-Backend/pkg/diapdu.TaskStatus",
+      "offset": 64
+    },
+    {
+      "name": "AssignedTo",
+      "type": "string",
+      "offset": 72
+    },
+    {
+      "name": "CreatedAt",
+      "type": "time.Time",
+      "offset": 88
+    },
+    {
+      "name": "StartedAt",
+      "type": "*time.Time",
+      "offset": 112
+    },
+    {
+      "name": "FinishedAt",
+      "type": "*time.Time",
+      "offset": 120
+    },
+    {
+      "name": "PickupStation",
+      "type": "string",
+      "offset": 128
+    },
+    {
+      "name": "DropoffStation",
+      "type": "string",
+      "offset": 144
+    },
+    {
+      "name": "StartPosJSON",
+      "type": "string",
+      "offset": 160
+    },
+    {
+      "name": "EndPosJSON",
+      "type": "string",
+      "offset": 176
+    },
+    {
+      "name": "RoadPointRaw",
+      "type": "string",
+      "offset": 192
+    },
+    {
+      "name": "EndPoint",
+      "type": "string",
+      "offset": 208
+    },
+    {
+      "name": "WaypointStations",
+      "type": "[]string",
+      "offset": 224
+    },
+    {
+      "name": "RunHeight",
+      "type": "float64",
+      "offset": 248
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.TaskScheduler": [
+    {
+      "name": "forkliftUpdater",
+      "type": "*CAS-Backend/pkg/diapdu.ForkliftUpdater",
+      "offset": 0
+    },
+    {
+      "name": "taskQueue",
+      "type": "[]*CAS-Backend/pkg/diapdu.Task1",
+      "offset": 8
+    },
+    {
+      "name": "queueMutex",
+      "type": "sync.Mutex",
+      "offset": 32
+    },
+    {
+      "name": "stopChan",
+      "type": "chan bool",
+      "offset": 40
+    },
+    {
+      "name": "interval",
+      "type": "time.Duration",
+      "offset": 48
+    },
+    {
+      "name": "maxRetry",
+      "type": "int",
+      "offset": 56
+    },
+    {
+      "name": "graph",
+      "type": "*CAS-Backend/pkg/diapdu.Graph",
+      "offset": 64
+    },
+    {
+      "name": "traffic",
+      "type": "*CAS-Backend/pkg/diapdu.TrafficManager",
+      "offset": 72
+    },
+    {
+      "name": "dynamicTraffic",
+      "type": "*CAS-Backend/pkg/diapdu.DynamicTrafficController",
+      "offset": 80
+    },
+    {
+      "name": "dockMu",
+      "type": "sync.Mutex",
+      "offset": 88
+    },
+    {
+      "name": "dockOccupant",
+      "type": "map[string]string",
+      "offset": 96
+    },
+    {
+      "name": "vehicleDockState",
+      "type": "map[string]*CAS-Backend/pkg/diapdu.vehicleDockState",
+      "offset": 104
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.TaskStatusSnap": [
+    {
+      "name": "TaskID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "Status",
+      "type": "int",
+      "offset": 16
+    },
+    {
+      "name": "Type",
+      "type": "int",
+      "offset": 24
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.TrafficManager": [
+    {
+      "name": "mu",
+      "type": "sync.RWMutex",
+      "offset": 0
+    },
+    {
+      "name": "byVehicle",
+      "type": "map[string]*CAS-Backend/pkg/diapdu.pathReservation",
+      "offset": 24
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.TrafficPathResult": [
+    {
+      "name": "NodeNames",
+      "type": "[]string",
+      "offset": 0
+    },
+    {
+      "name": "Distance",
+      "type": "float64",
+      "offset": 24
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.VehicleRuntimeHub": [
+    {
+      "name": "mu",
+      "type": "sync.RWMutex",
+      "offset": 0
+    },
+    {
+      "name": "byCanonical",
+      "type": "map[string]*CAS-Backend/pkg/diapdu.VehicleRuntimeSnap",
+      "offset": 24
+    },
+    {
+      "name": "resolveAt",
+      "type": "time.Time",
+      "offset": 32
+    },
+    {
+      "name": "pushToCanon",
+      "type": "map[string]string",
+      "offset": 56
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.VehicleRuntimePush": [
+    {
+      "name": "VehicleID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 16
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 24
+    },
+    {
+      "name": "Angle",
+      "type": "float64",
+      "offset": 32
+    },
+    {
+      "name": "CurrentStation",
+      "type": "string",
+      "offset": 40
+    },
+    {
+      "name": "BatteryLevel",
+      "type": "float64",
+      "offset": 56
+    },
+    {
+      "name": "Blocked",
+      "type": "bool",
+      "offset": 64
+    },
+    {
+      "name": "BlockX",
+      "type": "float64",
+      "offset": 72
+    },
+    {
+      "name": "BlockY",
+      "type": "float64",
+      "offset": 80
+    },
+    {
+      "name": "Emergency",
+      "type": "bool",
+      "offset": 88
+    },
+    {
+      "name": "SoftEmc",
+      "type": "bool",
+      "offset": 89
+    },
+    {
+      "name": "DriverEmc",
+      "type": "bool",
+      "offset": 90
+    },
+    {
+      "name": "IsStop",
+      "type": "bool",
+      "offset": 91
+    },
+    {
+      "name": "CurrentLock",
+      "type": "interface {}",
+      "offset": 96
+    },
+    {
+      "name": "TaskStatusPackage",
+      "type": "*CAS-Backend/pkg/diapdu.MonitorTaskStatusPackage",
+      "offset": 112
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.VehicleRuntimeSnap": [
+    {
+      "name": "PushVehicleID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "CanonicalID",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "X",
+      "type": "float64",
+      "offset": 32
+    },
+    {
+      "name": "Y",
+      "type": "float64",
+      "offset": 40
+    },
+    {
+      "name": "Angle",
+      "type": "float64",
+      "offset": 48
+    },
+    {
+      "name": "BatteryPercent",
+      "type": "int",
+      "offset": 56
+    },
+    {
+      "name": "CurrentStation",
+      "type": "string",
+      "offset": 64
+    },
+    {
+      "name": "TaskPkg",
+      "type": "CAS-Backend/pkg/diapdu.MonitorTaskStatusPackage",
+      "offset": 80
+    },
+    {
+      "name": "Blocked",
+      "type": "bool",
+      "offset": 184
+    },
+    {
+      "name": "BlockX",
+      "type": "float64",
+      "offset": 192
+    },
+    {
+      "name": "BlockY",
+      "type": "float64",
+      "offset": 200
+    },
+    {
+      "name": "Emergency",
+      "type": "bool",
+      "offset": 208
+    },
+    {
+      "name": "SoftEmc",
+      "type": "bool",
+      "offset": 209
+    },
+    {
+      "name": "DriverEmc",
+      "type": "bool",
+      "offset": 210
+    },
+    {
+      "name": "CurrentLock",
+      "type": "int",
+      "offset": 216
+    },
+    {
+      "name": "HasCurrentLock",
+      "type": "bool",
+      "offset": 224
+    },
+    {
+      "name": "UpdatedAt",
+      "type": "time.Time",
+      "offset": 232
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.edgeLock": [
+    {
+      "name": "vehicleID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "from",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "to",
+      "type": "string",
+      "offset": 32
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "offset": 48
+    },
+    {
+      "name": "pct",
+      "type": "float64",
+      "offset": 64
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.nb·1": [
+    {
+      "name": "to",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "dist",
+      "type": "float64",
+      "offset": 16
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.oppositeConflict": [
+    {
+      "name": "vA",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "vB",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "edges",
+      "type": "map[string]struct {}",
+      "offset": 32
+    },
+    {
+      "name": "endpoints",
+      "type": "[2]string",
+      "offset": 40
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.pathReservation": [
+    {
+      "name": "nodes",
+      "type": "map[string]struct {}",
+      "offset": 0
+    },
+    {
+      "name": "edges",
+      "type": "map[string]struct {}",
+      "offset": 8
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.runSnapEx": [
+    {
+      "name": "vehicleID",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "from",
+      "type": "string",
+      "offset": 16
+    },
+    {
+      "name": "to",
+      "type": "string",
+      "offset": 32
+    },
+    {
+      "name": "edgeIdx",
+      "type": "int",
+      "offset": 48
+    },
+    {
+      "name": "pct",
+      "type": "float64",
+      "offset": 56
+    },
+    {
+      "name": "priority",
+      "type": "int",
+      "offset": 64
+    },
+    {
+      "name": "valid",
+      "type": "bool",
+      "offset": 72
+    },
+    {
+      "name": "path",
+      "type": "[]string",
+      "offset": 80
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.vehicleDockState": [
+    {
+      "name": "targetDock",
+      "type": "string",
+      "offset": 0
+    },
+    {
+      "name": "navigating",
+      "type": "bool",
+      "offset": 16
+    },
+    {
+      "name": "cancel",
+      "type": "context.CancelFunc",
+      "offset": 24
+    }
+  ],
+  "agvcontrol.StopSlamRequest": [
+    {
+      "name": "Return_resultmap",
+      "type": "bool",
+      "tag": "json:\"return_resultmap\"",
+      "offset": 0
+    }
+  ],
+  "logger.Config": [
+    {
+      "name": "SlowThreshold",
+      "type": "time.Duration",
+      "tag": "",
+      "offset": 0
+    },
+    {
+      "name": "Colorful",
+      "type": "bool",
+      "tag": "",
+      "offset": 8
+    },
+    {
+      "name": "IgnoreRecordNotFoundError",
+      "type": "bool",
+      "tag": "",
+      "offset": 9
+    },
+    {
+      "name": "ParameterizedQueries",
+      "type": "bool",
+      "tag": "",
+      "offset": 10
+    },
+    {
+      "name": "LogLevel",
+      "type": "logger.LogLevel",
+      "tag": "",
+      "offset": 16
+    }
+  ],
+  "logger.logger": [
+    {
+      "name": "Writer",
+      "type": "logger.Writer",
+      "tag": "",
+      "offset": 0
+    },
+    {
+      "name": "Config",
+      "type": "logger.Config",
+      "tag": "",
+      "offset": 16
+    },
+    {
+      "name": "infoStr",
+      "type": "string",
+      "tag": "",
+      "offset": 40
+    },
+    {
+      "name": "warnStr",
+      "type": "string",
+      "tag": "",
+      "offset": 56
+    },
+    {
+      "name": "errStr",
+      "type": "string",
+      "tag": "",
+      "offset": 72
+    },
+    {
+      "name": "traceStr",
+      "type": "string",
+      "tag": "",
+      "offset": 88
+    },
+    {
+      "name": "traceErrStr",
+      "type": "string",
+      "tag": "",
+      "offset": 104
+    },
+    {
+      "name": "traceWarnStr",
+      "type": "string",
+      "tag": "",
+      "offset": 120
+    }
+  ],
+  "logger.traceRecorder": [
+    {
+      "name": "Interface",
+      "type": "logger.Interface",
+      "tag": "",
+      "offset": 0
+    },
+    {
+      "name": "BeginAt",
+      "type": "time.Time",
+      "tag": "",
+      "offset": 16
+    },
+    {
+      "name": "SQL",
+      "type": "string",
+      "tag": "",
+      "offset": 40
+    },
+    {
+      "name": "RowsAffected",
+      "type": "int64",
+      "tag": "",
+      "offset": 56
+    },
+    {
+      "name": "Err",
+      "type": "error",
+      "tag": "",
+      "offset": 64
+    }
+  ]
+}

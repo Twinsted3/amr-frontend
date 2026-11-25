@@ -1,0 +1,869 @@
+{
+  "CAS-Backend/biz/controller.convertMapsToResponse": [
+    {
+      "caller": "CAS-Backend/biz/controller.GetAllMapHandler",
+      "call_line": 42,
+      "declaration_line": 60
+    }
+  ],
+  "CAS-Backend/biz/controller.convertTasksToResponse": [
+    {
+      "caller": "CAS-Backend/biz/controller.GetAllTaskHandler",
+      "call_line": 313,
+      "declaration_line": 433
+    }
+  ],
+  "CAS-Backend/biz/controller.convertVehToResponse": [
+    {
+      "caller": "CAS-Backend/biz/controller.GetAllVehHandler",
+      "call_line": 77,
+      "declaration_line": 96
+    }
+  ],
+  "CAS-Backend/biz/controller.vehicleIP": [
+    {
+      "caller": "CAS-Backend/biz/controller.ExcTaskChainHandler",
+      "call_line": 157,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.TaskChainStatusHandler",
+      "call_line": 303,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.runTaskChainNavigationCommand",
+      "call_line": 387,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.runTaskChainNavigationControl",
+      "call_line": 408,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.TaskStatusHandler",
+      "call_line": 684,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.TaskStatusHandler",
+      "call_line": 709,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.PauseNavigationHandler",
+      "call_line": 818,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.ResumeNavigationHandler",
+      "call_line": 841,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.CancelNavigationHandler",
+      "call_line": 880,
+      "declaration_line": 22
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.ExcTaskHandler",
+      "call_line": 908,
+      "declaration_line": 22
+    }
+  ],
+  "CAS-Backend/biz/router.mountEmbeddedFrontend.func2": [
+    {
+      "caller": "CAS-Backend/biz/router.mountEmbeddedFrontend",
+      "call_line": 203,
+      "declaration_line": 181
+    }
+  ],
+  "CAS-Backend/biz/service.CheckPassword": [
+    {
+      "caller": "CAS-Backend/biz/service.Login",
+      "call_line": 62,
+      "declaration_line": 21
+    }
+  ],
+  "CAS-Backend/biz/service.HashPassword": [
+    {
+      "caller": "CAS-Backend/biz/service.Register",
+      "call_line": 40,
+      "declaration_line": 13
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.(*AGVClient).connectLocked": [
+    {
+      "caller": "CAS-Backend/pkg/agvcontrol.(*AGVClient).Run",
+      "call_line": 208,
+      "declaration_line": 125
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.CurrentLockAllowsManualDispatch": [
+    {
+      "caller": "CAS-Backend/pkg/agvcontrol.ControlOwnerAllowsManualDispatch",
+      "call_line": 51,
+      "declaration_line": 41
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.NewAGVClient": [
+    {
+      "caller": "CAS-Backend/pkg/agvcontrol.DoWithConn",
+      "call_line": 34,
+      "declaration_line": 94
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.QueryAMRLocation": [
+    {
+      "caller": "CAS-Backend/biz/controller.ExcTaskChainHandler.func1",
+      "call_line": 169,
+      "declaration_line": 1127
+    },
+    {
+      "caller": "CAS-Backend/biz/controller.ExcTaskHandler.func1",
+      "call_line": 937,
+      "declaration_line": 1127
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.QueryAMRLocationQuiet": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.queryVehicleStationQuiet.func1",
+      "call_line": 52,
+      "declaration_line": 1132
+    }
+  ],
+  "CAS-Backend/pkg/agvcontrol.poolKey": [
+    {
+      "caller": "CAS-Backend/pkg/agvcontrol.DoWithConn",
+      "call_line": 30,
+      "declaration_line": 19
+    }
+  ],
+  "CAS-Backend/pkg/appdir.DataDBPath": [
+    {
+      "caller": "CAS-Backend/biz/dao.InitDB",
+      "call_line": 49,
+      "declaration_line": 54
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).enterTime": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 52,
+      "declaration_line": 391
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 52,
+      "declaration_line": 391
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).applyOppositePause",
+      "call_line": 424,
+      "declaration_line": 391
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).applyOppositePause",
+      "call_line": 424,
+      "declaration_line": 391
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).priorityFor": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).buildRunSnapExLocked",
+      "call_line": 422,
+      "declaration_line": 452
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 51,
+      "declaration_line": 452
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 51,
+      "declaration_line": 452
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).applyOppositePause",
+      "call_line": 422,
+      "declaration_line": 452
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).applyOppositePause",
+      "call_line": 423,
+      "declaration_line": 452
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*ForkliftUpdater).RefreshFromDatabase": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StartAutoTaskScheduler",
+      "call_line": 1036,
+      "declaration_line": 141
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*ForkliftUpdater).Stop": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StopAutoTaskScheduler",
+      "call_line": 1061,
+      "declaration_line": 54
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*TaskScheduler).Stop": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StopAutoTaskScheduler",
+      "call_line": 1057,
+      "declaration_line": 59
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*TaskScheduler).planStationTaskRoute.func1": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).planStationTaskRoute",
+      "call_line": 407,
+      "declaration_line": 391
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).planStationTaskRoute",
+      "call_line": 424,
+      "declaration_line": 391
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.(*TaskScheduler).reconcileIdleVehiclesDock": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).scheduleLoop",
+      "call_line": 358,
+      "declaration_line": 828
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.IsGraphReady": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).loadPendingTasks",
+      "call_line": 79,
+      "declaration_line": 107
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.EnqueuePendingTask",
+      "call_line": 146,
+      "declaration_line": 107
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StartAutoTaskScheduler",
+      "call_line": 1028,
+      "declaration_line": 107
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.IsPPDockNode": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.NearestAvailablePPDock",
+      "call_line": 71,
+      "declaration_line": 11
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).dockOccupancyIncludingLivePositions",
+      "call_line": 118,
+      "declaration_line": 11
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).syncVehicleDockFromRuntime",
+      "call_line": 156,
+      "declaration_line": 11
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).claimDockIfParked",
+      "call_line": 224,
+      "declaration_line": 11
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).returnIdleVehiclesToDock",
+      "call_line": 451,
+      "declaration_line": 11
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).runDockNavigation",
+      "call_line": 857,
+      "declaration_line": 11
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.IsPendingTaskStatus": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).loadPendingTasks",
+      "call_line": 91,
+      "declaration_line": 71
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.EnqueuePendingTask",
+      "call_line": 136,
+      "declaration_line": 71
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.MonitorPackageHasData": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.navTasksCompleteFromMonitor",
+      "call_line": 214,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.HandleMonitorPush",
+      "call_line": 100,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).seedMonitorSnapFromHub",
+      "call_line": 159,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).OnMonitorPush",
+      "call_line": 192,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.HandleVehicleRuntimePush",
+      "call_line": 168,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.HandleVehicleRuntimePush",
+      "call_line": 170,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.pushMonitorTraffic",
+      "call_line": 184,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.syncHubTaskPkgFromTraffic",
+      "call_line": 205,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.MonitorSnapForVehicle",
+      "call_line": 239,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.MonitorSnapForVehicle",
+      "call_line": 246,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.pickRicherMonitorPackage",
+      "call_line": 267,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.pickRicherMonitorPackage",
+      "call_line": 267,
+      "declaration_line": 91
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.ensureVehicleInSchedulerPool",
+      "call_line": 461,
+      "declaration_line": 91
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.NewForkliftUpdater": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StartAutoTaskScheduler",
+      "call_line": 1035,
+      "declaration_line": 39
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.NewTaskScheduler": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StartAutoTaskScheduler",
+      "call_line": 1038,
+      "declaration_line": 35
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.NewVehicleRuntimeHub": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.init",
+      "call_line": 60,
+      "declaration_line": 62
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.PlanTaskRoute.func1": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.PlanTaskRoute",
+      "call_line": 322,
+      "declaration_line": 299
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.PlanTaskRoute",
+      "call_line": 330,
+      "declaration_line": 299
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.ResolveForkMidHeight": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.appendPathAllMoveTasks",
+      "call_line": 125,
+      "declaration_line": 68
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.StationFromMonitorSnap": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.currentStationForVehicle",
+      "call_line": 10,
+      "declaration_line": 276
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.NavTasksCompleteFromMonitor",
+      "call_line": 297,
+      "declaration_line": 276
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*VehicleRuntimeHub).CurrentStation",
+      "call_line": 329,
+      "declaration_line": 276
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.ensureVehicleInSchedulerPool",
+      "call_line": 462,
+      "declaration_line": 276
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.VehicleEmergencyDetail": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.probeVehicleReachable",
+      "call_line": 49,
+      "declaration_line": 10
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.statusFromRuntimeSnap",
+      "call_line": 380,
+      "declaration_line": 10
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.VehicleInEmergency": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.probeVehicleReachable",
+      "call_line": 47,
+      "declaration_line": 5
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.statusFromRuntimeSnap",
+      "call_line": 378,
+      "declaration_line": 5
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.ensureVehicleInSchedulerPool",
+      "call_line": 450,
+      "declaration_line": 5
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.alignPathFromStation": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).resolveFullTrafficPath",
+      "call_line": 314,
+      "declaration_line": 81
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.allSubTasksTerminalInSnap": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.allSubTasksTerminalForDispatch",
+      "call_line": 255,
+      "declaration_line": 219
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.appendPathNodes": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.PlanStationPath",
+      "call_line": 48,
+      "declaration_line": 81
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.batteryPercentFromPush": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.HandleVehicleRuntimePush",
+      "call_line": 156,
+      "declaration_line": 217
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.calculateDistance": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildGraphFromFile",
+      "call_line": 430,
+      "declaration_line": 318
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildGraphFromFile",
+      "call_line": 397,
+      "declaration_line": 318
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.closestNodeTo",
+      "call_line": 130,
+      "declaration_line": 318
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StraightLineTaskDistance",
+      "call_line": 342,
+      "declaration_line": 318
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.StraightLineTaskDistance",
+      "call_line": 342,
+      "declaration_line": 318
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.conflictEdgeIndexRange": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.winnerClearedOppositeZone",
+      "call_line": 113,
+      "declaration_line": 96
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.vehicleExitedCurrentConflictWave",
+      "call_line": 197,
+      "declaration_line": 96
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.conflictEntryNode": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.vehiclesOppositeInConflict",
+      "call_line": 278,
+      "declaration_line": 251
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.vehiclesOppositeInConflict",
+      "call_line": 279,
+      "declaration_line": 251
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.controlLockFromValue": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.probeVehicleReachable",
+      "call_line": 41,
+      "declaration_line": 6
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.HandleVehicleRuntimePush",
+      "call_line": 151,
+      "declaration_line": 6
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.controlLockIdle": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.probeVehicleReachable",
+      "call_line": 42,
+      "declaration_line": 13
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.convertPriority": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.convertDaoTaskToTask1",
+      "call_line": 164,
+      "declaration_line": 190
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.convertTaskStatus": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.convertDaoTaskToTask1",
+      "call_line": 165,
+      "declaration_line": 204
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.currentEdgeLock": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).computePausedVehicles",
+      "call_line": 437,
+      "declaration_line": 374
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 29,
+      "declaration_line": 374
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.directedEdgesOpposite": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.pickOppositeWinner",
+      "call_line": 141,
+      "declaration_line": 180
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.vehiclesOppositeInConflict",
+      "call_line": 269,
+      "declaration_line": 180
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.dispatchTaskIDPrefix": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.allSubTasksTerminalForDispatch",
+      "call_line": 258,
+      "declaration_line": 237
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.edgeUndirectedKey": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TrafficManager).isEdgeLockedByOther",
+      "call_line": 101,
+      "declaration_line": 34
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.oppositeConflictEdges",
+      "call_line": 31,
+      "declaration_line": 34
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.oppositeConflictEdges",
+      "call_line": 34,
+      "declaration_line": 34
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.vehicleExitedCurrentConflictWave",
+      "call_line": 206,
+      "declaration_line": 34
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.nextConflictWaveEdgeIndex",
+      "call_line": 222,
+      "declaration_line": 34
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.findNodeByName": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildGraphFromFile",
+      "call_line": 383,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildGraphFromFile",
+      "call_line": 390,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.resolveDockStartStation",
+      "call_line": 18,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.resolveDockStartStation",
+      "call_line": 22,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.planDockPathNodes",
+      "call_line": 51,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.planDockPathNodes",
+      "call_line": 51,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).executeTask",
+      "call_line": 737,
+      "declaration_line": 337
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).waitDockArrival",
+      "call_line": 952,
+      "declaration_line": 337
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.findNodeByPosition": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildGraphFromFile",
+      "call_line": 417,
+      "declaration_line": 325
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildGraphFromFile",
+      "call_line": 424,
+      "declaration_line": 325
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.resolveDockStartStation",
+      "call_line": 27,
+      "declaration_line": 325
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.formatDirectedEdge": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).logTrafficStateIfChanged",
+      "call_line": 471,
+      "declaration_line": 9
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).LogTaskAssignment",
+      "call_line": 103,
+      "declaration_line": 9
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).LogTaskAssignment",
+      "call_line": 110,
+      "declaration_line": 9
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).LogTaskAssignment",
+      "call_line": 117,
+      "declaration_line": 9
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).LogTaskAssignment",
+      "call_line": 123,
+      "declaration_line": 9
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.isTerminalRobotTaskStatus": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.allNavSubTasksTerminal",
+      "call_line": 194,
+      "declaration_line": 26
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.allSubTasksTerminalForDispatch",
+      "call_line": 268,
+      "declaration_line": 26
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.resolveCurrentEdge",
+      "call_line": 315,
+      "declaration_line": 26
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.pairKey": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 50,
+      "declaration_line": 81
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).pruneOppositeEnter",
+      "call_line": 348,
+      "declaration_line": 81
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).touchOppositeEnter",
+      "call_line": 372,
+      "declaration_line": 81
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).applyOppositePause",
+      "call_line": 421,
+      "declaration_line": 81
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.planStationRoadpoints": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.buildGotoTasks",
+      "call_line": 80,
+      "declaration_line": 54
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildExcNavigationTasks",
+      "call_line": 255,
+      "declaration_line": 54
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildExcNavigationTasks",
+      "call_line": 215,
+      "declaration_line": 54
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildExcNavigationTasks",
+      "call_line": 356,
+      "declaration_line": 54
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.BuildExcNavigationTasks",
+      "call_line": 402,
+      "declaration_line": 54
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.queryVehicleStation": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.currentStationForVehicle",
+      "call_line": 15,
+      "declaration_line": 43
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.shouldPauseForEdgeLock": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).computePausedVehicles",
+      "call_line": 443,
+      "declaration_line": 388
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.snapOnConflictEdge": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.pickOppositeWinner",
+      "call_line": 130,
+      "declaration_line": 88
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.pickOppositeWinner",
+      "call_line": 131,
+      "declaration_line": 88
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.vehicleExitedCurrentConflictWave",
+      "call_line": 194,
+      "declaration_line": 88
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.effectiveDirectedEdgeOnConflict",
+      "call_line": 240,
+      "declaration_line": 88
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.shouldPauseForOpposite",
+      "call_line": 303,
+      "declaration_line": 88
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).touchOppositeEnter",
+      "call_line": 381,
+      "declaration_line": 88
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.stringsHasPathSeparatorSuffix": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.ConfigureDiaodu",
+      "call_line": 52,
+      "declaration_line": 64
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.taskInQueue": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*TaskScheduler).enqueueTask",
+      "call_line": 124,
+      "declaration_line": 109
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.vehicleClearedOppositeZone": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.effectiveDirectedEdgeOnConflict",
+      "call_line": 237,
+      "declaration_line": 188
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.shouldPauseForOpposite",
+      "call_line": 294,
+      "declaration_line": 188
+    }
+  ],
+  "CAS-Backend/pkg/diapdu.winnerHoldsOppositeLocks": [
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).collectActiveEdgeLocks",
+      "call_line": 63,
+      "declaration_line": 121
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.shouldPauseForOpposite",
+      "call_line": 300,
+      "declaration_line": 121
+    },
+    {
+      "caller": "CAS-Backend/pkg/diapdu.(*DynamicTrafficController).applyOppositePause",
+      "call_line": 436,
+      "declaration_line": 121
+    }
+  ]
+}
